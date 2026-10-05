@@ -322,6 +322,43 @@ th,td{
 }
 
 /* =========================
+   LOCKED CUSTOMER ROW
+========================= */
+
+.customer-row.row-locked{
+  opacity:.82;
+}
+
+.customer-row.row-locked input{
+  pointer-events:none;
+  user-select:none;
+  background:transparent;
+}
+
+.customer-row.row-locked .row-key{
+  opacity:.45;
+}
+
+.customer-row.row-locked .row-time{
+  color:#64748b;
+  opacity:1;
+}
+
+.customer-row.row-locked.active-row td{
+  background:#f8fafc !important;
+}
+
+.customer-row.row-locked.active-row .name-input,
+.customer-row.row-locked.active-row .qty-input,
+.customer-row.row-locked.active-row .bayad-input{
+  background:#f8fafc;
+}
+
+.customer-row.row-locked.active-row td:first-child{
+  box-shadow:none;
+}
+
+/* =========================
    ROW NUMBER + KEY + TIME
 ========================= */
 
@@ -361,6 +398,8 @@ th,td{
   font-weight:900;
   line-height:1;
   white-space:nowrap;
+  cursor:pointer;
+  user-select:none;
 }
 
 .name-input,
@@ -827,10 +866,6 @@ th,td{
 
 }
 
-/* =========================
-   SHORT SCREEN
-========================= */
-
 @media(max-height:650px){
 
   .ledger-screen{
@@ -943,25 +978,15 @@ th,td{
       <div class="info-buttons">
 
         <div class="clear-group">
-
-          <button
-            class="info-btn clear-btn"
-            id="clearBtn"
-          >
+          <button class="info-btn clear-btn" id="clearBtn">
             CLEAR
           </button>
-
         </div>
 
         <div class="action-group">
-
-          <button
-            class="info-btn save-main-btn"
-            id="saveBtn"
-          >
+          <button class="info-btn save-main-btn" id="saveBtn">
             SAVE
           </button>
-
         </div>
 
       </div>
@@ -1009,38 +1034,17 @@ th,td{
               DEL
             </td>
 
-            <td>
-              <input id="delR" class="del-input"
-                type="number" inputmode="decimal">
-            </td>
-
-            <td>
-              <input id="delP" class="del-input"
-                type="number" inputmode="decimal">
-            </td>
-
-            <td>
-              <input id="delL" class="del-input"
-                type="number" inputmode="decimal">
-            </td>
-
-            <td>
-              <input id="delM" class="del-input"
-                type="number" inputmode="decimal">
-            </td>
-
-            <td>
-              <input id="delC" class="del-input"
-                type="number" inputmode="decimal">
-            </td>
+            <td><input id="delR" class="del-input" type="number" inputmode="decimal"></td>
+            <td><input id="delP" class="del-input" type="number" inputmode="decimal"></td>
+            <td><input id="delL" class="del-input" type="number" inputmode="decimal"></td>
+            <td><input id="delM" class="del-input" type="number" inputmode="decimal"></td>
+            <td><input id="delC" class="del-input" type="number" inputmode="decimal"></td>
 
           </tr>
 
           <tr class="summary-row sales-row">
 
-            <td class="summary-label">
-              SALES
-            </td>
+            <td class="summary-label">SALES</td>
 
             <td id="salesR">0</td>
             <td id="salesP">0</td>
@@ -1052,9 +1056,7 @@ th,td{
 
           <tr class="summary-row ret-row">
 
-            <td class="summary-label">
-              RET
-            </td>
+            <td class="summary-label">RET</td>
 
             <td id="retR">0</td>
             <td id="retP">0</td>
@@ -1091,10 +1093,7 @@ th,td{
 
           <tr class="customer-header">
 
-            <th
-              id="nameHeader"
-              title="5 taps to open multiplier settings"
-            >
+            <th id="nameHeader" title="5 taps to open multiplier settings">
               NAME
             </th>
 
@@ -1152,10 +1151,7 @@ th,td{
       Tap a file to preview • Tap again to return to current
     </div>
 
-    <div
-      class="saved-list"
-      id="savedList"
-    ></div>
+    <div class="saved-list" id="savedList"></div>
 
   </div>
 
@@ -1173,9 +1169,7 @@ th,td{
 
     <div class="modal-field">
 
-      <label for="ledgerDate">
-        DATE
-      </label>
+      <label for="ledgerDate">DATE</label>
 
       <input
         type="date"
@@ -1187,9 +1181,7 @@ th,td{
 
     <div class="modal-field">
 
-      <label for="ledgerName">
-        NAME
-      </label>
+      <label for="ledgerName">NAME</label>
 
       <input
         type="text"
@@ -1200,15 +1192,9 @@ th,td{
 
     </div>
 
-    <div
-      class="setup-error"
-      id="setupError"
-    ></div>
+    <div class="setup-error" id="setupError"></div>
 
-    <button
-      class="modal-btn"
-      id="openLedgerBtn"
-    >
+    <button class="modal-btn" id="openLedgerBtn">
       OPEN LEDGER
     </button>
 
@@ -1228,9 +1214,7 @@ th,td{
 
     <div class="modal-field">
 
-      <label for="saveDate">
-        DATE
-      </label>
+      <label for="saveDate">DATE</label>
 
       <input
         type="date"
@@ -1242,9 +1226,7 @@ th,td{
 
     <div class="modal-field">
 
-      <label for="saveName">
-        NAME
-      </label>
+      <label for="saveName">NAME</label>
 
       <input
         type="text"
@@ -1255,24 +1237,15 @@ th,td{
 
     </div>
 
-    <div
-      class="setup-error"
-      id="saveError"
-    ></div>
+    <div class="setup-error" id="saveError"></div>
 
     <div class="multiplier-actions">
 
-      <button
-        class="cancel-btn"
-        id="cancelSave"
-      >
+      <button class="cancel-btn" id="cancelSave">
         CANCEL
       </button>
 
-      <button
-        class="save-btn"
-        id="confirmSave"
-      >
+      <button class="save-btn" id="confirmSave">
         OK
       </button>
 
@@ -1308,17 +1281,11 @@ th,td{
 
     <div class="multiplier-actions">
 
-      <button
-        class="cancel-btn"
-        id="cancelUnsaved"
-      >
+      <button class="cancel-btn" id="cancelUnsaved">
         CANCEL
       </button>
 
-      <button
-        class="save-btn"
-        id="saveCurrentBeforeEdit"
-      >
+      <button class="save-btn" id="saveCurrentBeforeEdit">
         SAVE CURRENT
       </button>
 
@@ -1342,64 +1309,38 @@ th,td{
 
       <div class="multiplier-item">
         <label>R</label>
-        <input
-          id="multR"
-          type="number"
-          inputmode="decimal"
-        >
+        <input id="multR" type="number" inputmode="decimal">
       </div>
 
       <div class="multiplier-item">
         <label>P</label>
-        <input
-          id="multP"
-          type="number"
-          inputmode="decimal"
-        >
+        <input id="multP" type="number" inputmode="decimal">
       </div>
 
       <div class="multiplier-item">
         <label>L</label>
-        <input
-          id="multL"
-          type="number"
-          inputmode="decimal"
-        >
+        <input id="multL" type="number" inputmode="decimal">
       </div>
 
       <div class="multiplier-item">
         <label>M</label>
-        <input
-          id="multM"
-          type="number"
-          inputmode="decimal"
-        >
+        <input id="multM" type="number" inputmode="decimal">
       </div>
 
       <div class="multiplier-item">
         <label>C</label>
-        <input
-          id="multC"
-          type="number"
-          inputmode="decimal"
-        >
+        <input id="multC" type="number" inputmode="decimal">
       </div>
 
     </div>
 
     <div class="multiplier-actions">
 
-      <button
-        class="cancel-btn"
-        id="cancelMultiplier"
-      >
+      <button class="cancel-btn" id="cancelMultiplier">
         CANCEL
       </button>
 
-      <button
-        class="save-btn"
-        id="saveMultiplier"
-      >
+      <button class="save-btn" id="saveMultiplier">
         SAVE
       </button>
 
@@ -1468,13 +1409,11 @@ const MAX_SAVED_FILES =
 ========================= */
 
 const DEFAULT_MULTIPLIERS = {
-
   R:45,
   P:45,
   L:45,
   M:45,
   C:40
-
 };
 
 let multipliers =
@@ -1600,6 +1539,13 @@ let lastModifiedAt =
 let pendingEditId =
   null;
 
+/*
+ * The currently unlocked customer row.
+ * Only one row may be unlocked at a time.
+ */
+let activeCustomerRow =
+  null;
+
 
 /* =========================
    NUMBER
@@ -1671,7 +1617,6 @@ function formatDate(value){
     Number(parts[2]);
 
   const months = [
-
     "Jan",
     "Feb",
     "Mar",
@@ -1684,7 +1629,6 @@ function formatDate(value){
     "Oct",
     "Nov",
     "Dec"
-
   ];
 
   const date =
@@ -1695,7 +1639,6 @@ function formatDate(value){
     );
 
   const days = [
-
     "Sunday",
     "Monday",
     "Tuesday",
@@ -1703,7 +1646,6 @@ function formatDate(value){
     "Thursday",
     "Friday",
     "Saturday"
-
   ];
 
   return `${days[date.getDay()]}, ${months[m-1]} ${d}, ${y}`;
@@ -1767,6 +1709,224 @@ function updateCustomerRowTime(row){
       formatSavedTime(
         now
       );
+
+  }
+
+}
+
+
+/* =========================
+   ROW LOCKING
+========================= */
+
+/*
+ * Lock one specific row.
+ */
+function lockCustomerRow(row){
+
+  if(!row){
+    return;
+  }
+
+  row.classList.add(
+    "row-locked"
+  );
+
+  row.querySelectorAll(
+    "input"
+  ).forEach(
+    input => {
+      input.disabled = true;
+    }
+  );
+
+}
+
+
+/*
+ * Unlock one specific row.
+ */
+function unlockCustomerRow(row){
+
+  if(!row){
+    return;
+  }
+
+  if(readonlyMode){
+    return;
+  }
+
+  /*
+   * Lock any previously active row.
+   */
+  if(
+    activeCustomerRow &&
+    activeCustomerRow !== row
+  ){
+
+    lockCustomerRow(
+      activeCustomerRow
+    );
+
+    activeCustomerRow.classList.remove(
+      "active-row"
+    );
+
+  }
+
+  row.classList.remove(
+    "row-locked"
+  );
+
+  row.querySelectorAll(
+    "input"
+  ).forEach(
+    input => {
+      input.disabled = false;
+    }
+  );
+
+  activeCustomerRow =
+    row;
+
+  row.classList.add(
+    "active-row"
+  );
+
+}
+
+
+/*
+ * Lock every customer row.
+ */
+function lockAllCustomerRows(){
+
+  document
+    .querySelectorAll(
+      ".customer-row"
+    )
+    .forEach(
+      row => {
+
+        lockCustomerRow(
+          row
+        );
+
+        row.classList.remove(
+          "active-row"
+        );
+
+      }
+    );
+
+  activeCustomerRow =
+    null;
+
+}
+
+
+/*
+ * Set the initial editable state.
+ *
+ * At the beginning, all rows are available.
+ * The first row touched becomes the active
+ * unlocked row. Once another row is chosen,
+ * the previous one locks.
+ */
+function prepareRowsForEditing(){
+
+  document
+    .querySelectorAll(
+      ".customer-row"
+    )
+    .forEach(
+      row => {
+
+        row.classList.remove(
+          "row-locked"
+        );
+
+        row.classList.remove(
+          "active-row"
+        );
+
+        row.querySelectorAll(
+          "input"
+        ).forEach(
+          input => {
+            input.disabled = false;
+          }
+        );
+
+      }
+    );
+
+  activeCustomerRow =
+    null;
+
+}
+
+
+/*
+ * Five taps on a row's time record
+ * unlocks that row.
+ */
+function handleRowTimeTap(row){
+
+  if(!row || readonlyMode){
+    return;
+  }
+
+  let count =
+    Number(
+      row.dataset.timeTapCount || 0
+    );
+
+  count++;
+
+  row.dataset.timeTapCount =
+    String(count);
+
+  clearTimeout(
+    row._timeTapTimer
+  );
+
+  row._timeTapTimer =
+    setTimeout(
+      () => {
+
+        row.dataset.timeTapCount =
+          "0";
+
+      },
+      1000
+    );
+
+  if(count >= 5){
+
+    row.dataset.timeTapCount =
+      "0";
+
+    clearTimeout(
+      row._timeTapTimer
+    );
+
+    unlockCustomerRow(
+      row
+    );
+
+    const nameInput =
+      row.querySelector(
+        ".name-input"
+      );
+
+    if(nameInput){
+
+      nameInput.focus();
+
+    }
+
+    saveCurrentDraft();
 
   }
 
@@ -1981,6 +2141,9 @@ function buildRows(){
     tr.dataset.modifiedAt =
       "";
 
+    tr.dataset.timeTapCount =
+      "0";
+
     tr.innerHTML = `
 
       <td>
@@ -2000,9 +2163,8 @@ function buildRows(){
 
           <span
             class="row-time"
-          >
-            --
-          </span>
+            title="5 taps to unlock this row"
+          ></span>
 
           <input
             class="name-input"
@@ -2015,79 +2177,63 @@ function buildRows(){
       </td>
 
       <td>
-
         <input
           class="qty-input qty-r"
           type="number"
           inputmode="decimal"
         >
-
       </td>
 
       <td>
-
         <input
           class="qty-input qty-p"
           type="number"
           inputmode="decimal"
         >
-
       </td>
 
       <td>
-
         <input
           class="qty-input qty-l"
           type="number"
           inputmode="decimal"
         >
-
       </td>
 
       <td>
-
         <input
           class="qty-input qty-m"
           type="number"
           inputmode="decimal"
         >
-
       </td>
 
       <td>
-
         <input
           class="qty-input qty-c"
           type="number"
           inputmode="decimal"
         >
-
       </td>
 
       <td>
-
         <span class="amount-value">
           0
         </span>
-
       </td>
 
       <td>
-
         <input
           class="bayad-input"
           type="number"
           inputmode="decimal"
         >
-
       </td>
 
       <td>
-
         <span class="sukli-value">
           0
         </span>
-
       </td>
 
     `;
@@ -2116,10 +2262,19 @@ function buildRows(){
               );
 
             /*
-             * IMPORTANT:
-             * Only this customer row
-             * receives the new time.
+             * Safety:
+             * locked rows cannot be edited.
              */
+            if(
+              !row ||
+              row.classList.contains(
+                "row-locked"
+              )
+            ){
+
+              return;
+
+            }
 
             updateCustomerRowTime(
               row
@@ -2253,71 +2408,43 @@ function calculate(){
   );
 
 
-  document.getElementById(
-    "totalR"
-  ).textContent =
+  document.getElementById("totalR").textContent =
     formatAmount(totalR);
 
-  document.getElementById(
-    "totalP"
-  ).textContent =
+  document.getElementById("totalP").textContent =
     formatAmount(totalP);
 
-  document.getElementById(
-    "totalL"
-  ).textContent =
+  document.getElementById("totalL").textContent =
     formatAmount(totalL);
 
-  document.getElementById(
-    "totalM"
-  ).textContent =
+  document.getElementById("totalM").textContent =
     formatAmount(totalM);
 
-  document.getElementById(
-    "totalC"
-  ).textContent =
+  document.getElementById("totalC").textContent =
     formatAmount(totalC);
 
-
-  document.getElementById(
-    "totalAmount"
-  ).textContent =
+  document.getElementById("totalAmount").textContent =
     formatAmount(totalAmount);
 
-  document.getElementById(
-    "totalBayad"
-  ).textContent =
+  document.getElementById("totalBayad").textContent =
     formatAmount(totalBayad);
 
-  document.getElementById(
-    "totalSukli"
-  ).textContent =
+  document.getElementById("totalSukli").textContent =
     formatAmount(totalSukli);
 
-
-  document.getElementById(
-    "salesR"
-  ).textContent =
+  document.getElementById("salesR").textContent =
     formatAmount(totalR);
 
-  document.getElementById(
-    "salesP"
-  ).textContent =
+  document.getElementById("salesP").textContent =
     formatAmount(totalP);
 
-  document.getElementById(
-    "salesL"
-  ).textContent =
+  document.getElementById("salesL").textContent =
     formatAmount(totalL);
 
-  document.getElementById(
-    "salesM"
-  ).textContent =
+  document.getElementById("salesM").textContent =
     formatAmount(totalM);
 
-  document.getElementById(
-    "salesC"
-  ).textContent =
+  document.getElementById("salesC").textContent =
     formatAmount(totalC);
 
 
@@ -2357,40 +2484,20 @@ function calculate(){
     );
 
 
-  document.getElementById(
-    "retR"
-  ).textContent =
-    formatAmount(
-      delR - totalR
-    );
+  document.getElementById("retR").textContent =
+    formatAmount(delR - totalR);
 
-  document.getElementById(
-    "retP"
-  ).textContent =
-    formatAmount(
-      delP - totalP
-    );
+  document.getElementById("retP").textContent =
+    formatAmount(delP - totalP);
 
-  document.getElementById(
-    "retL"
-  ).textContent =
-    formatAmount(
-      delL - totalL
-    );
+  document.getElementById("retL").textContent =
+    formatAmount(delL - totalL);
 
-  document.getElementById(
-    "retM"
-  ).textContent =
-    formatAmount(
-      delM - totalM
-    );
+  document.getElementById("retM").textContent =
+    formatAmount(delM - totalM);
 
-  document.getElementById(
-    "retC"
-  ).textContent =
-    formatAmount(
-      delC - totalC
-    );
+  document.getElementById("retC").textContent =
+    formatAmount(delC - totalC);
 
 }
 
@@ -2423,34 +2530,23 @@ function captureLedger(){
     del:{
 
       R:
-        document.getElementById(
-          "delR"
-        ).value,
+        document.getElementById("delR").value,
 
       P:
-        document.getElementById(
-          "delP"
-        ).value,
+        document.getElementById("delP").value,
 
       L:
-        document.getElementById(
-          "delL"
-        ).value,
+        document.getElementById("delL").value,
 
       M:
-        document.getElementById(
-          "delM"
-        ).value,
+        document.getElementById("delM").value,
 
       C:
-        document.getElementById(
-          "delC"
-        ).value
+        document.getElementById("delC").value
 
     },
 
     rows:
-
       rows.map(
         row => ({
 
@@ -2488,11 +2584,6 @@ function captureLedger(){
             row.querySelector(
               ".bayad-input"
             ).value,
-
-          /*
-           * Each customer has
-           * its own modification time.
-           */
 
           modifiedAt:
             row.dataset.modifiedAt || ""
@@ -2532,29 +2623,19 @@ function applyLedger(data){
     data.del || {};
 
 
-  document.getElementById(
-    "delR"
-  ).value =
+  document.getElementById("delR").value =
     del.R || "";
 
-  document.getElementById(
-    "delP"
-  ).value =
+  document.getElementById("delP").value =
     del.P || "";
 
-  document.getElementById(
-    "delL"
-  ).value =
+  document.getElementById("delL").value =
     del.L || "";
 
-  document.getElementById(
-    "delM"
-  ).value =
+  document.getElementById("delM").value =
     del.M || "";
 
-  document.getElementById(
-    "delC"
-  ).value =
+  document.getElementById("delC").value =
     del.C || "";
 
 
@@ -2614,11 +2695,14 @@ function applyLedger(data){
 
       /*
        * Restore this customer's
-       * own timestamp.
+       * individual timestamp.
        */
 
       row.dataset.modifiedAt =
         item.modifiedAt || "";
+
+      row.dataset.timeTapCount =
+        "0";
 
       const timeEl =
         row.querySelector(
@@ -2632,7 +2716,7 @@ function applyLedger(data){
             ? formatSavedTime(
                 item.modifiedAt
               )
-            : "--";
+            : "";
 
       }
 
@@ -2713,12 +2797,15 @@ function clearLedgerValues(){
         ).value = "";
 
 
-        /*
-         * Clear this row's time too.
-         */
-
         row.dataset.modifiedAt =
           "";
+
+        row.dataset.timeTapCount =
+          "0";
+
+        clearTimeout(
+          row._timeTapTimer
+        );
 
         const timeEl =
           row.querySelector(
@@ -2727,12 +2814,14 @@ function clearLedgerValues(){
 
         if(timeEl){
           timeEl.textContent =
-            "--";
+            "";
         }
 
       }
     );
 
+
+  prepareRowsForEditing();
 
   calculate();
 
@@ -2817,6 +2906,8 @@ function startLedger(){
     null;
 
 
+  prepareRowsForEditing();
+
   updateModificationTime();
 
 
@@ -2874,6 +2965,9 @@ function loadSession(){
       null;
 
 
+    prepareRowsForEditing();
+
+
     document.body.classList.remove(
       "readonly-mode"
     );
@@ -2921,7 +3015,6 @@ function loadSession(){
   readonlyMode =
     false;
 
-
   setupModal.classList.remove(
     "hidden"
   );
@@ -2946,29 +3039,19 @@ function openMultiplierEditor(){
   }
 
 
-  document.getElementById(
-    "multR"
-  ).value =
+  document.getElementById("multR").value =
     multipliers.R;
 
-  document.getElementById(
-    "multP"
-  ).value =
+  document.getElementById("multP").value =
     multipliers.P;
 
-  document.getElementById(
-    "multL"
-  ).value =
+  document.getElementById("multL").value =
     multipliers.L;
 
-  document.getElementById(
-    "multM"
-  ).value =
+  document.getElementById("multM").value =
     multipliers.M;
 
-  document.getElementById(
-    "multC"
-  ).value =
+  document.getElementById("multC").value =
     multipliers.C;
 
 
@@ -2989,37 +3072,27 @@ function saveMultipliers(){
 
     R:
       num(
-        document.getElementById(
-          "multR"
-        ).value
+        document.getElementById("multR").value
       ),
 
     P:
       num(
-        document.getElementById(
-          "multP"
-        ).value
+        document.getElementById("multP").value
       ),
 
     L:
       num(
-        document.getElementById(
-          "multL"
-        ).value
+        document.getElementById("multL").value
       ),
 
     M:
       num(
-        document.getElementById(
-          "multM"
-        ).value
+        document.getElementById("multM").value
       ),
 
     C:
       num(
-        document.getElementById(
-          "multC"
-        ).value
+        document.getElementById("multC").value
       )
 
   };
@@ -3172,9 +3245,7 @@ function performSave(){
 
 
     if(!okay){
-
       return false;
-
     }
 
 
@@ -3292,9 +3363,7 @@ function performSave(){
       if(
         dateCompare !== 0
       ){
-
         return dateCompare;
-
       }
 
 
@@ -3446,9 +3515,7 @@ function renderSavedList(){
       if(
         dateCompare !== 0
       ){
-
         return dateCompare;
-
       }
 
 
@@ -3584,26 +3651,11 @@ function escapeHtml(value){
   return String(
     value || ""
   )
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-  .replace(
-    /</g,
-    "&lt;"
-  )
-  .replace(
-    />/g,
-    "&gt;"
-  )
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-  .replace(
-    /'/g,
-    "&#039;"
-  );
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
 
 }
 
@@ -3642,9 +3694,23 @@ function previewSavedFile(id){
   }
 
 
+  /*
+   * IMPORTANT:
+   *
+   * Capture the current editable ledger
+   * BEFORE previewing a saved file.
+   *
+   * This includes every customer's
+   * individual timestamp.
+   *
+   * Do NOT overwrite the temporary
+   * current state while already inside
+   * read-only preview mode.
+   */
+
   if(
-    !readonlyMode &&
-    currentLedgerStarted
+    currentLedgerStarted &&
+    !readonlyMode
   ){
 
     temporaryCurrentState =
@@ -3671,6 +3737,14 @@ function previewSavedFile(id){
   );
 
 
+  /*
+   * Preview is read-only.
+   * All rows are locked while viewing.
+   */
+
+  lockAllCustomerRows();
+
+
   document.body.classList.add(
     "readonly-mode"
   );
@@ -3686,6 +3760,14 @@ function previewSavedFile(id){
 ========================= */
 
 function returnToCurrent(){
+
+  /*
+   * Restore the exact current ledger
+   * that existed before preview.
+   *
+   * This restores each customer's
+   * individual timestamp too.
+   */
 
   if(
     temporaryCurrentState
@@ -3706,25 +3788,45 @@ function returnToCurrent(){
     readonlyMode =
       false;
 
+    currentPreviewId =
+      null;
+
+    selectedSavedId =
+      null;
+
+
+    /*
+     * The restored current ledger is
+     * editable again. Start with no
+     * active row; first row touched
+     * becomes active.
+     */
+
+    prepareRowsForEditing();
+
+
+    document.body.classList.remove(
+      "readonly-mode"
+    );
+
 
     saveCurrentDraft();
 
+  }else{
+
+    readonlyMode =
+      false;
+
+    currentPreviewId =
+      null;
+
+    selectedSavedId =
+      null;
+
+    activeCustomerRow =
+      null;
+
   }
-
-
-  readonlyMode =
-    false;
-
-  currentPreviewId =
-    null;
-
-  selectedSavedId =
-    null;
-
-
-  document.body.classList.remove(
-    "readonly-mode"
-  );
 
 
   renderSavedList();
@@ -3856,6 +3958,15 @@ function editSavedFile(id){
     file.id;
 
 
+  /*
+   * When editing a saved file,
+   * no row is active initially.
+   * Tap the row you want to work on.
+   */
+
+  prepareRowsForEditing();
+
+
   document.body.classList.remove(
     "readonly-mode"
   );
@@ -3947,6 +4058,9 @@ function deleteSavedFile(id){
 
     readonlyMode =
       false;
+
+
+    prepareRowsForEditing();
 
 
     document.body.classList.remove(
@@ -4068,12 +4182,6 @@ function hasLedgerData(data){
           .some(
             ([key,value]) => {
 
-              /*
-               * modifiedAt is metadata only.
-               * It must NOT make an otherwise
-               * empty row count as ledger data.
-               */
-
               if(
                 key === "modifiedAt"
               ){
@@ -4097,10 +4205,25 @@ function hasLedgerData(data){
 
 
 /* =========================
-   CUSTOMER ROW HIGHLIGHT
+   CUSTOMER ROW INTERACTION
 ========================= */
 
-document.addEventListener(
+/*
+ * Clicking anywhere inside a customer row:
+ *
+ * - If it is the TIME record:
+ *     count taps.
+ *
+ * - If it is another editable row:
+ *     previous row locks,
+ *     clicked row becomes active.
+ *
+ * - If it is a locked row:
+ *     it remains locked.
+ *     5 taps on its time are required.
+ */
+
+customerBody.addEventListener(
   "click",
   e => {
 
@@ -4110,26 +4233,195 @@ document.addEventListener(
       );
 
 
-    document
-      .querySelectorAll(
-        ".customer-row"
+    if(!row){
+      return;
+    }
+
+
+    /*
+     * TIME RECORD
+     */
+    if(
+      e.target.closest(
+        ".row-time"
       )
-      .forEach(
-        r => {
+    ){
 
-          r.classList.remove(
-            "active-row"
-          );
-
-        }
+      handleRowTimeTap(
+        row
       );
 
+      /*
+       * Highlight follows the row,
+       * but does not unlock it unless
+       * five taps are completed.
+       */
 
-    if(row){
+      document
+        .querySelectorAll(
+          ".customer-row"
+        )
+        .forEach(
+          r => {
+            r.classList.remove(
+              "active-row"
+            );
+          }
+        );
 
       row.classList.add(
         "active-row"
       );
+
+      return;
+
+    }
+
+
+    /*
+     * READ-ONLY PREVIEW
+     */
+    if(readonlyMode){
+      return;
+    }
+
+
+    /*
+     * Locked row:
+     * tapping another cell does NOT
+     * unlock it.
+     *
+     * Use 5 taps on the time record.
+     */
+    if(
+      row.classList.contains(
+        "row-locked"
+      )
+    ){
+
+      document
+        .querySelectorAll(
+          ".customer-row"
+        )
+        .forEach(
+          r => {
+            r.classList.remove(
+              "active-row"
+            );
+          }
+        );
+
+      row.classList.add(
+        "active-row"
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * Editable row:
+     * switching rows automatically
+     * locks the previous row.
+     */
+    unlockCustomerRow(
+      row
+    );
+
+  }
+);
+
+
+/* =========================
+   CUSTOMER ROW FOCUS
+========================= */
+
+/*
+ * If the user focuses an input directly
+ * (for example through keyboard/navigation),
+ * make that row the active row too.
+ */
+customerBody.addEventListener(
+  "focusin",
+  e => {
+
+    const input =
+      e.target.closest(
+        ".name-input, .qty-input, .bayad-input"
+      );
+
+    if(!input || readonlyMode){
+      return;
+    }
+
+
+    const row =
+      input.closest(
+        ".customer-row"
+      );
+
+    if(!row){
+      return;
+    }
+
+
+    if(
+      row.classList.contains(
+        "row-locked"
+      )
+    ){
+
+      /*
+       * Do not allow a locked row
+       * to become editable simply by focus.
+       */
+      input.blur();
+
+      return;
+
+    }
+
+
+    unlockCustomerRow(
+      row
+    );
+
+  }
+);
+
+
+/* =========================
+   OUTSIDE CUSTOMER ROW
+========================= */
+
+/*
+ * Tapping outside the customer rows
+ * removes the visual active highlight,
+ * but the current row remains locked/unlocked
+ * according to the row-locking system.
+ */
+document.addEventListener(
+  "click",
+  e => {
+
+    if(
+      !e.target.closest(
+        ".customer-row"
+      )
+    ){
+
+      document
+        .querySelectorAll(
+          ".customer-row"
+        )
+        .forEach(
+          r => {
+            r.classList.remove(
+              "active-row"
+            );
+          }
+        );
 
     }
 
@@ -4396,12 +4688,10 @@ savedList.addEventListener(
         ".saved-main"
       );
 
-
     const editButton =
       e.target.closest(
         "[data-edit]"
       );
-
 
     const deleteButton =
       e.target.closest(
@@ -4485,11 +4775,9 @@ nameHeader.addEventListener(
       tapCount =
         0;
 
-
       clearTimeout(
         tapTimer
       );
-
 
       openMultiplierEditor();
 
