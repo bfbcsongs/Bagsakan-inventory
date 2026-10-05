@@ -315,7 +315,7 @@ th,td{
   height:13px;
   border:0;
   outline:none;
-  background:#fef9c3;
+  background:transparent;
   text-align:center;
   font-size:13px;
   font-weight:800;
@@ -332,7 +332,25 @@ th,td{
 
 .qty-input:focus,
 .name-input:focus{
-  background:#fde68a;
+  background:transparent;
+}
+
+/* ONLY THE CURRENTLY SELECTED ROW */
+.customer-row.active-row td{
+  background:#fef9c3 !important;
+}
+
+.customer-row.active-row .name-input,
+.customer-row.active-row .qty-input{
+  background:#fef9c3;
+}
+
+.customer-row.active-row td:first-child{
+  box-shadow:inset 3px 0 0 #f59e0b;
+}
+
+.customer-row.active-row .row-number{
+  color:#b45309;
 }
 
 .amount-value{
@@ -1755,6 +1773,42 @@ function buildRows(){
     });
 
 }
+
+
+/* =========================
+   CURRENT ROW HIGHLIGHT
+========================= */
+
+document.addEventListener(
+  "click",
+  e => {
+
+    const row =
+      e.target.closest(
+        ".customer-row"
+      );
+
+    document
+      .querySelectorAll(".customer-row")
+      .forEach(r => {
+
+        r.classList.remove(
+          "active-row"
+        );
+
+      });
+
+
+    if(row){
+
+      row.classList.add(
+        "active-row"
+      );
+
+    }
+
+  }
+);
 
 
 /* =========================
