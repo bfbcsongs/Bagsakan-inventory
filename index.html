@@ -299,7 +299,7 @@ th,td{
   outline:none;
   background:transparent;
   text-align:center;
-  font-size:8px;
+  font-size:11px;
   font-weight:700;
   padding:0 2px;
   color:#111827;
@@ -320,7 +320,7 @@ th,td{
   width:100%;
   text-align:right;
   padding-right:4px;
-  font-size:8px;
+  font-size:11px;
   font-weight:900;
   color:#111827;
   white-space:nowrap;
@@ -379,10 +379,6 @@ th,td{
   margin-bottom:4px;
 }
 
-/*
- * Larger permanent list area.
- * Enough space to see about 4 files.
- */
 .saved-list{
   display:flex;
   flex-direction:column;
@@ -708,11 +704,11 @@ th,td{
   .name-input,
   .qty-input{
     height:13px;
-    font-size:7px;
+    font-size:11px;
   }
 
   .amount-value{
-    font-size:7px;
+    font-size:11px;
   }
 
   .total-row{
@@ -790,11 +786,11 @@ th,td{
   .name-input,
   .qty-input{
     height:11px;
-    font-size:6px;
+    font-size:11px;
   }
 
   .amount-value{
-    font-size:6px;
+    font-size:11px;
   }
 
   .total-row{
@@ -815,13 +811,8 @@ th,td{
 
 <div class="app">
 
-  <!-- =========================
-       MAIN LEDGER SCREEN
-  ========================= -->
-
   <div class="ledger-screen">
 
-    <!-- DATE + NAME + BUTTONS -->
     <div class="info-bar">
 
       <div class="info-date" id="displayDate"></div>
@@ -857,9 +848,6 @@ th,td{
       </div>
 
     </div>
-
-
-    <!-- SUMMARY -->
 
     <div class="table-wrap">
 
@@ -962,9 +950,6 @@ th,td{
 
     </div>
 
-
-    <!-- CUSTOMER TABLE -->
-
     <div class="customer-wrap">
 
       <table class="customer-table">
@@ -1029,11 +1014,6 @@ th,td{
 
   </div>
 
-
-  <!-- =========================
-       PERMANENT SAVED LIST
-  ========================= -->
-
   <div class="saved-section">
 
     <div class="saved-section-title">
@@ -1053,10 +1033,6 @@ th,td{
 
 </div>
 
-
-<!-- =========================
-     START LEDGER MODAL
-========================= -->
 
 <div class="modal" id="setupModal">
 
@@ -1111,10 +1087,6 @@ th,td{
 
 </div>
 
-
-<!-- =========================
-     SAVE MODAL
-========================= -->
 
 <div
   class="modal hidden"
@@ -1183,10 +1155,6 @@ th,td{
 
 </div>
 
-
-<!-- =========================
-     MULTIPLIER MODAL
-========================= -->
 
 <div
   class="modal hidden"
@@ -2062,12 +2030,6 @@ function clearLedgerValues(){
 
   calculate();
 
-  /*
-   * The old data is now intentionally cleared.
-   * Keep the current Date + Name but store
-   * the cleared state as the new draft.
-   */
-
   saveCurrentDraft();
 
 }
@@ -2188,11 +2150,6 @@ function loadSession(){
     );
 
 
-    /*
-     * If Date + Name are already present,
-     * immediately restore the ledger.
-     */
-
     if(
       draft.ledger.date &&
       draft.ledger.name
@@ -2210,10 +2167,6 @@ function loadSession(){
 
   }
 
-
-  /*
-   * No usable current draft.
-   */
 
   ledgerDate.value = "";
   ledgerName.value = "";
@@ -2406,11 +2359,6 @@ function performSave(){
       : -1;
 
 
-  /*
-   * If another saved file already has
-   * the same DATE, ask before replacing it.
-   */
-
   const dateIndex =
     files.findIndex(
       (file,index) =>
@@ -2459,10 +2407,6 @@ function performSave(){
   data.name = name;
 
 
-  /*
-   * UPDATE EXISTING FILE
-   */
-
   if(
     editingSavedId &&
     editingIndex !== -1
@@ -2495,10 +2439,6 @@ function performSave(){
 
   }
 
-  /*
-   * CREATE NEW FILE
-   */
-
   else{
 
     const file = {
@@ -2530,12 +2470,6 @@ function performSave(){
   }
 
 
-  /*
-   * SORT BY DATE.
-   * Latest calendar date first.
-   * Saved time is only a tie-breaker.
-   */
-
   files.sort(
     (a,b) => {
 
@@ -2558,10 +2492,6 @@ function performSave(){
   );
 
 
-  /*
-   * Keep maximum 30 files.
-   */
-
   if(
     files.length >
     MAX_SAVED_FILES
@@ -2578,11 +2508,6 @@ function performSave(){
 
   setSavedFiles(files);
 
-
-  /*
-   * Update Date + Name display
-   * before clearing the current ledger.
-   */
 
   ledgerDate.value =
     date;
@@ -2601,13 +2526,6 @@ function performSave(){
     "hidden"
   );
 
-
-  /*
-   * IMPORTANT:
-   * After saving, the current working
-   * ledger is intentionally emptied
-   * and becomes read-only.
-   */
 
   clearLedgerValues();
 
@@ -2629,12 +2547,6 @@ function performSave(){
     "readonly-mode"
   );
 
-
-  /*
-   * Keep the EMPTY current state
-   * safely stored so it survives
-   * refresh/reopen.
-   */
 
   localStorage.removeItem(
     CURRENT_DRAFT_KEY
@@ -2666,10 +2578,6 @@ function renderSavedList(){
     getSavedFiles();
 
 
-  /*
-   * SORT BY DATE — LATEST FIRST
-   */
-
   files.sort(
     (a,b) => {
 
@@ -2691,11 +2599,6 @@ function renderSavedList(){
     }
   );
 
-
-  /*
-   * Keep storage itself synchronized
-   * with the new date ordering.
-   */
 
   setSavedFiles(files);
 
@@ -2830,11 +2733,6 @@ function previewSavedFile(id){
   }
 
 
-  /*
-   * Same highlighted item:
-   * return to current.
-   */
-
   if(
     selectedSavedId === id &&
     readonlyMode
@@ -2846,11 +2744,6 @@ function previewSavedFile(id){
 
   }
 
-
-  /*
-   * Save current editable state
-   * temporarily before preview.
-   */
 
   if(
     !readonlyMode &&
@@ -2992,11 +2885,6 @@ function editSavedFile(id){
   );
 
 
-  /*
-   * Immediately protect the editable
-   * saved file as the current draft.
-   */
-
   saveCurrentDraft();
 
 
@@ -3063,11 +2951,6 @@ function deleteSavedFile(id){
     editingSavedId =
       null;
 
-    /*
-     * The current editable data can
-     * still remain safely in the draft.
-     */
-
     saveCurrentDraft();
 
   }
@@ -3127,13 +3010,6 @@ function clearCurrentLedger(){
   const hasData =
     hasLedgerData(current);
 
-
-  /*
-   * NO SAVE-FIRST OPTION ANYMORE.
-   *
-   * CLEAR only asks whether the
-   * user really wants to clear.
-   */
 
   if(hasData){
 
