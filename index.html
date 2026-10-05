@@ -246,16 +246,33 @@ th,td{
   table-layout:fixed;
 }
 
+/*
+   NAME reduced from 25% to 20%
+   AMOUNT reduced from 25% to 15%
+
+   Added:
+   BAYAD 15%
+   SUKLI 15%
+*/
+
 .customer-table col.name-col{
-  width:25%;
+  width:20%;
 }
 
 .customer-table col.qty-col{
-  width:10%;
+  width:7%;
 }
 
 .customer-table col.amount-col{
-  width:25%;
+  width:15%;
+}
+
+.customer-table col.bayad-col{
+  width:15%;
+}
+
+.customer-table col.sukli-col{
+  width:15%;
 }
 
 .customer-header{
@@ -288,6 +305,28 @@ th,td{
 }
 
 /* =========================
+   ACTIVE CUSTOMER ROW
+========================= */
+
+.customer-row.active-row td{
+  background:#fef9c3 !important;
+}
+
+.customer-row.active-row .name-input,
+.customer-row.active-row .qty-input,
+.customer-row.active-row .bayad-input{
+  background:#fef9c3;
+}
+
+.customer-row.active-row td:first-child{
+  box-shadow:inset 3px 0 0 #f59e0b;
+}
+
+.customer-row.active-row .row-number{
+  color:#b45309;
+}
+
+/* =========================
    ROW NUMBER + INPUTS
 ========================= */
 
@@ -310,7 +349,8 @@ th,td{
 }
 
 .name-input,
-.qty-input{
+.qty-input,
+.bayad-input{
   width:100%;
   height:13px;
   border:0;
@@ -331,29 +371,33 @@ th,td{
 }
 
 .qty-input:focus,
-.name-input:focus{
+.name-input:focus,
+.bayad-input:focus{
   background:transparent;
 }
 
-/* ONLY THE CURRENTLY SELECTED ROW */
-.customer-row.active-row td{
-  background:#fef9c3 !important;
-}
-
-.customer-row.active-row .name-input,
-.customer-row.active-row .qty-input{
-  background:#fef9c3;
-}
-
-.customer-row.active-row td:first-child{
-  box-shadow:inset 3px 0 0 #f59e0b;
-}
-
-.customer-row.active-row .row-number{
-  color:#b45309;
-}
+/* =========================
+   AMOUNT / BAYAD / SUKLI
+========================= */
 
 .amount-value{
+  display:block;
+  width:100%;
+  text-align:right;
+  padding-right:4px;
+  font-size:13px;
+  font-weight:900;
+  color:#111827;
+  white-space:nowrap;
+}
+
+.bayad-input{
+  text-align:right;
+  padding-right:4px;
+  font-weight:900;
+}
+
+.sukli-value{
   display:block;
   width:100%;
   text-align:right;
@@ -739,12 +783,14 @@ th,td{
   }
 
   .name-input,
-  .qty-input{
+  .qty-input,
+  .bayad-input{
     height:13px;
     font-size:13px;
   }
 
-  .amount-value{
+  .amount-value,
+  .sukli-value{
     font-size:13px;
   }
 
@@ -825,12 +871,14 @@ th,td{
   }
 
   .name-input,
-  .qty-input{
+  .qty-input,
+  .bayad-input{
     height:11px;
     font-size:13px;
   }
 
-  .amount-value{
+  .amount-value,
+  .sukli-value{
     font-size:13px;
   }
 
@@ -1009,6 +1057,8 @@ th,td{
           <col class="qty-col">
           <col class="qty-col">
           <col class="amount-col">
+          <col class="bayad-col">
+          <col class="sukli-col">
         </colgroup>
 
         <thead>
@@ -1019,7 +1069,7 @@ th,td{
               id="nameHeader"
               title="5 taps to open multiplier settings"
             >
-              🔑
+              <span id="lastModifiedTime">--:--:--</span>
             </th>
 
             <th>R</th>
@@ -1028,6 +1078,8 @@ th,td{
             <th>M</th>
             <th>C</th>
             <th>Amount</th>
+            <th>Bayad</th>
+            <th>Sukli</th>
 
           </tr>
 
@@ -1050,6 +1102,8 @@ th,td{
             <td id="totalC">0</td>
 
             <td id="totalAmount">0</td>
+            <td id="totalBayad">0</td>
+            <td id="totalSukli">0</td>
 
           </tr>
 
@@ -1379,6 +1433,9 @@ const multiplierModal =
 const nameHeader =
   document.getElementById("nameHeader");
 
+const lastModifiedTime =
+  document.getElementById("lastModifiedTime");
+
 const savedList =
   document.getElementById("savedList");
 
@@ -1412,6 +1469,8 @@ let temporaryCurrentState = null;
 let temporaryCurrentEditingId = null;
 
 let editingSavedId = null;
+
+let lastModifiedAt = Date.now();
 
 
 /* =========================
@@ -1499,7 +1558,50 @@ function formatDate(value){
 
 
 /* =========================
-   TIME
+   TIME FORMAT
+========================= */
+
+function formatModifiedTime(timestamp){
+
+  if(!timestamp){
+    return "--:--:--";
+  }
+
+  const d =
+    new Date(timestamp);
+
+  if(Number.isNaN(d.getTime())){
+    return "--:--:--";
+  }
+
+  return d.toLocaleTimeString(
+    [],
+    {
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit",
+      hour12:false
+    }
+  );
+
+}
+
+
+function updateModificationTime(){
+
+  lastModifiedAt =
+    Date.now();
+
+  lastModifiedTime.textContent =
+    formatModifiedTime(
+      lastModifiedAt
+    );
+
+}
+
+
+/* =========================
+   SAVED TIME
 ========================= */
 
 function formatSavedTime(timestamp){
@@ -1730,6 +1832,18 @@ function buildRows(){
         <span class="amount-value">0</span>
       </td>
 
+      <td>
+        <input
+          class="bayad-input"
+          type="number"
+          inputmode="decimal"
+        >
+      </td>
+
+      <td>
+        <span class="sukli-value">0</span>
+      </td>
+
     `;
 
     customerBody.appendChild(tr);
@@ -1738,7 +1852,9 @@ function buildRows(){
 
 
   document
-    .querySelectorAll(".qty-input")
+    .querySelectorAll(
+      ".qty-input, .name-input, .bayad-input"
+    )
     .forEach(input => {
 
       input.addEventListener(
@@ -1747,23 +1863,7 @@ function buildRows(){
 
           calculate();
 
-          saveCurrentDraft();
-
-        }
-      );
-
-    });
-
-
-  document
-    .querySelectorAll(".name-input")
-    .forEach(input => {
-
-      input.addEventListener(
-        "input",
-        () => {
-
-          calculate();
+          updateModificationTime();
 
           saveCurrentDraft();
 
@@ -1773,42 +1873,6 @@ function buildRows(){
     });
 
 }
-
-
-/* =========================
-   CURRENT ROW HIGHLIGHT
-========================= */
-
-document.addEventListener(
-  "click",
-  e => {
-
-    const row =
-      e.target.closest(
-        ".customer-row"
-      );
-
-    document
-      .querySelectorAll(".customer-row")
-      .forEach(r => {
-
-        r.classList.remove(
-          "active-row"
-        );
-
-      });
-
-
-    if(row){
-
-      row.classList.add(
-        "active-row"
-      );
-
-    }
-
-  }
-);
 
 
 /* =========================
@@ -1822,7 +1886,10 @@ function calculate(){
   let totalL = 0;
   let totalM = 0;
   let totalC = 0;
+
   let totalAmount = 0;
+  let totalBayad = 0;
+  let totalSukli = 0;
 
 
   const rows =
@@ -1858,6 +1925,11 @@ function calculate(){
         row.querySelector(".qty-c").value
       );
 
+    const bayad =
+      num(
+        row.querySelector(".bayad-input").value
+      );
+
 
     totalR += r;
     totalP += p;
@@ -1874,13 +1946,25 @@ function calculate(){
       (c * multipliers.C);
 
 
+    const sukli =
+      bayad - amount;
+
+
     totalAmount += amount;
+    totalBayad += bayad;
+    totalSukli += sukli;
 
 
     row.querySelector(
       ".amount-value"
     ).textContent =
       formatAmount(amount);
+
+
+    row.querySelector(
+      ".sukli-value"
+    ).textContent =
+      formatAmount(sukli);
 
   });
 
@@ -1902,6 +1986,12 @@ function calculate(){
 
   document.getElementById("totalAmount").textContent =
     formatAmount(totalAmount);
+
+  document.getElementById("totalBayad").textContent =
+    formatAmount(totalBayad);
+
+  document.getElementById("totalSukli").textContent =
+    formatAmount(totalSukli);
 
 
   document.getElementById("salesR").textContent =
@@ -1975,6 +2065,9 @@ function captureLedger(){
     name:
       ledgerName.value.trim(),
 
+    modifiedAt:
+      lastModifiedAt,
+
     del:{
       R:document.getElementById("delR").value,
       P:document.getElementById("delP").value,
@@ -2002,7 +2095,10 @@ function captureLedger(){
           row.querySelector(".qty-m").value,
 
         C:
-          row.querySelector(".qty-c").value
+          row.querySelector(".qty-c").value,
+
+        bayad:
+          row.querySelector(".bayad-input").value
 
       }))
 
@@ -2027,6 +2123,17 @@ function applyLedger(data){
 
   ledgerName.value =
     data.name || "";
+
+
+  lastModifiedAt =
+    data.modifiedAt ||
+    Date.now();
+
+
+  lastModifiedTime.textContent =
+    formatModifiedTime(
+      lastModifiedAt
+    );
 
 
   const del =
@@ -2084,6 +2191,9 @@ function applyLedger(data){
     row.querySelector(".qty-c").value =
       item.C || "";
 
+    row.querySelector(".bayad-input").value =
+      item.bayad || "";
+
   });
 
 
@@ -2128,11 +2238,14 @@ function clearLedgerValues(){
       row.querySelector(".qty-l").value = "";
       row.querySelector(".qty-m").value = "";
       row.querySelector(".qty-c").value = "";
+      row.querySelector(".bayad-input").value = "";
 
     });
 
 
   calculate();
+
+  updateModificationTime();
 
   saveCurrentDraft();
 
@@ -2202,6 +2315,10 @@ function startLedger(){
   temporaryCurrentEditingId = null;
 
   editingSavedId = null;
+
+
+  updateModificationTime();
+
 
   document.body.classList.remove(
     "readonly-mode"
@@ -2277,6 +2394,9 @@ function loadSession(){
 
   displayDate.textContent = "";
   displayName.textContent = "";
+
+  lastModifiedTime.textContent =
+    "--:--:--";
 
   setupError.textContent = "";
 
@@ -2360,6 +2480,8 @@ function saveMultipliers(){
 
 
   calculate();
+
+  updateModificationTime();
 
   saveCurrentDraft();
 
@@ -2504,11 +2626,17 @@ function performSave(){
   }
 
 
+  lastModifiedAt =
+    now;
+
+
   const data =
     captureLedger();
 
   data.date = date;
   data.name = name;
+  data.modifiedAt =
+    lastModifiedAt;
 
 
   if(
@@ -2621,6 +2749,11 @@ function performSave(){
 
   displayName.textContent =
     name;
+
+  lastModifiedTime.textContent =
+    formatModifiedTime(
+      lastModifiedAt
+    );
 
 
   saveModal.classList.add(
@@ -3195,6 +3328,45 @@ function hasLedgerData(data){
 
 
 /* =========================
+   CUSTOMER ROW HIGHLIGHT
+========================= */
+
+document.addEventListener(
+  "click",
+  e => {
+
+    const row =
+      e.target.closest(
+        ".customer-row"
+      );
+
+
+    document
+      .querySelectorAll(
+        ".customer-row"
+      )
+      .forEach(r => {
+
+        r.classList.remove(
+          "active-row"
+        );
+
+      });
+
+
+    if(row){
+
+      row.classList.add(
+        "active-row"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================
    OPEN LEDGER
 ========================= */
 
@@ -3401,7 +3573,7 @@ savedList.addEventListener(
 
 
 /* =========================
-   5-TAP KEY
+   5-TAP TIME RECORD
 ========================= */
 
 let tapCount = 0;
@@ -3511,6 +3683,8 @@ document
       () => {
 
         calculate();
+
+        updateModificationTime();
 
         saveCurrentDraft();
 
