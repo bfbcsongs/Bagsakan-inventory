@@ -523,10 +523,10 @@ th,td{
 }
 
 .saved-time{
-  font-size:8px;
+  font-size:9px;
   color:#64748b;
-  font-weight:700;
-  margin-top:1px;
+  font-weight:800;
+  margin-top:2px;
 }
 
 .saved-actions{
@@ -933,6 +933,7 @@ th,td{
 
     </div>
 
+
     <div class="table-wrap">
 
       <table>
@@ -1034,6 +1035,7 @@ th,td{
 
     </div>
 
+
     <div class="customer-wrap">
 
       <table class="customer-table">
@@ -1103,6 +1105,7 @@ th,td{
     </div>
 
   </div>
+
 
   <div class="saved-section">
 
@@ -1380,7 +1383,7 @@ if('serviceWorker' in navigator){
 
       navigator.serviceWorker
         .register(
-          './sw.js?v=2',
+          './sw.js?v=3',
           {
             scope:'./'
           }
@@ -1553,11 +1556,6 @@ let editingSavedId =
 let lastModifiedAt =
   Date.now();
 
-/*
-   Pending EDIT request.
-   Used when the current ledger must
-   be saved before opening another file.
-*/
 let pendingEditId =
   null;
 
@@ -1690,7 +1688,7 @@ function formatSavedTime(timestamp){
   }
 
   return d.toLocaleTimeString(
-    [],
+    "en-US",
     {
       hour:"numeric",
       minute:"2-digit",
@@ -1709,121 +1707,6 @@ function updateModificationTime(){
 
   lastModifiedAt =
     Date.now();
-
-}
-
-
-/* =========================
-   TOUCH EDITED SAVED FILE
-========================= */
-
-/*
-   IMPORTANT:
-   If a saved file is currently
-   being edited, every input/change
-   updates ONLY that saved file's
-   modifiedAt timestamp immediately.
-
-   The timestamp shown in the
-   SAVED LEDGER FILES list therefore
-   represents the latest input made
-   to that particular file.
-*/
-
-function touchEditedSavedFile(){
-
-  if(
-    !editingSavedId ||
-    readonlyMode
-  ){
-
-    return;
-
-  }
-
-
-  const files =
-    getSavedFiles();
-
-
-  const index =
-    files.findIndex(
-      file =>
-        file.id ===
-        editingSavedId
-    );
-
-
-  if(index === -1){
-    return;
-  }
-
-
-  const now =
-    Date.now();
-
-
-  files[index].modifiedAt =
-    now;
-
-
-  /*
-     Keep the ledger data's
-     modification timestamp
-     synchronized as well.
-  */
-
-  if(files[index].data){
-
-    files[index].data.modifiedAt =
-      now;
-
-  }
-
-
-  setSavedFiles(
-    files
-  );
-
-
-  /*
-     Update ONLY the visible
-     timestamp of this saved item.
-     We do not rebuild the whole
-     saved list because that could
-     disturb the active input.
-  */
-
-  const item =
-    Array.from(
-      savedList.querySelectorAll(
-        ".saved-item"
-      )
-    ).find(
-      el =>
-        el.dataset.id ===
-        editingSavedId
-    );
-
-
-  if(item){
-
-    const timeEl =
-      item.querySelector(
-        ".saved-time"
-      );
-
-
-    if(timeEl){
-
-      timeEl.textContent =
-        formatSavedTime(
-          now
-        );
-
-    }
-
-  }
 
 }
 
@@ -1866,6 +1749,76 @@ function setSavedFiles(files){
     SAVED_FILES_KEY,
     JSON.stringify(files)
   );
+
+}
+
+
+/* =========================
+   TOUCH EDITED SAVED FILE
+========================= */
+
+function touchEditedSavedFile(){
+
+  if(
+    !editingSavedId ||
+    readonlyMode
+  ){
+
+    return;
+
+  }
+
+  const files =
+    getSavedFiles();
+
+  const index =
+    files.findIndex(
+      file =>
+        file.id === editingSavedId
+    );
+
+  if(index === -1){
+    return;
+  }
+
+  const now =
+    Date.now();
+
+  files[index].modifiedAt =
+    now;
+
+  setSavedFiles(
+    files
+  );
+
+  const item =
+    Array.from(
+      savedList.querySelectorAll(
+        ".saved-item"
+      )
+    ).find(
+      el =>
+        el.dataset.id ===
+        editingSavedId
+    );
+
+  if(item){
+
+    const timeEl =
+      item.querySelector(
+        ".saved-time"
+      );
+
+    if(timeEl){
+
+      timeEl.textContent =
+        formatSavedTime(
+          now
+        );
+
+    }
+
+  }
 
 }
 
@@ -2101,13 +2054,6 @@ function buildRows(){
             updateModificationTime();
 
             saveCurrentDraft();
-
-            /*
-               NEW:
-               If editing a saved file,
-               update its own timestamp
-               immediately.
-            */
 
             touchEditedSavedFile();
 
@@ -3001,11 +2947,6 @@ function saveMultipliers(){
 
   saveCurrentDraft();
 
-  /*
-     Multiplier changes also modify
-     the currently edited saved file.
-  */
-
   touchEditedSavedFile();
 
 }
@@ -3474,12 +3415,8 @@ function renderSavedList(){
         );
 
 
-      /*
-         NEW:
-         Store the saved-file ID
-         directly on the item so its
-         timestamp can be updated
-         without rebuilding the list.
+      /* IMPORTANT:
+         Each saved row gets its own ID.
       */
 
       item.dataset.id =
@@ -4550,13 +4487,6 @@ document
           updateModificationTime();
 
           saveCurrentDraft();
-
-          /*
-             NEW:
-             DEL changes also update
-             the timestamp of the
-             currently edited file.
-          */
 
           touchEditedSavedFile();
 
