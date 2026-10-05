@@ -317,8 +317,12 @@ th,td{
   color:#b45309;
 }
 
+.customer-row.active-row .row-time{
+  color:#b45309;
+}
+
 /* =========================
-   ROW NUMBER + INPUTS
+   ROW NUMBER + KEY + TIME
 ========================= */
 
 .name-cell{
@@ -337,6 +341,26 @@ th,td{
   color:#64748b;
   font-size:10px;
   font-weight:900;
+}
+
+.row-key{
+  width:12px;
+  flex-shrink:0;
+  text-align:center;
+  font-size:8px;
+  line-height:1;
+  opacity:.75;
+}
+
+.row-time{
+  width:38px;
+  flex-shrink:0;
+  text-align:center;
+  color:#64748b;
+  font-size:7px;
+  font-weight:900;
+  line-height:1;
+  white-space:nowrap;
 }
 
 .name-input,
@@ -520,13 +544,6 @@ th,td{
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-}
-
-.saved-time{
-  font-size:9px;
-  color:#64748b;
-  font-weight:800;
-  margin-top:2px;
 }
 
 .saved-actions{
@@ -789,6 +806,15 @@ th,td{
     font-size:10px;
   }
 
+  .row-key{
+    font-size:8px;
+  }
+
+  .row-time{
+    width:38px;
+    font-size:7px;
+  }
+
   .total-row{
     height:23px;
     font-size:10px;
@@ -875,6 +901,15 @@ th,td{
 
   .row-number{
     font-size:9px;
+  }
+
+  .row-key{
+    font-size:7px;
+  }
+
+  .row-time{
+    width:36px;
+    font-size:6.5px;
   }
 
   .total-row{
@@ -1129,6 +1164,7 @@ th,td{
 
 <!-- START LEDGER MODAL -->
 <div class="modal" id="setupModal">
+
   <div class="modal-box">
 
     <div class="modal-title">
@@ -1136,6 +1172,7 @@ th,td{
     </div>
 
     <div class="modal-field">
+
       <label for="ledgerDate">
         DATE
       </label>
@@ -1145,9 +1182,11 @@ th,td{
         id="ledgerDate"
         autocomplete="off"
       >
+
     </div>
 
     <div class="modal-field">
+
       <label for="ledgerName">
         NAME
       </label>
@@ -1158,6 +1197,7 @@ th,td{
         autocomplete="off"
         placeholder="Enter name"
       >
+
     </div>
 
     <div
@@ -1173,6 +1213,7 @@ th,td{
     </button>
 
   </div>
+
 </div>
 
 
@@ -1700,6 +1741,39 @@ function formatSavedTime(timestamp){
 
 
 /* =========================
+   ROW TIME
+========================= */
+
+function updateCustomerRowTime(row){
+
+  if(!row){
+    return;
+  }
+
+  const now =
+    Date.now();
+
+  row.dataset.modifiedAt =
+    String(now);
+
+  const timeEl =
+    row.querySelector(
+      ".row-time"
+    );
+
+  if(timeEl){
+
+    timeEl.textContent =
+      formatSavedTime(
+        now
+      );
+
+  }
+
+}
+
+
+/* =========================
    MODIFICATION TIME
 ========================= */
 
@@ -1790,35 +1864,6 @@ function touchEditedSavedFile(){
   setSavedFiles(
     files
   );
-
-  const item =
-    Array.from(
-      savedList.querySelectorAll(
-        ".saved-item"
-      )
-    ).find(
-      el =>
-        el.dataset.id ===
-        editingSavedId
-    );
-
-  if(item){
-
-    const timeEl =
-      item.querySelector(
-        ".saved-time"
-      );
-
-    if(timeEl){
-
-      timeEl.textContent =
-        formatSavedTime(
-          now
-        );
-
-    }
-
-  }
 
 }
 
@@ -1933,6 +1978,9 @@ function buildRows(){
     tr.className =
       "customer-row";
 
+    tr.dataset.modifiedAt =
+      "";
+
     tr.innerHTML = `
 
       <td>
@@ -1941,6 +1989,19 @@ function buildRows(){
 
           <span class="row-number">
             ${i}.
+          </span>
+
+          <span
+            class="row-key"
+            aria-label="Customer row key"
+          >
+            🔑
+          </span>
+
+          <span
+            class="row-time"
+          >
+            --
           </span>
 
           <input
@@ -2048,6 +2109,21 @@ function buildRows(){
         input.addEventListener(
           "input",
           () => {
+
+            const row =
+              input.closest(
+                ".customer-row"
+              );
+
+            /*
+             * IMPORTANT:
+             * Only this customer row
+             * receives the new time.
+             */
+
+            updateCustomerRowTime(
+              row
+            );
 
             calculate();
 
@@ -2180,95 +2256,69 @@ function calculate(){
   document.getElementById(
     "totalR"
   ).textContent =
-    formatAmount(
-      totalR
-    );
+    formatAmount(totalR);
 
   document.getElementById(
     "totalP"
   ).textContent =
-    formatAmount(
-      totalP
-    );
+    formatAmount(totalP);
 
   document.getElementById(
     "totalL"
   ).textContent =
-    formatAmount(
-      totalL
-    );
+    formatAmount(totalL);
 
   document.getElementById(
     "totalM"
   ).textContent =
-    formatAmount(
-      totalM
-    );
+    formatAmount(totalM);
 
   document.getElementById(
     "totalC"
   ).textContent =
-    formatAmount(
-      totalC
-    );
+    formatAmount(totalC);
 
 
   document.getElementById(
     "totalAmount"
   ).textContent =
-    formatAmount(
-      totalAmount
-    );
+    formatAmount(totalAmount);
 
   document.getElementById(
     "totalBayad"
   ).textContent =
-    formatAmount(
-      totalBayad
-    );
+    formatAmount(totalBayad);
 
   document.getElementById(
     "totalSukli"
   ).textContent =
-    formatAmount(
-      totalSukli
-    );
+    formatAmount(totalSukli);
 
 
   document.getElementById(
     "salesR"
   ).textContent =
-    formatAmount(
-      totalR
-    );
+    formatAmount(totalR);
 
   document.getElementById(
     "salesP"
   ).textContent =
-    formatAmount(
-      totalP
-    );
+    formatAmount(totalP);
 
   document.getElementById(
     "salesL"
   ).textContent =
-    formatAmount(
-      totalL
-    );
+    formatAmount(totalL);
 
   document.getElementById(
     "salesM"
   ).textContent =
-    formatAmount(
-      totalM
-    );
+    formatAmount(totalM);
 
   document.getElementById(
     "salesC"
   ).textContent =
-    formatAmount(
-      totalC
-    );
+    formatAmount(totalC);
 
 
   const delR =
@@ -2437,7 +2487,15 @@ function captureLedger(){
           bayad:
             row.querySelector(
               ".bayad-input"
-            ).value
+            ).value,
+
+          /*
+           * Each customer has
+           * its own modification time.
+           */
+
+          modifiedAt:
+            row.dataset.modifiedAt || ""
 
         })
       )
@@ -2553,6 +2611,31 @@ function applyLedger(data){
       ).value =
         item.bayad || "";
 
+
+      /*
+       * Restore this customer's
+       * own timestamp.
+       */
+
+      row.dataset.modifiedAt =
+        item.modifiedAt || "";
+
+      const timeEl =
+        row.querySelector(
+          ".row-time"
+        );
+
+      if(timeEl){
+
+        timeEl.textContent =
+          item.modifiedAt
+            ? formatSavedTime(
+                item.modifiedAt
+              )
+            : "--";
+
+      }
+
     }
   );
 
@@ -2578,13 +2661,11 @@ function applyLedger(data){
 function clearLedgerValues(){
 
   [
-
     "delR",
     "delP",
     "delL",
     "delM",
     "delC"
-
   ].forEach(
     id => {
 
@@ -2630,6 +2711,24 @@ function clearLedgerValues(){
         row.querySelector(
           ".bayad-input"
         ).value = "";
+
+
+        /*
+         * Clear this row's time too.
+         */
+
+        row.dataset.modifiedAt =
+          "";
+
+        const timeEl =
+          row.querySelector(
+            ".row-time"
+          );
+
+        if(timeEl){
+          timeEl.textContent =
+            "--";
+        }
 
       }
     );
@@ -2682,9 +2781,7 @@ function startLedger(){
 
 
   displayDate.textContent =
-    formatDate(
-      date
-    );
+    formatDate(date);
 
   displayName.textContent =
     name;
@@ -3069,8 +3166,7 @@ function performSave(){
     const okay =
       confirm(
         `A saved file already exists for ${formatDate(date)}.\n\n` +
-        `Name: ${existing.name}\n` +
-        `Time: ${formatSavedTime(existing.modifiedAt || existing.savedAt)}\n\n` +
+        `Name: ${existing.name}\n\n` +
         `Replace that file with this ledger?`
       );
 
@@ -3247,9 +3343,7 @@ function performSave(){
 
 
   displayDate.textContent =
-    formatDate(
-      date
-    );
+    formatDate(date);
 
   displayName.textContent =
     name;
@@ -3415,10 +3509,6 @@ function renderSavedList(){
         );
 
 
-      /* IMPORTANT:
-         Each saved row gets its own ID.
-      */
-
       item.dataset.id =
         file.id;
 
@@ -3447,15 +3537,6 @@ function renderSavedList(){
             <div class="saved-name">
               ${escapeHtml(
                 file.name || ""
-              )}
-            </div>
-
-            <div class="saved-time">
-              ${escapeHtml(
-                formatSavedTime(
-                  file.modifiedAt ||
-                  file.savedAt
-                )
               )}
             </div>
 
@@ -3983,12 +4064,27 @@ function hasLedgerData(data){
 
     return data.rows.some(
       row =>
-        Object.values(row)
+        Object.entries(row)
           .some(
-            value =>
-              String(
+            ([key,value]) => {
+
+              /*
+               * modifiedAt is metadata only.
+               * It must NOT make an otherwise
+               * empty row count as ledger data.
+               */
+
+              if(
+                key === "modifiedAt"
+              ){
+                return false;
+              }
+
+              return String(
                 value || ""
-              ).trim() !== ""
+              ).trim() !== "";
+
+            }
           )
     );
 
