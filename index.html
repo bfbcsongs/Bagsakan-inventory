@@ -246,15 +246,6 @@ th,td{
   table-layout:fixed;
 }
 
-/*
-   NAME reduced from 25% to 20%
-   AMOUNT reduced from 25% to 15%
-
-   Added:
-   BAYAD 15%
-   SUKLI 15%
-*/
-
 .customer-table col.name-col{
   width:20%;
 }
@@ -287,6 +278,15 @@ th,td{
   border-color:#475569;
   cursor:pointer;
   user-select:none;
+}
+
+#lastModifiedTime{
+  display:block;
+  width:100%;
+  text-align:center;
+  white-space:nowrap;
+  font-size:8px;
+  line-height:1;
 }
 
 .customer-row{
@@ -778,6 +778,10 @@ th,td{
     font-size:8px;
   }
 
+  #lastModifiedTime{
+    font-size:7px;
+  }
+
   .customer-row{
     height:14px;
   }
@@ -863,6 +867,10 @@ th,td{
   .customer-header{
     height:14px;
     font-size:7px;
+  }
+
+  #lastModifiedTime{
+    font-size:6px;
   }
 
   .customer-row{
@@ -1069,7 +1077,7 @@ th,td{
               id="nameHeader"
               title="5 taps to open multiplier settings"
             >
-              <span id="lastModifiedTime">--:--:--</span>
+              <span id="lastModifiedTime">--:-- am</span>
             </th>
 
             <th>R</th>
@@ -1470,7 +1478,15 @@ let temporaryCurrentEditingId = null;
 
 let editingSavedId = null;
 
-let lastModifiedAt = Date.now();
+let lastModifiedAt = null;
+
+/*
+   When EDIT is tapped while the current
+   ledger contains data, this stores the
+   saved file that should be opened after
+   the current ledger is successfully saved.
+*/
+let pendingEditId = null;
 
 
 /* =========================
@@ -1558,31 +1574,30 @@ function formatDate(value){
 
 
 /* =========================
-   TIME FORMAT
+   MODIFICATION TIME
 ========================= */
 
 function formatModifiedTime(timestamp){
 
   if(!timestamp){
-    return "--:--:--";
+    return "--:-- am";
   }
 
   const d =
     new Date(timestamp);
 
   if(Number.isNaN(d.getTime())){
-    return "--:--:--";
+    return "--:-- am";
   }
 
   return d.toLocaleTimeString(
     [],
     {
-      hour:"2-digit",
+      hour:"numeric",
       minute:"2-digit",
-      second:"2-digit",
-      hour12:false
+      hour12:true
     }
-  );
+  ).toLowerCase();
 
 }
 
@@ -2111,7 +2126,7 @@ function captureLedger(){
    APPLY LEDGER
 ========================= */
 
-function applyLedger(data){
+function applyLedger(data, fallbackModifiedAt){
 
   if(!data){
     return;
@@ -2127,7 +2142,8 @@ function applyLedger(data){
 
   lastModifiedAt =
     data.modifiedAt ||
-    Date.now();
+    fallbackModifiedAt ||
+    null;
 
 
   lastModifiedTime.textContent =
@@ -2316,8 +2332,13 @@ function startLedger(){
 
   editingSavedId = null;
 
+  lastModifiedAt =
+    Date.now();
 
-  updateModificationTime();
+  lastModifiedTime.textContent =
+    formatModifiedTime(
+      lastModifiedAt
+    );
 
 
   document.body.classList.remove(
@@ -2346,7 +2367,8 @@ function loadSession(){
   ){
 
     applyLedger(
-      draft.ledger
+      draft.ledger,
+      draft.savedAt
     );
 
 
@@ -2395,8 +2417,10 @@ function loadSession(){
   displayDate.textContent = "";
   displayName.textContent = "";
 
+  lastModifiedAt = null;
+
   lastModifiedTime.textContent =
-    "--:--:--";
+    "--:-- am";
 
   setupError.textContent = "";
 
@@ -2639,6 +2663,9 @@ function performSave(){
     lastModifiedAt;
 
 
+  let savedFileId = null;
+
+
   if(
     editingSavedId &&
     editingIndex !== -1
@@ -2663,8 +2690,11 @@ function performSave(){
     };
 
 
-    editingSavedId =
+    savedFileId =
       files[editingIndex].id;
+
+    editingSavedId =
+      savedFileId;
 
   }
 
@@ -2692,6 +2722,9 @@ function performSave(){
 
 
     files.push(file);
+
+    savedFileId =
+      file.id;
 
     editingSavedId =
       file.id;
@@ -2750,16 +2783,27 @@ function performSave(){
   displayName.textContent =
     name;
 
-  lastModifiedTime.textContent =
-    formatModifiedTime(
-      lastModifiedAt
-    );
+
+  /*
+     Keep the saved file's actual
+     modification time before clearing
+     the current ledger.
+  */
+
+  const savedModificationTime =
+    lastModifiedAt;
 
 
   saveModal.classList.add(
     "hidden"
   );
 
+
+  /*
+     Clear the current ledger exactly
+     as before, then make it empty
+     and read-only.
+  */
 
   clearLedgerValues();
 
@@ -2777,6 +2821,22 @@ function performSave(){
   temporaryCurrentEditingId = null;
 
 
+  /*
+     The saved file is complete.
+     Keep the header showing the save/
+     modification time rather than the
+     internal clear operation.
+  */
+
+  lastModifiedAt =
+    savedModificationTime;
+
+  lastModifiedTime.textContent =
+    formatModifiedTime(
+      lastModifiedAt
+    );
+
+
   document.body.classList.add(
     "readonly-mode"
   );
@@ -2788,6 +2848,40 @@ function performSave(){
 
 
   renderSavedList();
+
+
+  /*
+     IMPORTANT:
+     If EDIT was waiting for the current
+     ledger to be saved, continue to the
+     selected saved file now.
+  */
+
+  const editAfterSave =
+    pendingEditId;
+
+  pendingEditId = null;
+
+
+  if(editAfterSave){
+
+    const targetStillExists =
+      getSavedFiles().some(
+        file =>
+          file.id === editAfterSave
+      );
+
+    if(targetStillExists){
+
+      editSavedFile(
+        editAfterSave
+      );
+
+      return true;
+
+    }
+
+  }
 
 
   alert(
@@ -2979,6 +3073,14 @@ function previewSavedFile(id){
   }
 
 
+  /*
+     PREVIEW is read-only.
+     We only preserve the current
+     editable ledger temporarily so
+     tapping the file again can return
+     to it.
+  */
+
   if(
     !readonlyMode &&
     currentLedgerStarted
@@ -3004,7 +3106,8 @@ function previewSavedFile(id){
 
 
   applyLedger(
-    file.data
+    file.data,
+    file.savedAt
   );
 
 
@@ -3087,8 +3190,75 @@ function editSavedFile(id){
   }
 
 
+  /*
+     SAFETY LOCK:
+     Never replace an active current
+     ledger that contains data.
+
+     If there is current data, ask first.
+     SAVE CURRENT continues only after
+     the normal Save Ledger process is
+     successfully completed.
+  */
+
+  if(
+    !readonlyMode &&
+    currentLedgerStarted
+  ){
+
+    const current =
+      captureLedger();
+
+    const hasData =
+      hasLedgerData(current);
+
+
+    if(hasData){
+
+      const okay =
+        confirm(
+          "You have an active ledger with unsaved data.\n\n" +
+          "SAVE CURRENT before editing this saved file?\n\n" +
+          "Choose OK to save the current ledger.\n" +
+          "Choose Cancel to stay on the current ledger."
+        );
+
+
+      if(!okay){
+
+        return;
+
+      }
+
+
+      /*
+         Remember which saved file the user
+         wanted to edit. The normal SAVE
+         process will continue here after
+         successful saving.
+      */
+
+      pendingEditId =
+        id;
+
+
+      saveCurrentFile();
+
+      return;
+
+    }
+
+  }
+
+
+  /*
+     No unsaved current data, so the
+     saved file can be opened directly.
+  */
+
   applyLedger(
-    file.data
+    file.data,
+    file.savedAt
   );
 
 
@@ -3439,6 +3609,16 @@ document
     "click",
     () => {
 
+      /*
+         If this save was triggered by
+         EDIT protection, cancelling the
+         save must also cancel the pending
+         edit. The current ledger remains
+         exactly where it was.
+      */
+
+      pendingEditId = null;
+
       saveModal.classList.add(
         "hidden"
       );
@@ -3468,6 +3648,8 @@ saveModal.addEventListener(
   e => {
 
     if(e.target === saveModal){
+
+      pendingEditId = null;
 
       saveModal.classList.add(
         "hidden"
