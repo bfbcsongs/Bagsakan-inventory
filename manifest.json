@@ -1,0 +1,22 @@
+{
+  "short_name": "RPLMC",
+  "name": "RPLMC Tracker",
+  "description": "RPLMC Sales and Delivery Ledger Tracker",
+  "start_url": "./index.html",
+  "background_color": "#f1f5f9",
+  "theme_color": "#111827",
+  "display": "standalone",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
