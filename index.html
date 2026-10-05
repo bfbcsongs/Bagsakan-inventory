@@ -32,6 +32,7 @@ body{
   display:flex;
   justify-content:center;
   overflow-y:auto;
+  overflow-x:hidden;
 }
 
 .app{
@@ -325,8 +326,6 @@ th,td{
   white-space:nowrap;
 }
 
-/* BIGGER TOTAL */
-
 .total-row{
   height:25px;
   background:#111827;
@@ -351,21 +350,16 @@ th,td{
 
 .saved-section{
   width:100%;
-  height:115px;
-  flex:0 0 115px;
   background:#fff;
   border:1px solid #cbd5e1;
   border-radius:4px;
   margin-top:4px;
   padding:5px;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
+  flex-shrink:0;
 }
 
 .saved-section-title{
   height:22px;
-  flex-shrink:0;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -374,35 +368,37 @@ th,td{
   border-radius:4px;
   font-size:11px;
   font-weight:900;
-  margin-bottom:3px;
+  margin-bottom:4px;
 }
 
 .saved-section-subtitle{
-  height:15px;
-  flex-shrink:0;
   text-align:center;
   font-size:9px;
   color:#64748b;
   font-weight:700;
-  margin-bottom:3px;
+  margin-bottom:4px;
 }
 
+/*
+ * Larger permanent list area.
+ * Enough space to see about 4 files.
+ */
 .saved-list{
-  flex:1 1 auto;
-  min-height:0;
   display:flex;
   flex-direction:column;
   gap:4px;
+  height:270px;
+  max-height:270px;
   overflow-y:auto;
-  overflow-x:hidden;
   padding-right:2px;
+  -webkit-overflow-scrolling:touch;
 }
 
 .saved-item{
   border:1px solid #cbd5e1;
   border-radius:6px;
   background:#f8fafc;
-  padding:4px;
+  padding:5px;
   flex-shrink:0;
   user-select:none;
 }
@@ -420,15 +416,15 @@ th,td{
 }
 
 .saved-number{
-  width:20px;
-  height:20px;
+  width:21px;
+  height:21px;
   border-radius:50%;
   background:#111827;
   color:#fff;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:8px;
+  font-size:9px;
   font-weight:900;
   flex-shrink:0;
 }
@@ -443,14 +439,14 @@ th,td{
 }
 
 .saved-date{
-  font-size:10px;
+  font-size:11px;
   font-weight:900;
   color:#1d4ed8;
   white-space:nowrap;
 }
 
 .saved-name{
-  font-size:10px;
+  font-size:11px;
   font-weight:900;
   color:#111827;
   white-space:nowrap;
@@ -459,7 +455,7 @@ th,td{
 }
 
 .saved-time{
-  font-size:7px;
+  font-size:8px;
   color:#64748b;
   font-weight:700;
   margin-top:1px;
@@ -468,18 +464,18 @@ th,td{
 .saved-actions{
   display:flex;
   gap:4px;
-  margin-top:3px;
-  padding-left:26px;
+  margin-top:4px;
+  padding-left:27px;
 }
 
 .saved-action{
-  height:22px;
+  height:24px;
   border:0;
   border-radius:5px;
   color:#fff;
-  font-size:8px;
+  font-size:9px;
   font-weight:900;
-  padding:0 9px;
+  padding:0 10px;
 }
 
 .edit-saved-btn{
@@ -492,9 +488,9 @@ th,td{
 
 .empty-list{
   text-align:center;
-  padding:12px 10px;
+  padding:18px 10px;
   color:#64748b;
-  font-size:10px;
+  font-size:11px;
   font-weight:800;
 }
 
@@ -724,9 +720,9 @@ th,td{
     font-size:10px;
   }
 
-  .saved-section{
-    height:105px;
-    flex-basis:105px;
+  .saved-list{
+    height:270px;
+    max-height:270px;
   }
 
 }
@@ -806,6 +802,11 @@ th,td{
     font-size:8px;
   }
 
+  .saved-list{
+    height:260px;
+    max-height:260px;
+  }
+
 }
 </style>
 </head>
@@ -821,7 +822,6 @@ th,td{
   <div class="ledger-screen">
 
     <!-- DATE + NAME + BUTTONS -->
-
     <div class="info-bar">
 
       <div class="info-date" id="displayDate"></div>
@@ -859,9 +859,7 @@ th,td{
     </div>
 
 
-    <!-- =========================
-         SUMMARY
-    ========================= -->
+    <!-- SUMMARY -->
 
     <div class="table-wrap">
 
@@ -904,48 +902,28 @@ th,td{
             </td>
 
             <td>
-              <input
-                id="delR"
-                class="del-input"
-                type="number"
-                inputmode="decimal"
-              >
+              <input id="delR" class="del-input"
+                type="number" inputmode="decimal">
             </td>
 
             <td>
-              <input
-                id="delP"
-                class="del-input"
-                type="number"
-                inputmode="decimal"
-              >
+              <input id="delP" class="del-input"
+                type="number" inputmode="decimal">
             </td>
 
             <td>
-              <input
-                id="delL"
-                class="del-input"
-                type="number"
-                inputmode="decimal"
-              >
+              <input id="delL" class="del-input"
+                type="number" inputmode="decimal">
             </td>
 
             <td>
-              <input
-                id="delM"
-                class="del-input"
-                type="number"
-                inputmode="decimal"
-              >
+              <input id="delM" class="del-input"
+                type="number" inputmode="decimal">
             </td>
 
             <td>
-              <input
-                id="delC"
-                class="del-input"
-                type="number"
-                inputmode="decimal"
-              >
+              <input id="delC" class="del-input"
+                type="number" inputmode="decimal">
             </td>
 
           </tr>
@@ -985,9 +963,7 @@ th,td{
     </div>
 
 
-    <!-- =========================
-         CUSTOMER TABLE
-    ========================= -->
+    <!-- CUSTOMER TABLE -->
 
     <div class="customer-wrap">
 
@@ -1082,10 +1058,7 @@ th,td{
      START LEDGER MODAL
 ========================= -->
 
-<div
-  class="modal"
-  id="setupModal"
->
+<div class="modal" id="setupModal">
 
   <div class="modal-box">
 
@@ -1230,47 +1203,27 @@ th,td{
 
       <div class="multiplier-item">
         <label>R</label>
-        <input
-          id="multR"
-          type="number"
-          inputmode="decimal"
-        >
+        <input id="multR" type="number" inputmode="decimal">
       </div>
 
       <div class="multiplier-item">
         <label>P</label>
-        <input
-          id="multP"
-          type="number"
-          inputmode="decimal"
-        >
+        <input id="multP" type="number" inputmode="decimal">
       </div>
 
       <div class="multiplier-item">
         <label>L</label>
-        <input
-          id="multL"
-          type="number"
-          inputmode="decimal"
-        >
+        <input id="multL" type="number" inputmode="decimal">
       </div>
 
       <div class="multiplier-item">
         <label>M</label>
-        <input
-          id="multM"
-          type="number"
-          inputmode="decimal"
-        >
+        <input id="multM" type="number" inputmode="decimal">
       </div>
 
       <div class="multiplier-item">
         <label>C</label>
-        <input
-          id="multC"
-          type="number"
-          inputmode="decimal"
-        >
+        <input id="multC" type="number" inputmode="decimal">
       </div>
 
     </div>
@@ -1534,7 +1487,7 @@ function formatSavedTime(timestamp){
 
 
 /* =========================
-   SAVED FILES
+   GET SAVED FILES
 ========================= */
 
 function getSavedFiles(){
@@ -1561,6 +1514,10 @@ function getSavedFiles(){
 }
 
 
+/* =========================
+   SET SAVED FILES
+========================= */
+
 function setSavedFiles(files){
 
   localStorage.setItem(
@@ -1572,25 +1529,17 @@ function setSavedFiles(files){
 
 
 /* =========================
-   CURRENT DRAFT
+   AUTO-SAVE CURRENT DRAFT
 ========================= */
 
 function saveCurrentDraft(){
-
-  /*
-   * Never save a read-only preview
-   * as the current editable draft.
-   */
 
   if(
     !currentLedgerStarted ||
     readonlyMode
   ){
-
     return;
-
   }
-
 
   try{
 
@@ -1607,7 +1556,6 @@ function saveCurrentDraft(){
 
     };
 
-
     localStorage.setItem(
       CURRENT_DRAFT_KEY,
       JSON.stringify(draft)
@@ -1615,8 +1563,8 @@ function saveCurrentDraft(){
 
   }catch(e){
 
-    console.log(
-      "Unable to auto-save current draft:",
+    console.warn(
+      "Unable to auto-save current draft.",
       e
     );
 
@@ -1625,42 +1573,53 @@ function saveCurrentDraft(){
 }
 
 
-function clearCurrentDraft(){
+/* =========================
+   LOAD CURRENT DRAFT
+========================= */
 
-  localStorage.removeItem(
-    CURRENT_DRAFT_KEY
-  );
-
-}
-
-
-function getCurrentDraft(){
+function loadCurrentDraft(){
 
   try{
 
-    const data =
-      JSON.parse(
-        localStorage.getItem(
-          CURRENT_DRAFT_KEY
-        )
+    const raw =
+      localStorage.getItem(
+        CURRENT_DRAFT_KEY
       );
 
-    if(
-      !data ||
-      !data.ledger
-    ){
-
+    if(!raw){
       return null;
-
     }
 
-    return data;
+    const draft =
+      JSON.parse(raw);
+
+    if(
+      !draft ||
+      !draft.ledger
+    ){
+      return null;
+    }
+
+    return draft;
 
   }catch(e){
 
     return null;
 
   }
+
+}
+
+
+/* =========================
+   CLEAR CURRENT DRAFT
+========================= */
+
+function clearCurrentDraft(){
+
+  localStorage.removeItem(
+    CURRENT_DRAFT_KEY
+  );
 
 }
 
@@ -1732,9 +1691,7 @@ function buildRows(){
       </td>
 
       <td>
-        <span class="amount-value">
-          0
-        </span>
+        <span class="amount-value">0</span>
       </td>
 
     `;
@@ -1892,29 +1849,19 @@ function calculate(){
 
 
   const delR =
-    num(
-      document.getElementById("delR").value
-    );
+    num(document.getElementById("delR").value);
 
   const delP =
-    num(
-      document.getElementById("delP").value
-    );
+    num(document.getElementById("delP").value);
 
   const delL =
-    num(
-      document.getElementById("delL").value
-    );
+    num(document.getElementById("delL").value);
 
   const delM =
-    num(
-      document.getElementById("delM").value
-    );
+    num(document.getElementById("delM").value);
 
   const delC =
-    num(
-      document.getElementById("delC").value
-    );
+    num(document.getElementById("delC").value);
 
 
   document.getElementById("retR").textContent =
@@ -1957,20 +1904,11 @@ function captureLedger(){
       ledgerName.value.trim(),
 
     del:{
-      R:
-        document.getElementById("delR").value,
-
-      P:
-        document.getElementById("delP").value,
-
-      L:
-        document.getElementById("delL").value,
-
-      M:
-        document.getElementById("delM").value,
-
-      C:
-        document.getElementById("delC").value
+      R:document.getElementById("delR").value,
+      P:document.getElementById("delP").value,
+      L:document.getElementById("delL").value,
+      M:document.getElementById("delM").value,
+      C:document.getElementById("delC").value
     },
 
     rows:
@@ -2056,34 +1994,22 @@ function applyLedger(data){
       savedRows[index] || {};
 
 
-    row.querySelector(
-      ".name-input"
-    ).value =
+    row.querySelector(".name-input").value =
       item.name || "";
 
-    row.querySelector(
-      ".qty-r"
-    ).value =
+    row.querySelector(".qty-r").value =
       item.R || "";
 
-    row.querySelector(
-      ".qty-p"
-    ).value =
+    row.querySelector(".qty-p").value =
       item.P || "";
 
-    row.querySelector(
-      ".qty-l"
-    ).value =
+    row.querySelector(".qty-l").value =
       item.L || "";
 
-    row.querySelector(
-      ".qty-m"
-    ).value =
+    row.querySelector(".qty-m").value =
       item.M || "";
 
-    row.querySelector(
-      ".qty-c"
-    ).value =
+    row.querySelector(".qty-c").value =
       item.C || "";
 
   });
@@ -2124,34 +2050,25 @@ function clearLedgerValues(){
     .querySelectorAll(".customer-row")
     .forEach(row => {
 
-      row.querySelector(
-        ".name-input"
-      ).value = "";
-
-      row.querySelector(
-        ".qty-r"
-      ).value = "";
-
-      row.querySelector(
-        ".qty-p"
-      ).value = "";
-
-      row.querySelector(
-        ".qty-l"
-      ).value = "";
-
-      row.querySelector(
-        ".qty-m"
-      ).value = "";
-
-      row.querySelector(
-        ".qty-c"
-      ).value = "";
+      row.querySelector(".name-input").value = "";
+      row.querySelector(".qty-r").value = "";
+      row.querySelector(".qty-p").value = "";
+      row.querySelector(".qty-l").value = "";
+      row.querySelector(".qty-m").value = "";
+      row.querySelector(".qty-c").value = "";
 
     });
 
 
   calculate();
+
+  /*
+   * The old data is now intentionally cleared.
+   * Keep the current Date + Name but store
+   * the cleared state as the new draft.
+   */
+
+  saveCurrentDraft();
 
 }
 
@@ -2206,7 +2123,6 @@ function startLedger(){
     "hidden"
   );
 
-
   currentLedgerStarted = true;
 
   readonlyMode = false;
@@ -2215,12 +2131,11 @@ function startLedger(){
 
   selectedSavedId = null;
 
-  editingSavedId = null;
-
   temporaryCurrentState = null;
 
   temporaryCurrentEditingId = null;
 
+  editingSavedId = null;
 
   document.body.classList.remove(
     "readonly-mode"
@@ -2233,19 +2148,14 @@ function startLedger(){
 
 
 /* =========================
-   INITIAL / RESTORE SESSION
+   INITIAL MODAL / RESTORE
 ========================= */
 
 function loadSession(){
 
   const draft =
-    getCurrentDraft();
+    loadCurrentDraft();
 
-
-  /*
-   * If an unfinished current ledger
-   * exists, restore it automatically.
-   */
 
   if(
     draft &&
@@ -2259,7 +2169,6 @@ function loadSession(){
 
     editingSavedId =
       draft.editingSavedId || null;
-
 
     currentLedgerStarted = true;
 
@@ -2279,21 +2188,31 @@ function loadSession(){
     );
 
 
-    setupError.textContent = "";
+    /*
+     * If Date + Name are already present,
+     * immediately restore the ledger.
+     */
 
-    setupModal.classList.add(
-      "hidden"
-    );
+    if(
+      draft.ledger.date &&
+      draft.ledger.name
+    ){
 
+      setupModal.classList.add(
+        "hidden"
+      );
 
-    return;
+      setupError.textContent = "";
+
+      return;
+
+    }
 
   }
 
 
   /*
-   * No current draft:
-   * start normally.
+   * No usable current draft.
    */
 
   ledgerDate.value = "";
@@ -2307,22 +2226,6 @@ function loadSession(){
   currentLedgerStarted = false;
 
   readonlyMode = false;
-
-  selectedSavedId = null;
-
-  currentPreviewId = null;
-
-  editingSavedId = null;
-
-  temporaryCurrentState = null;
-
-  temporaryCurrentEditingId = null;
-
-
-  document.body.classList.remove(
-    "readonly-mode"
-  );
-
 
   setupModal.classList.remove(
     "hidden"
@@ -2379,30 +2282,11 @@ function saveMultipliers(){
 
   multipliers = {
 
-    R:
-      num(
-        document.getElementById("multR").value
-      ),
-
-    P:
-      num(
-        document.getElementById("multP").value
-      ),
-
-    L:
-      num(
-        document.getElementById("multL").value
-      ),
-
-    M:
-      num(
-        document.getElementById("multM").value
-      ),
-
-    C:
-      num(
-        document.getElementById("multC").value
-      )
+    R:num(document.getElementById("multR").value),
+    P:num(document.getElementById("multP").value),
+    L:num(document.getElementById("multL").value),
+    M:num(document.getElementById("multM").value),
+    C:num(document.getElementById("multC").value)
 
   };
 
@@ -2469,53 +2353,6 @@ function saveCurrentFile(){
 
 
 /* =========================
-   FINISH SAVED LEDGER
-========================= */
-
-function finishAfterSave(){
-
-  /*
-   * The save is complete.
-   * The current ledger is now intentionally
-   * cleared and placed into read-only mode.
-   */
-
-  clearLedgerValues();
-
-
-  /*
-   * The previous working draft must no longer
-   * exist because the ledger has been intentionally
-   * cleared after SAVE.
-   */
-
-  clearCurrentDraft();
-
-
-  readonlyMode = true;
-
-  currentLedgerStarted = true;
-
-  selectedSavedId = null;
-
-  currentPreviewId = null;
-
-  temporaryCurrentState = null;
-
-  temporaryCurrentEditingId = null;
-
-
-  document.body.classList.add(
-    "readonly-mode"
-  );
-
-
-  renderSavedList();
-
-}
-
-
-/* =========================
    PERFORM SAVE
 ========================= */
 
@@ -2570,8 +2407,8 @@ function performSave(){
 
 
   /*
-   * Check another saved file with
-   * the same date.
+   * If another saved file already has
+   * the same DATE, ask before replacing it.
    */
 
   const dateIndex =
@@ -2587,7 +2424,6 @@ function performSave(){
     const existing =
       files[dateIndex];
 
-
     const okay =
       confirm(
         `A saved file already exists for ${formatDate(date)}.\n\n` +
@@ -2595,7 +2431,6 @@ function performSave(){
         `Saved: ${formatSavedTime(existing.savedAt)}\n\n` +
         `Replace that file with this ledger?`
       );
-
 
     if(!okay){
 
@@ -2611,9 +2446,7 @@ function performSave(){
 
 
     if(editingIndex > dateIndex){
-
       editingIndex--;
-
     }
 
   }
@@ -2654,89 +2487,80 @@ function performSave(){
     };
 
 
-    setSavedFiles(
-      files
-    );
+    setSavedFiles(files);
 
-
-    saveModal.classList.add(
-      "hidden"
-    );
-
-
-    /*
-     * Keep the saved file itself in the
-     * permanent history, but clear the
-     * working ledger immediately.
-     */
 
     editingSavedId =
-      existing.id;
+      files[editingIndex].id;
+
+  }
+
+  /*
+   * CREATE NEW FILE
+   */
+
+  else{
+
+    const file = {
+
+      id:
+        "rplmc-" +
+        now +
+        "-" +
+        Math.random()
+          .toString(36)
+          .slice(2,8),
+
+      date,
+      name,
+
+      savedAt:
+        now,
+
+      data
+
+    };
 
 
-    ledgerDate.value =
-      date;
+    files.push(file);
 
-    ledgerName.value =
-      name;
-
-    displayDate.textContent =
-      formatDate(date);
-
-    displayName.textContent =
-      name;
-
-
-    finishAfterSave();
-
-
-    alert(
-      "Ledger updated successfully."
-    );
-
-
-    return true;
+    editingSavedId =
+      file.id;
 
   }
 
 
   /*
-   * CREATE NEW SAVED FILE
+   * SORT BY DATE.
+   * Latest calendar date first.
+   * Saved time is only a tie-breaker.
    */
 
-  const file = {
-
-    id:
-      "rplmc-" +
-      now +
-      "-" +
-      Math.random()
-        .toString(36)
-        .slice(2,8),
-
-    date,
-
-    name,
-
-    savedAt:
-      now,
-
-    data
-
-  };
-
-
-  files.unshift(
-    file
-  );
-
-
   files.sort(
-    (a,b) =>
-      Number(b.savedAt || 0) -
-      Number(a.savedAt || 0)
+    (a,b) => {
+
+      const dateCompare =
+        String(b.date || "")
+          .localeCompare(
+            String(a.date || "")
+          );
+
+      if(dateCompare !== 0){
+        return dateCompare;
+      }
+
+      return (
+        Number(b.savedAt || 0) -
+        Number(a.savedAt || 0)
+      );
+
+    }
   );
 
+
+  /*
+   * Keep maximum 30 files.
+   */
 
   if(
     files.length >
@@ -2752,14 +2576,13 @@ function performSave(){
   }
 
 
-  setSavedFiles(
-    files
-  );
+  setSavedFiles(files);
 
 
-  editingSavedId =
-    file.id;
-
+  /*
+   * Update Date + Name display
+   * before clearing the current ledger.
+   */
 
   ledgerDate.value =
     date;
@@ -2779,13 +2602,51 @@ function performSave(){
   );
 
 
-  finishAfterSave();
+  /*
+   * IMPORTANT:
+   * After saving, the current working
+   * ledger is intentionally emptied
+   * and becomes read-only.
+   */
+
+  clearLedgerValues();
+
+
+  currentLedgerStarted = true;
+
+  readonlyMode = true;
+
+  currentPreviewId = null;
+
+  selectedSavedId = null;
+
+  temporaryCurrentState = null;
+
+  temporaryCurrentEditingId = null;
+
+
+  document.body.classList.add(
+    "readonly-mode"
+  );
+
+
+  /*
+   * Keep the EMPTY current state
+   * safely stored so it survives
+   * refresh/reopen.
+   */
+
+  localStorage.removeItem(
+    CURRENT_DRAFT_KEY
+  );
+
+
+  renderSavedList();
 
 
   alert(
-    "Ledger saved successfully."
+    "Ledger saved successfully.\n\nThe current ledger is now empty and read-only."
   );
-
 
   return true;
 
@@ -2805,21 +2666,46 @@ function renderSavedList(){
     getSavedFiles();
 
 
+  /*
+   * SORT BY DATE — LATEST FIRST
+   */
+
   files.sort(
-    (a,b) =>
-      Number(b.savedAt || 0) -
-      Number(a.savedAt || 0)
+    (a,b) => {
+
+      const dateCompare =
+        String(b.date || "")
+          .localeCompare(
+            String(a.date || "")
+          );
+
+      if(dateCompare !== 0){
+        return dateCompare;
+      }
+
+      return (
+        Number(b.savedAt || 0) -
+        Number(a.savedAt || 0)
+      );
+
+    }
   );
+
+
+  /*
+   * Keep storage itself synchronized
+   * with the new date ordering.
+   */
+
+  setSavedFiles(files);
 
 
   if(files.length === 0){
 
     savedList.innerHTML = `
-
       <div class="empty-list">
         No saved ledger files yet.
       </div>
-
     `;
 
     return;
@@ -2899,9 +2785,7 @@ function renderSavedList(){
       `;
 
 
-      savedList.appendChild(
-        item
-      );
+      savedList.appendChild(item);
 
     }
   );
@@ -2934,7 +2818,6 @@ function previewSavedFile(id){
   const files =
     getSavedFiles();
 
-
   const file =
     files.find(
       item =>
@@ -2948,8 +2831,8 @@ function previewSavedFile(id){
 
 
   /*
-   * Tap same file again:
-   * return to current ledger.
+   * Same highlighted item:
+   * return to current.
    */
 
   if(
@@ -2965,8 +2848,8 @@ function previewSavedFile(id){
 
 
   /*
-   * Preserve current editable ledger
-   * in memory before preview.
+   * Save current editable state
+   * temporarily before preview.
    */
 
   if(
@@ -3022,18 +2905,14 @@ function returnToCurrent(){
       temporaryCurrentState
     );
 
-
     editingSavedId =
       temporaryCurrentEditingId;
-
 
     currentLedgerStarted =
       true;
 
-
     readonlyMode =
       false;
-
 
     saveCurrentDraft();
 
@@ -3068,7 +2947,6 @@ function editSavedFile(id){
 
   const files =
     getSavedFiles();
-
 
   const file =
     files.find(
@@ -3114,13 +2992,13 @@ function editSavedFile(id){
   );
 
 
+  /*
+   * Immediately protect the editable
+   * saved file as the current draft.
+   */
+
   saveCurrentDraft();
 
-
-  /*
-   * Return to the top ledger
-   * after pressing EDIT.
-   */
 
   document
     .querySelector(".ledger-screen")
@@ -3140,7 +3018,6 @@ function deleteSavedFile(id){
 
   const files =
     getSavedFiles();
-
 
   const file =
     files.find(
@@ -3186,12 +3063,9 @@ function deleteSavedFile(id){
     editingSavedId =
       null;
 
-
     /*
-     * If the deleted file was the one
-     * currently being edited, the current
-     * draft remains safe but future SAVE
-     * will create a new file.
+     * The current editable data can
+     * still remain safely in the draft.
      */
 
     saveCurrentDraft();
@@ -3230,114 +3104,66 @@ function deleteSavedFile(id){
 
 function clearCurrentLedger(){
 
-  /*
-   * CLEAR is intentionally available
-   * even when the screen is read-only
-   * after a successful SAVE.
-   */
-
   if(!currentLedgerStarted){
-
     return;
-
   }
 
-
-  /*
-   * If this is a preview, don't clear
-   * the saved file by accident.
-   */
-
-  if(
-    readonlyMode &&
-    currentPreviewId
-  ){
-
-    alert(
-      "This is a read-only preview. Tap the file again to return to current."
-    );
-
-    return;
-
-  }
-
-
-  const okay =
-    confirm(
-      "Clear the current ledger?"
-    );
-
-
-  if(!okay){
-
-    return;
-
-  }
-
-
-  /*
-   * Clear the current data.
-   * No SAVE FIRST question.
-   */
-
-  clearLedgerValues();
-
-
-  /*
-   * The old current data is now intentionally
-   * destroyed. Store the cleared state so the
-   * old values cannot come back after refresh.
-   */
-
-  if(
-    currentLedgerStarted &&
-    !readonlyMode
-  ){
-
-    saveCurrentDraft();
-
-  }
-
-
-  /*
-   * If the current screen was the empty
-   * read-only screen after SAVE, allow the
-   * user to begin a completely new ledger.
-   */
 
   if(readonlyMode){
 
-    clearCurrentDraft();
-
-    ledgerDate.value = "";
-    ledgerName.value = "";
-
-    displayDate.textContent = "";
-    displayName.textContent = "";
-
-    currentLedgerStarted = false;
-
-    readonlyMode = false;
-
-    selectedSavedId = null;
-    currentPreviewId = null;
-
-    editingSavedId = null;
-
-    temporaryCurrentState = null;
-    temporaryCurrentEditingId = null;
-
-    document.body.classList.remove(
-      "readonly-mode"
+    alert(
+      "This ledger is read-only. Tap EDIT on a saved file to edit it, or start a new ledger."
     );
 
-    setupError.textContent = "";
-
-    setupModal.classList.remove(
-      "hidden"
-    );
+    return;
 
   }
+
+
+  const current =
+    captureLedger();
+
+
+  const hasData =
+    hasLedgerData(current);
+
+
+  /*
+   * NO SAVE-FIRST OPTION ANYMORE.
+   *
+   * CLEAR only asks whether the
+   * user really wants to clear.
+   */
+
+  if(hasData){
+
+    const okay =
+      confirm(
+        "Clear the current ledger?\n\n" +
+        "All current entries will be cleared."
+      );
+
+
+    if(!okay){
+      return;
+    }
+
+  }else{
+
+    const okay =
+      confirm(
+        "Clear the current ledger?"
+      );
+
+
+    if(!okay){
+      return;
+    }
+
+  }
+
+
+  clearLedgerValues();
 
 }
 
@@ -3392,56 +3218,6 @@ function hasLedgerData(data){
 
 
 /* =========================
-   DATE + NAME AUTOSAVE
-========================= */
-
-ledgerDate.addEventListener(
-  "input",
-  () => {
-
-    setupError.textContent = "";
-
-    if(
-      currentLedgerStarted &&
-      !readonlyMode
-    ){
-
-      displayDate.textContent =
-        formatDate(
-          ledgerDate.value
-        );
-
-      saveCurrentDraft();
-
-    }
-
-  }
-);
-
-
-ledgerName.addEventListener(
-  "input",
-  () => {
-
-    setupError.textContent = "";
-
-    if(
-      currentLedgerStarted &&
-      !readonlyMode
-    ){
-
-      displayName.textContent =
-        ledgerName.value;
-
-      saveCurrentDraft();
-
-    }
-
-  }
-);
-
-
-/* =========================
    OPEN LEDGER
 ========================= */
 
@@ -3462,10 +3238,31 @@ ledgerName.addEventListener(
   e => {
 
     if(e.key === "Enter"){
-
       startLedger();
-
     }
+
+  }
+);
+
+
+/* =========================
+   SETUP ERROR
+========================= */
+
+ledgerDate.addEventListener(
+  "input",
+  () => {
+
+    setupError.textContent = "";
+
+  }
+);
+
+ledgerName.addEventListener(
+  "input",
+  () => {
+
+    setupError.textContent = "";
 
   }
 );
@@ -3546,7 +3343,6 @@ saveDate.addEventListener(
   }
 );
 
-
 saveName.addEventListener(
   "input",
   () => {
@@ -3582,12 +3378,10 @@ savedList.addEventListener(
         ".saved-main"
       );
 
-
     const editButton =
       e.target.closest(
         "[data-edit]"
       );
-
 
     const deleteButton =
       e.target.closest(
@@ -3636,25 +3430,20 @@ savedList.addEventListener(
 let tapCount = 0;
 let tapTimer = null;
 
-
 nameHeader.addEventListener(
   "click",
   () => {
 
     tapCount++;
 
-
     clearTimeout(
       tapTimer
     );
 
-
     tapTimer =
       setTimeout(
         () => {
-
           tapCount = 0;
-
         },
         1000
       );
@@ -3664,11 +3453,9 @@ nameHeader.addEventListener(
 
       tapCount = 0;
 
-
       clearTimeout(
         tapTimer
       );
-
 
       openMultiplierEditor();
 
