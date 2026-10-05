@@ -1,38 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
->
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-192.png">
 
 <title>RPLMC Tracker</title>
 
-<!-- PWA Manifest & Meta Tags -->
-<link rel="manifest" href="./manifest.json">
-<link rel="apple-touch-icon" href="./icon-192.png">
-<meta name="theme-color" content="#111827">
-
 <style>
-
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
 }
 
-html,
-body{
+html,body{
   margin:0;
   padding:0;
   width:100%;
   height:100%;
   overflow:hidden;
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:Arial,sans-serif;
   background:#f1f5f9;
-  color:#111827;
 }
 
 body{
@@ -50,610 +44,398 @@ body{
   overflow:hidden;
 }
 
-
-/* =================================
-   DATE + NAME
-================================= */
+/* =========================
+   DATE + NAME BAR
+========================= */
 
 .info-bar{
-
   height:48px;
-
   flex-shrink:0;
-
+  background:#fff;
+  border:1px solid #cbd5e1;
+  border-radius:5px;
+  margin-bottom:3px;
   display:flex;
   align-items:center;
   justify-content:center;
-
-  gap:14px;
-
-  background:#ffffff;
-
-  border:1px solid #cbd5e1;
-
-  border-radius:5px;
-
-  margin-bottom:3px;
-
+  gap:8px;
+  padding:0 8px;
   overflow:hidden;
 }
 
 .info-date{
-
-  font-size:19px;
-
-  font-weight:900;
-
   color:#1d4ed8;
-
+  font-size:19px;
+  font-weight:900;
   white-space:nowrap;
 }
 
 .info-separator{
-
+  color:#64748b;
   font-size:18px;
-
   font-weight:900;
-
-  color:#94a3b8;
 }
 
 .info-name{
-
-  font-size:19px;
-
-  font-weight:900;
-
   color:#111827;
-
+  font-size:19px;
+  font-weight:900;
   white-space:nowrap;
-
-  max-width:48%;
-
   overflow:hidden;
-
   text-overflow:ellipsis;
 }
 
-
-/* =================================
-   TABLE
-================================= */
+/* =========================
+   TABLE WRAP
+========================= */
 
 .table-wrap{
-
-  background:#ffffff;
-
+  width:100%;
+  background:#fff;
   border:1px solid #cbd5e1;
-
   border-radius:5px;
-
   overflow:hidden;
-
   flex-shrink:0;
 }
 
 table{
-
   width:100%;
-
   border-collapse:collapse;
-
   table-layout:fixed;
 }
 
-th,
-td{
-
+th,td{
   border:1px solid #cbd5e1;
-
-  padding:1px 2px;
-
   text-align:center;
-
-  height:22px;
-
-  font-size:10px;
+  padding:0;
+  overflow:hidden;
 }
 
-th{
-
-  background:#e2e8f0;
-
-  font-weight:900;
-}
-
-
-/* =================================
+/* =========================
    SUMMARY
-================================= */
+========================= */
 
 .summary-title{
-
-  background:#1e293b;
-
-  color:#ffffff;
-
-  font-size:10px;
-
+  height:22px;
+  background:#111827;
+  color:#fff;
+  font-size:11px;
   font-weight:900;
+  letter-spacing:.5px;
+}
 
+.summary-head{
   height:20px;
-}
-
-.summary-table th:first-child,
-.summary-table td:first-child{
-
-  width:24%;
-}
-
-.summary-table th:not(:first-child),
-.summary-table td:not(:first-child){
-
-  width:15.2%;
-}
-
-.summary-table input{
-
-  width:100%;
-
-  height:19px;
-
-  border:0;
-
-  outline:none;
-
-  text-align:center;
-
+  background:#e2e8f0;
+  color:#111827;
   font-size:10px;
-
-  font-weight:800;
-
-  background:transparent;
-
-  padding:0;
+  font-weight:900;
 }
 
+.summary-row{
+  height:22px;
+  font-size:10px;
+  font-weight:900;
+}
 
-/* DEL */
+.summary-label{
+  width:18%;
+  text-align:left;
+  padding-left:6px;
+}
 
-.del-row td{
+.summary-value{
+  width:16.4%;
+}
 
+.del-row{
+  color:#166534;
   background:#f0fdf4;
 }
 
-.del-row .metric{
-
-  color:#15803d;
-
-  font-weight:900;
+.sales-row{
+  color:#fff;
+  background:#1d4ed8;
 }
 
-
-/* SALES */
-
-.sales-row td{
-
-  background:#eff6ff;
+.ret-row{
+  color:#fff;
+  background:#c2410c;
 }
 
-.sales-row .metric{
-
-  color:#1d4ed8;
-
-  font-weight:900;
-}
-
-.sales-value{
-
-  color:#1d4ed8;
-
-  font-weight:900;
-}
-
-
-/* RET */
-
-.ret-row td{
-
-  background:#fff7ed;
-}
-
-.ret-row .metric{
-
-  color:#c2410c;
-
-  font-weight:900;
-}
-
-.ret-value{
-
-  color:#c2410c;
-
-  font-weight:900;
-}
-
-
-/* =================================
-   CUSTOMER TABLE
-================================= */
-
-.entries-wrap{
-
-  flex:1;
-
-  min-height:0;
-
-  margin-top:3px;
-
-  background:#ffffff;
-
-  border:1px solid #cbd5e1;
-
-  border-radius:5px;
-
-  overflow:hidden;
-
-  display:flex;
-
-  flex-direction:column;
-}
-
-.entries-scroll{
-
-  flex:1;
-
-  overflow:hidden;
-}
-
-.entries-table{
-
+.del-input{
   width:100%;
-
-  table-layout:fixed;
-}
-
-
-/*
-   NAME
-*/
-
-.entries-table th:first-child{
-
-  width:25%;
-}
-
-
-/*
-   R P L M C
-*/
-
-.entries-table th:nth-child(2),
-.entries-table th:nth-child(3),
-.entries-table th:nth-child(4),
-.entries-table th:nth-child(5),
-.entries-table th:nth-child(6){
-
-  width:10%;
-}
-
-
-/*
-   AMOUNT
-*/
-
-.entries-table th:nth-child(7){
-
-  width:25%;
-}
-
-
-.entries-table thead th{
-
-  background:#1e293b;
-
-  color:#ffffff;
-
-  height:22px;
-
-  font-size:10px;
-
-  position:relative;
-
-  z-index:2;
-}
-
-
-.entries-table tbody td{
-
-  height:21px;
-
-  font-size:10px;
-}
-
-
-.entries-table input{
-
-  width:100%;
-
-  height:19px;
-
+  height:20px;
   border:0;
-
   outline:none;
-
+  background:transparent;
   text-align:center;
-
+  font-weight:900;
   font-size:10px;
-
-  font-weight:700;
-
-  background:#ffffff;
-
+  color:#166534;
   padding:0;
 }
 
-.name-input{
+/* =========================
+   CUSTOMER TABLE
+========================= */
 
-  text-align:left !important;
-
-  padding-left:4px !important;
+.customer-wrap{
+  flex:1;
+  min-height:0;
+  overflow:hidden;
+  background:#fff;
+  border:1px solid #cbd5e1;
+  border-radius:5px;
 }
 
+.customer-table{
+  height:100%;
+}
 
-/*
-   AMOUNT CELL
-*/
+.customer-table col.name-col{
+  width:25%;
+}
 
-.amount-cell{
+.customer-table col.qty-col{
+  width:10%;
+}
 
+.customer-table col.amount-col{
+  width:25%;
+}
+
+.customer-header{
+  height:21px;
+  background:#1e293b;
+  color:#fff;
+  font-size:10px;
   font-weight:900;
+}
 
-  color:#111827;
+.customer-header th{
+  border-color:#475569;
+  cursor:pointer;
+  user-select:none;
+}
 
+.customer-row{
+  height:21px;
+  font-size:10px;
+  font-weight:700;
+  background:#fff;
+}
+
+.customer-row:nth-child(even){
   background:#f8fafc;
 }
 
+.customer-row td{
+  border-color:#cbd5e1;
+}
 
-/* =================================
-   TOTAL
-================================= */
+.name-input,
+.qty-input{
+  width:100%;
+  height:20px;
+  border:0;
+  outline:none;
+  background:transparent;
+  text-align:center;
+  font-size:10px;
+  font-weight:700;
+  padding:0 2px;
+  color:#111827;
+}
+
+.name-input{
+  text-align:left;
+  padding-left:5px;
+}
+
+.qty-input:focus,
+.name-input:focus{
+  background:#fef9c3;
+}
+
+.amount-value{
+  display:block;
+  width:100%;
+  text-align:right;
+  padding-right:5px;
+  font-size:10px;
+  font-weight:900;
+  color:#111827;
+  white-space:nowrap;
+}
+
+.total-row{
+  height:23px;
+  background:#111827;
+  color:#fff;
+  font-size:10px;
+  font-weight:900;
+}
 
 .total-row td{
-
-  height:23px;
-
-  background:#111827;
-
-  color:#ffffff;
-
-  font-weight:900;
-
-  font-size:10px;
+  border-color:#374151;
 }
 
-.total-row td:first-child{
-
-  text-align:left;
-
-  padding-left:4px;
+.total-label{
+  text-align:right;
+  padding-right:5px;
 }
 
-
-/* =================================
+/* =========================
    MODALS
-================================= */
-
-.modal-overlay{
-
-  position:fixed;
-
-  inset:0;
-
-  z-index:9999;
-
-  background:rgba(15,23,42,.72);
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  padding:18px;
-}
+========================= */
 
 .modal{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.65);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+  z-index:9999;
+}
 
-  width:min(360px,100%);
+.modal.hidden{
+  display:none;
+}
 
-  background:#ffffff;
-
-  border-radius:10px;
-
+.modal-box{
+  width:min(360px,95vw);
+  background:#fff;
+  border-radius:12px;
   padding:18px;
-
   box-shadow:0 20px 50px rgba(0,0,0,.3);
 }
 
 .modal-title{
-
   text-align:center;
-
-  font-size:18px;
-
+  font-size:20px;
   font-weight:900;
-
   color:#111827;
-
-  margin-bottom:5px;
-}
-
-.modal-subtitle{
-
-  text-align:center;
-
-  font-size:11px;
-
-  color:#64748b;
-
   margin-bottom:15px;
 }
 
-.modal label{
-
-  display:block;
-
-  font-size:11px;
-
-  font-weight:800;
-
-  color:#334155;
-
-  margin-bottom:4px;
-}
-
-.modal input{
-
-  width:100%;
-
-  height:40px;
-
-  border:1px solid #cbd5e1;
-
-  border-radius:6px;
-
-  outline:none;
-
-  padding:0 10px;
-
-  font-size:14px;
-
+.modal-field{
   margin-bottom:12px;
 }
 
-.modal input:focus{
-
-  border-color:#2563eb;
-}
-
-.start-btn{
-
-  width:100%;
-
-  height:42px;
-
-  border:0;
-
-  border-radius:6px;
-
-  background:#16a34a;
-
-  color:#ffffff;
-
-  font-size:14px;
-
+.modal-field label{
+  display:block;
+  font-size:12px;
   font-weight:900;
-}
-
-.start-btn:active{
-
-  transform:scale(.98);
-}
-
-.error-message{
-
-  text-align:center;
-
-  color:#dc2626;
-
-  font-size:11px;
-
-  font-weight:700;
-
-  min-height:15px;
-
+  color:#334155;
   margin-bottom:5px;
 }
 
+.modal-field input{
+  width:100%;
+  height:42px;
+  border:1px solid #94a3b8;
+  border-radius:7px;
+  padding:0 10px;
+  font-size:16px;
+  font-weight:700;
+  outline:none;
+}
 
-/* =================================
+.modal-field input:focus{
+  border-color:#1d4ed8;
+  box-shadow:0 0 0 2px rgba(29,78,216,.12);
+}
+
+.setup-error{
+  min-height:18px;
+  color:#dc2626;
+  text-align:center;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:6px;
+}
+
+.modal-btn{
+  width:100%;
+  height:44px;
+  border:0;
+  border-radius:7px;
+  background:#111827;
+  color:#fff;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.modal-btn:active{
+  transform:scale(.98);
+}
+
+/* =========================
    MULTIPLIER MODAL
-================================= */
+========================= */
 
 .multiplier-grid{
-
   display:grid;
-
-  grid-template-columns:1fr 1fr;
-
-  gap:8px;
-
-  margin-top:12px;
-
+  grid-template-columns:repeat(5,1fr);
+  gap:6px;
   margin-bottom:15px;
 }
 
 .multiplier-item{
-
-  border:1px solid #cbd5e1;
-
-  border-radius:6px;
-
-  padding:7px;
-
-  background:#f8fafc;
+  text-align:center;
 }
 
 .multiplier-item label{
-
+  display:block;
+  font-size:12px;
+  font-weight:900;
   margin-bottom:4px;
-
-  font-size:10px;
 }
 
 .multiplier-item input{
-
-  height:34px;
-
-  margin:0;
-
-  text-align:center;
-
-  font-size:13px;
-
-  font-weight:900;
-}
-
-.save-multiplier{
-
   width:100%;
-
-  height:40px;
-
-  border:0;
-
+  height:38px;
+  border:1px solid #94a3b8;
   border-radius:6px;
-
-  background:#2563eb;
-
-  color:#ffffff;
-
-  font-size:13px;
-
+  text-align:center;
+  font-size:14px;
   font-weight:900;
+  outline:none;
 }
 
+.multiplier-actions{
+  display:flex;
+  gap:7px;
+}
 
-/* =================================
-   SMALL SCREEN
-================================= */
+.multiplier-actions button{
+  flex:1;
+  height:42px;
+  border:0;
+  border-radius:7px;
+  font-weight:900;
+  font-size:14px;
+}
+
+.cancel-btn{
+  background:#e2e8f0;
+  color:#111827;
+}
+
+.save-btn{
+  background:#16a34a;
+  color:#fff;
+}
+
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:480px){
-
-  .app{
-    padding:2px;
-  }
 
   .info-bar{
     height:45px;
@@ -668,21 +450,43 @@ th{
     font-size:16px;
   }
 
-  th,
-  td{
+  .summary-title{
     height:21px;
   }
 
-  .entries-table tbody td{
+  .summary-head,
+  .summary-row{
+    height:21px;
+  }
+
+  .summary-value,
+  .summary-label,
+  .del-input{
+    font-size:10px;
+  }
+
+  .customer-header{
     height:20px;
   }
 
+  .customer-row{
+    height:20px;
+  }
+
+  .name-input,
+  .qty-input,
+  .amount-value{
+    font-size:10px;
+  }
+
+  .total-row{
+    height:22px;
+  }
 }
 
-
-/* =================================
-   VERY SMALL SCREEN
-================================= */
+/* =========================
+   VERY SHORT SCREENS
+========================= */
 
 @media(max-height:650px){
 
@@ -695,386 +499,226 @@ th{
     font-size:16px;
   }
 
-  .summary-title{
-    height:18px;
+  .info-separator{
+    font-size:15px;
   }
 
-  th,
-  td{
+  .summary-title{
+    height:18px;
+    font-size:10px;
+  }
+
+  .summary-head,
+  .summary-row{
     height:19px;
   }
 
-  .entries-table tbody td{
+  .summary-value,
+  .summary-label,
+  .del-input{
+    font-size:9px;
+  }
+
+  .customer-header{
     height:18px;
   }
 
-  .entries-table input{
-    height:17px;
+  .customer-row{
+    height:18px;
   }
 
-}
+  .name-input,
+  .qty-input,
+  .amount-value{
+    height:17px;
+    font-size:9px;
+  }
 
+  .total-row{
+    height:20px;
+  }
+}
 </style>
 </head>
 
 <body>
 
-
 <div class="app">
 
-
-  <!-- ===============================
-       DATE + NAME
-  ================================ -->
-
+  <!-- DATE + NAME -->
   <div class="info-bar">
-
-    <span
-      class="info-date"
-      id="displayDate">
-      Oct 5, 2026
-    </span>
-
-    <span class="info-separator">
-      •
-    </span>
-
-    <span
-      class="info-name"
-      id="displayName">
-      Name
-    </span>
-
+    <div class="info-date" id="displayDate"></div>
+    <div class="info-separator">•</div>
+    <div class="info-name" id="displayName"></div>
   </div>
 
-
-  <!-- ===============================
-       SUMMARY TABLE
-  ================================ -->
-
+  <!-- SUMMARY -->
   <div class="table-wrap">
 
-    <table class="summary-table">
+    <table>
+      <colgroup>
+        <col style="width:18%">
+        <col style="width:16.4%">
+        <col style="width:16.4%">
+        <col style="width:16.4%">
+        <col style="width:16.4%">
+        <col style="width:16.4%">
+      </colgroup>
 
       <thead>
-
         <tr>
-
-          <th
-            colspan="6"
-            class="summary-title">
-            SUMMARY
-          </th>
-
+          <th colspan="6" class="summary-title">SUMMARY</th>
         </tr>
 
-        <tr>
-
+        <tr class="summary-head">
           <th>Metric</th>
-
           <th>R</th>
-
           <th>P</th>
-
           <th>L</th>
-
           <th>M</th>
-
           <th>C</th>
-
         </tr>
-
       </thead>
-
 
       <tbody>
 
+        <tr class="summary-row del-row">
+          <td class="summary-label">DEL</td>
 
-        <!-- DEL -->
-
-        <tr class="del-row">
-
-          <td class="metric">
-            DEL
+          <td>
+            <input id="delR" class="del-input" type="number" inputmode="decimal">
           </td>
 
           <td>
-            <input
-              type="number"
-              id="delR"
-              inputmode="decimal"
-              oninput="calculate()"
-            >
+            <input id="delP" class="del-input" type="number" inputmode="decimal">
           </td>
 
           <td>
-            <input
-              type="number"
-              id="delP"
-              inputmode="decimal"
-              oninput="calculate()"
-            >
+            <input id="delL" class="del-input" type="number" inputmode="decimal">
           </td>
 
           <td>
-            <input
-              type="number"
-              id="delL"
-              inputmode="decimal"
-              oninput="calculate()"
-            >
+            <input id="delM" class="del-input" type="number" inputmode="decimal">
           </td>
 
           <td>
-            <input
-              type="number"
-              id="delM"
-              inputmode="decimal"
-              oninput="calculate()"
-            >
+            <input id="delC" class="del-input" type="number" inputmode="decimal">
           </td>
-
-          <td>
-            <input
-              type="number"
-              id="delC"
-              inputmode="decimal"
-              oninput="calculate()"
-            >
-          </td>
-
         </tr>
 
-
-        <!-- SALES -->
-
-        <tr class="sales-row">
-
-          <td class="metric">
-            SALES
-          </td>
-
-          <td
-            id="salesR"
-            class="sales-value">
-            0
-          </td>
-
-          <td
-            id="salesP"
-            class="sales-value">
-            0
-          </td>
-
-          <td
-            id="salesL"
-            class="sales-value">
-            0
-          </td>
-
-          <td
-            id="salesM"
-            class="sales-value">
-            0
-          </td>
-
-          <td
-            id="salesC"
-            class="sales-value">
-            0
-          </td>
-
+        <tr class="summary-row sales-row">
+          <td class="summary-label">SALES</td>
+          <td id="salesR">0</td>
+          <td id="salesP">0</td>
+          <td id="salesL">0</td>
+          <td id="salesM">0</td>
+          <td id="salesC">0</td>
         </tr>
 
-
-        <!-- RET -->
-
-        <tr class="ret-row">
-
-          <td class="metric">
-            RET
-          </td>
-
-          <td
-            id="retR"
-            class="ret-value">
-            0
-          </td>
-
-          <td
-            id="retP"
-            class="ret-value">
-            0
-          </td>
-
-          <td
-            id="retL"
-            class="ret-value">
-            0
-          </td>
-
-          <td
-            id="retM"
-            class="ret-value">
-            0
-          </td>
-
-          <td
-            id="retC"
-            class="ret-value">
-            0
-          </td>
-
+        <tr class="summary-row ret-row">
+          <td class="summary-label">RET</td>
+          <td id="retR">0</td>
+          <td id="retP">0</td>
+          <td id="retL">0</td>
+          <td id="retM">0</td>
+          <td id="retC">0</td>
         </tr>
 
       </tbody>
+    </table>
+
+  </div>
+
+  <!-- CUSTOMER LIST -->
+  <div class="customer-wrap">
+
+    <table class="customer-table">
+
+      <colgroup>
+        <col class="name-col">
+        <col class="qty-col">
+        <col class="qty-col">
+        <col class="qty-col">
+        <col class="qty-col">
+        <col class="qty-col">
+        <col class="amount-col">
+      </colgroup>
+
+      <thead>
+        <tr class="customer-header">
+
+          <!-- 5 TAP KEY ICON -->
+          <th id="nameHeader" title="5 taps to open settings">🔑</th>
+
+          <th>R</th>
+          <th>P</th>
+          <th>L</th>
+          <th>M</th>
+          <th>C</th>
+
+          <th>Amount</th>
+
+        </tr>
+      </thead>
+
+      <tbody id="customerBody"></tbody>
+
+      <tfoot>
+        <tr class="total-row">
+
+          <td class="total-label">TOTAL</td>
+
+          <td id="totalR">0</td>
+          <td id="totalP">0</td>
+          <td id="totalL">0</td>
+          <td id="totalM">0</td>
+          <td id="totalC">0</td>
+
+          <td id="totalAmount">0</td>
+
+        </tr>
+      </tfoot>
 
     </table>
 
   </div>
 
-
-  <!-- ===============================
-       CUSTOMER LIST
-  ================================ -->
-
-  <div class="entries-wrap">
-
-    <div class="entries-scroll">
-
-      <table class="entries-table">
-
-
-        <thead>
-
-          <tr>
-
-            <th
-              id="nameHeader">
-              NAME
-            </th>
-
-            <th>R</th>
-
-            <th>P</th>
-
-            <th>L</th>
-
-            <th>M</th>
-
-            <th>C</th>
-
-            <th>AMOUNT</th>
-
-          </tr>
-
-        </thead>
-
-
-        <tbody id="entryBody">
-        </tbody>
-
-
-        <tfoot>
-
-          <tr class="total-row">
-
-            <td>
-              TOTAL
-            </td>
-
-            <td id="totalR">
-              0
-            </td>
-
-            <td id="totalP">
-              0
-            </td>
-
-            <td id="totalL">
-              0
-            </td>
-
-            <td id="totalM">
-              0
-            </td>
-
-            <td id="totalC">
-              0
-            </td>
-
-            <td id="totalAmount">
-              0.00
-            </td>
-
-          </tr>
-
-        </tfoot>
-
-
-      </table>
-
-    </div>
-
-  </div>
-
 </div>
 
 
-<!-- =====================================
-     DATE + NAME MODAL
-====================================== -->
+<!-- =========================
+     START LEDGER MODAL
+========================= -->
 
-<div
-  class="modal-overlay"
-  id="setupModal"
->
+<div class="modal" id="setupModal">
 
-  <div class="modal">
+  <div class="modal-box">
 
-    <div class="modal-title">
-      Start Ledger
+    <div class="modal-title">Start Ledger</div>
+
+    <div class="modal-field">
+      <label for="ledgerDate">DATE</label>
+      <input
+        type="date"
+        id="ledgerDate"
+        autocomplete="off"
+      >
     </div>
 
-    <div class="modal-subtitle">
-      Enter the date and name before opening.
+    <div class="modal-field">
+      <label for="ledgerName">NAME</label>
+      <input
+        type="text"
+        id="ledgerName"
+        autocomplete="off"
+        placeholder="Enter name"
+      >
     </div>
 
+    <div class="setup-error" id="setupError"></div>
 
-    <label for="ledgerDate">
-      Date
-    </label>
-
-    <input
-      type="date"
-      id="ledgerDate"
-    >
-
-
-    <label for="ledgerName">
-      Name
-    </label>
-
-    <input
-      type="text"
-      id="ledgerName"
-      placeholder="Enter name"
-      autocomplete="off"
-    >
-
-
-    <div
-      class="error-message"
-      id="setupError">
-    </div>
-
-
-    <button
-      class="start-btn"
-      onclick="startLedger()">
-
+    <button class="modal-btn" id="openLedgerBtn">
       OPEN LEDGER
-
     </button>
 
   </div>
@@ -1082,115 +726,62 @@ th{
 </div>
 
 
-<!-- =====================================
+<!-- =========================
      MULTIPLIER MODAL
-====================================== -->
+========================= -->
 
-<div
-  class="modal-overlay"
-  id="multiplierModal"
-  style="display:none;"
->
+<div class="modal hidden" id="multiplierModal">
 
-  <div class="modal">
+  <div class="modal-box">
 
-    <div class="modal-title">
-      Edit Multipliers
-    </div>
-
-    <div class="modal-subtitle">
-      Set the amount multiplier for each product.
-    </div>
-
+    <div class="modal-title">Edit Multipliers</div>
 
     <div class="multiplier-grid">
 
-
       <div class="multiplier-item">
-
-        <label>
-          R
-        </label>
-
-        <input
-          type="number"
-          id="multR"
-          inputmode="decimal"
-        >
-
+        <label>R</label>
+        <input id="multR" type="number" inputmode="decimal">
       </div>
 
-
       <div class="multiplier-item">
-
-        <label>
-          P
-        </label>
-
-        <input
-          type="number"
-          id="multP"
-          inputmode="decimal"
-        >
-
+        <label>P</label>
+        <input id="multP" type="number" inputmode="decimal">
       </div>
 
-
       <div class="multiplier-item">
-
-        <label>
-          L
-        </label>
-
-        <input
-          type="number"
-          id="multL"
-          inputmode="decimal"
-        >
-
+        <label>L</label>
+        <input id="multL" type="number" inputmode="decimal">
       </div>
 
-
       <div class="multiplier-item">
-
-        <label>
-          M
-        </label>
-
-        <input
-          type="number"
-          id="multM"
-          inputmode="decimal"
-        >
-
+        <label>M</label>
+        <input id="multM" type="number" inputmode="decimal">
       </div>
 
-
       <div class="multiplier-item">
-
-        <label>
-          C
-        </label>
-
-        <input
-          type="number"
-          id="multC"
-          inputmode="decimal"
-        >
-
+        <label>C</label>
+        <input id="multC" type="number" inputmode="decimal">
       </div>
-
 
     </div>
 
+    <div class="multiplier-actions">
 
-    <button
-      class="save-multiplier"
-      onclick="saveMultipliers()">
+      <button
+        class="cancel-btn"
+        id="cancelMultiplier"
+      >
+        CANCEL
+      </button>
 
-      SAVE MULTIPLIERS
+      <button
+        class="save-btn"
+        id="saveMultiplier"
+      >
+        SAVE
+      </button>
 
-    </button>
+    </div>
 
   </div>
 
@@ -1199,78 +790,150 @@ th{
 
 <script>
 
+/* =====================================================
+   SERVICE WORKER
+===================================================== */
 
-/* =================================
-   SETTINGS
-================================= */
+if ('serviceWorker' in navigator) {
 
-const ROW_COUNT = 19;
+  window.addEventListener('load', () => {
+
+    navigator.serviceWorker.register(
+      './sw.js?v=1',
+      {scope:'./'}
+    )
+
+    .then(reg => {
+      console.log('Service Worker Registered!');
+    })
+
+    .catch(err => {
+      console.log(
+        'Service Worker Registration Failed:',
+        err
+      );
+    });
+
+  });
+
+}
+
+
+/* =====================================================
+   DEFAULT MULTIPLIERS
+===================================================== */
 
 const DEFAULT_MULTIPLIERS = {
-
   R:45,
-
   P:45,
-
   L:45,
-
   M:45,
-
   C:40
-
 };
-
-
-/* =================================
-   MULTIPLIERS
-================================= */
 
 let multipliers =
   JSON.parse(
-    localStorage.getItem(
-      "rplmc_multipliers"
-    )
-  ) || DEFAULT_MULTIPLIERS;
+    localStorage.getItem("rplmc_multipliers")
+  ) || {...DEFAULT_MULTIPLIERS};
 
 
-/* =================================
-   NUMBER
-================================= */
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const setupModal =
+  document.getElementById("setupModal");
+
+const setupError =
+  document.getElementById("setupError");
+
+const ledgerDate =
+  document.getElementById("ledgerDate");
+
+const ledgerName =
+  document.getElementById("ledgerName");
+
+const displayDate =
+  document.getElementById("displayDate");
+
+const displayName =
+  document.getElementById("displayName");
+
+const customerBody =
+  document.getElementById("customerBody");
+
+const multiplierModal =
+  document.getElementById("multiplierModal");
+
+const nameHeader =
+  document.getElementById("nameHeader");
+
+
+/* =====================================================
+   NUMBER HELPER
+===================================================== */
 
 function num(value){
 
-  const n=parseFloat(value);
+  const n = parseFloat(value);
 
-  return Number.isFinite(n)
-    ? n
-    : 0;
+  return Number.isFinite(n) ? n : 0;
+
 }
 
 
-/* =================================
-   DATE
-================================= */
+/* =====================================================
+   AMOUNT FORMAT
+   Removes unnecessary .00
+===================================================== */
+
+function formatAmount(value){
+
+  const n = num(value);
+
+  if(n === 0){
+    return "0";
+  }
+
+  if(Number.isInteger(n)){
+    return String(n);
+  }
+
+  return n
+    .toFixed(2)
+    .replace(/\.?0+$/,"");
+
+}
+
+
+/* =====================================================
+   TODAY
+===================================================== */
 
 function getToday(){
 
-  const now=new Date();
+  const d = new Date();
 
-  const year=
-    now.getFullYear();
+  const y =
+    d.getFullYear();
 
-  const month=
-    String(
-      now.getMonth()+1
-    ).padStart(2,"0");
+  const m =
+    String(d.getMonth()+1)
+      .padStart(2,"0");
 
-  const day=
-    String(
-      now.getDate()
-    ).padStart(2,"0");
+  const day =
+    String(d.getDate())
+      .padStart(2,"0");
 
-  return `${year}-${month}-${day}`;
+  return `${y}-${m}-${day}`;
+
 }
 
+
+/* =====================================================
+   DATE FORMAT
+   Example: Oct 5, 2026
+===================================================== */
 
 function formatDate(value){
 
@@ -1278,25 +941,23 @@ function formatDate(value){
     return "";
   }
 
-  const parts=
+  const parts =
     value.split("-");
 
-  if(parts.length!==3){
+  if(parts.length !== 3){
     return value;
   }
 
-  const year=
+  const y =
     Number(parts[0]);
 
-  const month=
+  const m =
     Number(parts[1]);
 
-  const day=
+  const d =
     Number(parts[2]);
 
-
-  const months=[
-
+  const months = [
     "Jan",
     "Feb",
     "Mar",
@@ -1309,394 +970,389 @@ function formatDate(value){
     "Oct",
     "Nov",
     "Dec"
-
   ];
 
+  return `${months[m-1]} ${d}, ${y}`;
 
-  return `${months[month-1]} ${day}, ${year}`;
 }
 
 
-/* =================================
-   BUILD CUSTOMER ROWS
-================================= */
+/* =====================================================
+   BUILD 19 CUSTOMER ROWS
+===================================================== */
 
 function buildRows(){
 
-  const body=
-    document.getElementById(
-      "entryBody"
-    );
+  customerBody.innerHTML = "";
 
-  body.innerHTML="";
+  for(let i=1;i<=19;i++){
 
-
-  for(
-    let i=1;
-    i<=ROW_COUNT;
-    i++
-  ){
-
-    const tr=
+    const tr =
       document.createElement("tr");
 
+    tr.className =
+      "customer-row";
 
-    tr.innerHTML=`
+    tr.innerHTML = `
 
       <td>
-
         <input
-          type="text"
           class="name-input"
-          placeholder="${i}"
+          type="text"
           autocomplete="off"
         >
-
       </td>
-
 
       <td>
-
         <input
+          class="qty-input qty-r"
           type="number"
-          class="qty-r"
           inputmode="decimal"
-          oninput="calculate()"
         >
-
       </td>
-
 
       <td>
-
         <input
+          class="qty-input qty-p"
           type="number"
-          class="qty-p"
           inputmode="decimal"
-          oninput="calculate()"
         >
-
       </td>
-
 
       <td>
-
         <input
+          class="qty-input qty-l"
           type="number"
-          class="qty-l"
           inputmode="decimal"
-          oninput="calculate()"
         >
-
       </td>
-
 
       <td>
-
         <input
+          class="qty-input qty-m"
           type="number"
-          class="qty-m"
           inputmode="decimal"
-          oninput="calculate()"
         >
-
       </td>
-
 
       <td>
-
         <input
+          class="qty-input qty-c"
           type="number"
-          class="qty-c"
           inputmode="decimal"
-          oninput="calculate()"
         >
-
       </td>
 
-
-      <td
-        class="amount-cell amount-value">
-
-        0.00
-
+      <td>
+        <span class="amount-value">0</span>
       </td>
 
     `;
 
-
-    body.appendChild(tr);
+    customerBody.appendChild(tr);
 
   }
+
+
+  document
+    .querySelectorAll(".qty-input")
+    .forEach(input => {
+
+      input.addEventListener(
+        "input",
+        calculate
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(".name-input")
+    .forEach(input => {
+
+      input.addEventListener(
+        "input",
+        calculate
+      );
+
+    });
 
 }
 
 
-/* =================================
+/* =====================================================
    CALCULATE
-================================= */
+===================================================== */
 
 function calculate(){
 
-  const totals={
+  let totalR = 0;
+  let totalP = 0;
+  let totalL = 0;
+  let totalM = 0;
+  let totalC = 0;
 
-    R:0,
-
-    P:0,
-
-    L:0,
-
-    M:0,
-
-    C:0,
-
-    amount:0
-
-  };
+  let totalAmount = 0;
 
 
-  const rows=
+  const rows =
     document.querySelectorAll(
-      "#entryBody tr"
+      ".customer-row"
     );
 
 
-  rows.forEach(row=>{
+  rows.forEach(row => {
 
-    const r=
+    const r =
       num(
-        row.querySelector(
-          ".qty-r"
-        ).value
+        row.querySelector(".qty-r").value
       );
 
-    const p=
+    const p =
       num(
-        row.querySelector(
-          ".qty-p"
-        ).value
+        row.querySelector(".qty-p").value
       );
 
-    const l=
+    const l =
       num(
-        row.querySelector(
-          ".qty-l"
-        ).value
+        row.querySelector(".qty-l").value
       );
 
-    const m=
+    const m =
       num(
-        row.querySelector(
-          ".qty-m"
-        ).value
+        row.querySelector(".qty-m").value
       );
 
-    const c=
+    const c =
       num(
-        row.querySelector(
-          ".qty-c"
-        ).value
+        row.querySelector(".qty-c").value
       );
 
 
-    /* =============================
-       AMOUNT FORMULA
-    ============================== */
+    totalR += r;
+    totalP += p;
+    totalL += l;
+    totalM += m;
+    totalC += c;
 
-    const amount=
 
+    const amount =
       (r * multipliers.R) +
-
       (p * multipliers.P) +
-
       (l * multipliers.L) +
-
       (m * multipliers.M) +
-
       (c * multipliers.C);
+
+
+    totalAmount += amount;
 
 
     row.querySelector(
       ".amount-value"
-    ).textContent=
-      amount.toFixed(2);
-
-
-    totals.R += r;
-
-    totals.P += p;
-
-    totals.L += l;
-
-    totals.M += m;
-
-    totals.C += c;
-
-    totals.amount += amount;
+    ).textContent =
+      formatAmount(amount);
 
   });
 
 
-  /* =============================
-     SALES
-  ============================== */
-
-  document.getElementById(
-    "salesR"
-  ).textContent=
-    totals.R;
-
-  document.getElementById(
-    "salesP"
-  ).textContent=
-    totals.P;
-
-  document.getElementById(
-    "salesL"
-  ).textContent=
-    totals.L;
-
-  document.getElementById(
-    "salesM"
-  ).textContent=
-    totals.M;
-
-  document.getElementById(
-    "salesC"
-  ).textContent=
-    totals.C;
-
-
-  /* =============================
-     TOTAL QUANTITIES
-  ============================== */
+  /* TOTALS */
 
   document.getElementById(
     "totalR"
-  ).textContent=
-    totals.R;
+  ).textContent =
+    formatAmount(totalR);
 
   document.getElementById(
     "totalP"
-  ).textContent=
-    totals.P;
+  ).textContent =
+    formatAmount(totalP);
 
   document.getElementById(
     "totalL"
-  ).textContent=
-    totals.L;
+  ).textContent =
+    formatAmount(totalL);
 
   document.getElementById(
     "totalM"
-  ).textContent=
-    totals.M;
+  ).textContent =
+    formatAmount(totalM);
 
   document.getElementById(
     "totalC"
-  ).textContent=
-    totals.C;
-
-
-  /* =============================
-     TOTAL AMOUNT
-  ============================== */
+  ).textContent =
+    formatAmount(totalC);
 
   document.getElementById(
     "totalAmount"
-  ).textContent=
-    totals.amount.toFixed(2);
+  ).textContent =
+    formatAmount(totalAmount);
 
 
-  /* =============================
-     RET = DEL - SALES
-  ============================== */
+  /* SALES */
 
-  const types=[
-    "R",
-    "P",
-    "L",
-    "M",
-    "C"
-  ];
+  document.getElementById(
+    "salesR"
+  ).textContent =
+    formatAmount(totalR);
 
+  document.getElementById(
+    "salesP"
+  ).textContent =
+    formatAmount(totalP);
 
-  types.forEach(type=>{
+  document.getElementById(
+    "salesL"
+  ).textContent =
+    formatAmount(totalL);
 
-    const del=
-      num(
-        document.getElementById(
-          "del"+type
-        ).value
-      );
+  document.getElementById(
+    "salesM"
+  ).textContent =
+    formatAmount(totalM);
 
-
-    const sales=
-      totals[type];
-
-
-    const ret=
-      del-sales;
+  document.getElementById(
+    "salesC"
+  ).textContent =
+    formatAmount(totalC);
 
 
-    document.getElementById(
-      "ret"+type
-    ).textContent=
-      ret;
+  /* RET */
 
-  });
+  const delR =
+    num(
+      document.getElementById(
+        "delR"
+      ).value
+    );
+
+  const delP =
+    num(
+      document.getElementById(
+        "delP"
+      ).value
+    );
+
+  const delL =
+    num(
+      document.getElementById(
+        "delL"
+      ).value
+    );
+
+  const delM =
+    num(
+      document.getElementById(
+        "delM"
+      ).value
+    );
+
+  const delC =
+    num(
+      document.getElementById(
+        "delC"
+      ).value
+    );
+
+
+  document.getElementById(
+    "retR"
+  ).textContent =
+    formatAmount(
+      delR - totalR
+    );
+
+  document.getElementById(
+    "retP"
+  ).textContent =
+    formatAmount(
+      delP - totalP
+    );
+
+  document.getElementById(
+    "retL"
+  ).textContent =
+    formatAmount(
+      delL - totalL
+    );
+
+  document.getElementById(
+    "retM"
+  ).textContent =
+    formatAmount(
+      delM - totalM
+    );
+
+  document.getElementById(
+    "retC"
+  ).textContent =
+    formatAmount(
+      delC - totalC
+    );
 
 }
 
 
-/* =================================
+/* =====================================================
    START LEDGER
-================================= */
+   DATE + NAME MUST BOTH BE FILLED
+===================================================== */
 
 function startLedger(){
 
-  const date=
-    document.getElementById(
-      "ledgerDate"
-    ).value;
+  const date =
+    ledgerDate.value.trim();
+
+  const name =
+    ledgerName.value.trim();
 
 
-  const name=
-    document.getElementById(
-      "ledgerName"
-    ).value.trim();
+  if(!date && !name){
 
+    setupError.textContent =
+      "Please enter Date and Name.";
 
-  const error=
-    document.getElementById(
-      "setupError"
-    );
+    return;
 
+  }
 
   if(!date){
 
-    error.textContent=
-      "Please select a date.";
+    setupError.textContent =
+      "Please enter the Date.";
+
+    ledgerDate.focus();
 
     return;
 
   }
-
 
   if(!name){
 
-    error.textContent=
-      "Please enter a name.";
+    setupError.textContent =
+      "Please enter the Name.";
+
+    ledgerName.focus();
 
     return;
 
   }
 
+
+  /* DISPLAY */
+
+  displayDate.textContent =
+    formatDate(date);
+
+  displayName.textContent =
+    name;
+
+
+  /* SAVE ONLY AFTER VALID OPEN */
 
   localStorage.setItem(
     "rplmc_ledger_date",
     date
   );
-
 
   localStorage.setItem(
     "rplmc_ledger_name",
@@ -1704,164 +1360,139 @@ function startLedger(){
   );
 
 
-  document.getElementById(
-    "displayDate"
-  ).textContent=
-    formatDate(date);
+  setupError.textContent = "";
 
-
-  document.getElementById(
-    "displayName"
-  ).textContent=
-    name;
-
-
-  document.getElementById(
-    "setupModal"
-  ).style.display=
-    "none";
-
-
-  calculate();
+  setupModal.classList.add(
+    "hidden"
+  );
 
 }
 
 
-/* =================================
+/* =====================================================
    LOAD SESSION
-================================= */
+   IMPORTANT:
+   START MODAL IS ALWAYS EMPTY
+===================================================== */
 
 function loadSession(){
 
-  const savedDate=
-    localStorage.getItem(
-      "rplmc_ledger_date"
-    );
+  /*
+    Do NOT prefill Date or Name.
+    User specifically requested that
+    both fields are empty whenever
+    Start Ledger opens.
+  */
 
+  ledgerDate.value = "";
+  ledgerName.value = "";
 
-  const savedName=
-    localStorage.getItem(
-      "rplmc_ledger_name"
-    );
+  displayDate.textContent = "";
+  displayName.textContent = "";
 
+  setupError.textContent = "";
 
-  document.getElementById(
-    "setupModal"
-  ).style.display=
-    "flex";
-
-
-  document.getElementById(
-    "ledgerDate"
-  ).value=
-    savedDate || getToday();
-
-
-  if(savedName){
-
-    document.getElementById(
-      "ledgerName"
-    ).value=
-      savedName;
-
-  }
+  setupModal.classList.remove(
+    "hidden"
+  );
 
 }
 
 
-/* =================================
-   MULTIPLIER MODAL
-================================= */
+/* =====================================================
+   MULTIPLIER EDITOR
+===================================================== */
 
 function openMultiplierEditor(){
 
   document.getElementById(
     "multR"
-  ).value=
+  ).value =
     multipliers.R;
-
 
   document.getElementById(
     "multP"
-  ).value=
+  ).value =
     multipliers.P;
-
 
   document.getElementById(
     "multL"
-  ).value=
+  ).value =
     multipliers.L;
-
 
   document.getElementById(
     "multM"
-  ).value=
+  ).value =
     multipliers.M;
-
 
   document.getElementById(
     "multC"
-  ).value=
+  ).value =
     multipliers.C;
 
 
-  document.getElementById(
-    "multiplierModal"
-  ).style.display=
-    "flex";
+  multiplierModal.classList.remove(
+    "hidden"
+  );
 
 }
 
 
+/* =====================================================
+   SAVE MULTIPLIERS
+===================================================== */
+
 function saveMultipliers(){
 
-  multipliers={
+  multipliers = {
 
-    R:num(
-      document.getElementById(
-        "multR"
-      ).value
-    ),
+    R:
+      num(
+        document.getElementById(
+          "multR"
+        ).value
+      ),
 
-    P:num(
-      document.getElementById(
-        "multP"
-      ).value
-    ),
+    P:
+      num(
+        document.getElementById(
+          "multP"
+        ).value
+      ),
 
-    L:num(
-      document.getElementById(
-        "multL"
-      ).value
-    ),
+    L:
+      num(
+        document.getElementById(
+          "multL"
+        ).value
+      ),
 
-    M:num(
-      document.getElementById(
-        "multM"
-      ).value
-    ),
+    M:
+      num(
+        document.getElementById(
+          "multM"
+        ).value
+      ),
 
-    C:num(
-      document.getElementById(
-        "multC"
-      ).value
-    )
+    C:
+      num(
+        document.getElementById(
+          "multC"
+        ).value
+      )
 
   };
 
 
   localStorage.setItem(
     "rplmc_multipliers",
-    JSON.stringify(
-      multipliers
-    )
+    JSON.stringify(multipliers)
   );
 
 
-  document.getElementById(
-    "multiplierModal"
-  ).style.display=
-    "none";
+  multiplierModal.classList.add(
+    "hidden"
+  );
 
 
   calculate();
@@ -1869,126 +1500,168 @@ function saveMultipliers(){
 }
 
 
-/* =================================
-   5 TAP NAME HEADER
-================================= */
-
-let nameTapCount=0;
-
-let nameTapTimer=null;
-
+/* =====================================================
+   EVENTS
+===================================================== */
 
 document
-  .getElementById("nameHeader")
+  .getElementById("openLedgerBtn")
   .addEventListener(
     "click",
-    function(){
+    startLedger
+  );
 
-      nameTapCount++;
+
+/* Enter on Name */
+
+ledgerName.addEventListener(
+  "keydown",
+  e => {
+
+    if(e.key === "Enter"){
+      startLedger();
+    }
+
+  }
+);
 
 
-      clearTimeout(
-        nameTapTimer
+/* Date/Name validation feedback */
+
+ledgerDate.addEventListener(
+  "input",
+  () => {
+
+    setupError.textContent = "";
+
+  }
+);
+
+ledgerName.addEventListener(
+  "input",
+  () => {
+
+    setupError.textContent = "";
+
+  }
+);
+
+
+/* =====================================================
+   5-TAP KEY ICON
+===================================================== */
+
+let tapCount = 0;
+let tapTimer = null;
+
+nameHeader.addEventListener(
+  "click",
+  () => {
+
+    tapCount++;
+
+    clearTimeout(tapTimer);
+
+    tapTimer =
+      setTimeout(() => {
+
+        tapCount = 0;
+
+      },1000);
+
+
+    if(tapCount >= 5){
+
+      tapCount = 0;
+
+      clearTimeout(tapTimer);
+
+      openMultiplierEditor();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   CLOSE MULTIPLIER MODAL
+   TAP OUTSIDE
+===================================================== */
+
+multiplierModal.addEventListener(
+  "click",
+  e => {
+
+    if(e.target === multiplierModal){
+
+      multiplierModal.classList.add(
+        "hidden"
       );
 
-
-      nameTapTimer=
-        setTimeout(
-          function(){
-
-            nameTapCount=0;
-
-          },
-          1000
-        );
-
-
-      if(nameTapCount>=5){
-
-        nameTapCount=0;
-
-        clearTimeout(
-          nameTapTimer
-        );
-
-        openMultiplierEditor();
-
-      }
-
     }
-  );
+
+  }
+);
 
 
-/* =================================
-   CLOSE MULTIPLIER MODAL
-   BY TAPPING OUTSIDE
-================================= */
+/* CANCEL */
 
 document
-  .getElementById(
-    "multiplierModal"
-  )
+  .getElementById("cancelMultiplier")
   .addEventListener(
     "click",
-    function(e){
+    () => {
 
-      if(
-        e.target === this
-      ){
-
-        this.style.display=
-          "none";
-
-      }
+      multiplierModal.classList.add(
+        "hidden"
+      );
 
     }
   );
 
 
-/* =================================
+/* SAVE */
+
+document
+  .getElementById("saveMultiplier")
+  .addEventListener(
+    "click",
+    saveMultipliers
+  );
+
+
+/* =====================================================
+   DEL INPUT EVENTS
+===================================================== */
+
+[
+  "delR",
+  "delP",
+  "delL",
+  "delM",
+  "delC"
+].forEach(id => {
+
+  document
+    .getElementById(id)
+    .addEventListener(
+      "input",
+      calculate
+    );
+
+});
+
+
+/* =====================================================
    INITIALIZE
-================================= */
+===================================================== */
 
 buildRows();
 
-loadSession();
-
 calculate();
 
-
-/* =================================
-   ENTER KEY
-================================= */
-
-document
-  .getElementById(
-    "ledgerName"
-  )
-  .addEventListener(
-    "keydown",
-    function(e){
-
-      if(e.key==="Enter"){
-
-        startLedger();
-
-      }
-
-    }
-  );
-
-
-/* =================================
-   SERVICE WORKER REGISTRATION
-================================= */
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js?v=1', { scope: './' })
-      .then(reg => console.log('Service Worker Registered!', reg))
-      .catch(err => console.log('Service Worker Registration Failed:', err));
-  });
-}
+loadSession();
 
 </script>
 
