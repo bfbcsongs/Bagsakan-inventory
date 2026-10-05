@@ -1,202 +1,1169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>RPLMC Tracker</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    html, body {
-      width: 100%;
-      height: 100vh;
-      overflow: hidden; /* Fits everything in one screen height */
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: #ffffff;
-      color: #333;
-    }
-    .app-container {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      padding: 2px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
-    /* Ultra-thin grid lines matching screenshot style */
-    th, td {
-      border: 1px solid #d1d5db;
-      padding: 1px 2px;
-      text-align: center;
-      font-size: 11px;
-      height: 19px;
-    }
-    th {
-      background-color: #f8fafc;
-      font-weight: 600;
-      color: #475569;
-    }
-    input {
-      width: 100%;
-      height: 100%;
-      border: none;
-      outline: none;
-      background: transparent;
-      text-align: center;
-      font-size: 11px;
-      color: #1e293b;
-      padding: 0;
-    }
-    /* Rounded box style for name column inputs */
-    .name-input {
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      background-color: #f8fafc;
-      height: 16px;
-    }
-    .calc-val {
-      font-weight: 600;
-      color: #0f172a;
-    }
-    .total-row {
-      background-color: #f1f5f9;
-      font-weight: bold;
-      color: #dc2626; /* Highlight total line */
-    }
-    .table-title {
-      font-size: 10px;
-      font-weight: bold;
-      color: #64748b;
-      text-transform: uppercase;
-      margin: 2px 0 1px 2px;
-    }
-    /* Column widths */
-    col.col-name { width: 25%; }
-    col.col-item { width: 15%; }
-  </style>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+>
+
+<title>RPLMC Tracker</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f1f5f9;
+  color:#111827;
+}
+
+body{
+  display:flex;
+  justify-content:center;
+}
+
+.app{
+  width:100%;
+  max-width:900px;
+  height:100vh;
+  padding:4px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.app-title{
+  height:28px;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:15px;
+  font-weight:900;
+  background:#111827;
+  color:white;
+  border-radius:5px;
+  margin-bottom:3px;
+}
+
+/* =========================
+   DATE + NAME BAR
+========================= */
+
+.info-bar{
+  position:relative;
+  height:32px;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  background:white;
+  border:1px solid #cbd5e1;
+  border-radius:5px;
+  margin-bottom:3px;
+  font-size:11px;
+  font-weight:800;
+  color:#334155;
+  text-transform:none;
+}
+
+.info-date{
+  color:#1d4ed8;
+}
+
+.info-separator{
+  color:#94a3b8;
+}
+
+.info-name{
+  color:#111827;
+}
+
+/* =========================
+   TABLE CONTAINERS
+========================= */
+
+.table-wrap{
+  background:white;
+  border:1px solid #cbd5e1;
+  border-radius:5px;
+  overflow:hidden;
+  flex-shrink:0;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+
+th,
+td{
+  border:1px solid #cbd5e1;
+  padding:2px;
+  text-align:center;
+  height:25px;
+  font-size:11px;
+}
+
+th{
+  background:#e2e8f0;
+  font-weight:900;
+}
+
+td:first-child,
+th:first-child{
+  width:25%;
+}
+
+/* =========================
+   SUMMARY TABLE
+========================= */
+
+.summary-title{
+  background:#1e293b;
+  color:white;
+  font-size:11px;
+  font-weight:900;
+}
+
+.summary-table input{
+  width:100%;
+  height:21px;
+  border:0;
+  outline:none;
+  text-align:center;
+  font-size:11px;
+  font-weight:700;
+  background:transparent;
+}
+
+.summary-table .metric{
+  font-weight:900;
+  background:#f8fafc;
+}
+
+/* SALES */
+
+.sales-row td{
+  background:#eff6ff;
+}
+
+.sales-row .metric{
+  color:#1d4ed8;
+}
+
+.sales-value{
+  color:#1d4ed8;
+  font-weight:900;
+}
+
+/* RET */
+
+.ret-row td{
+  background:#fff7ed;
+}
+
+.ret-row .metric{
+  color:#c2410c;
+}
+
+.ret-value{
+  color:#c2410c;
+  font-weight:900;
+}
+
+/* DEL */
+
+.del-row td{
+  background:#f0fdf4;
+}
+
+.del-row .metric{
+  color:#15803d;
+}
+
+/* =========================
+   ITEMIZED TABLE
+========================= */
+
+.entries-wrap{
+  flex:1;
+  min-height:0;
+  margin-top:3px;
+  background:white;
+  border:1px solid #cbd5e1;
+  border-radius:5px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.entries-scroll{
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+
+.entries-table th{
+  position:sticky;
+  top:0;
+  z-index:3;
+  background:#1e293b;
+  color:white;
+}
+
+.entries-table th:first-child{
+  width:30%;
+}
+
+.entries-table th:not(:first-child){
+  width:14%;
+}
+
+.entries-table input{
+  width:100%;
+  height:22px;
+  border:0;
+  outline:none;
+  text-align:center;
+  font-size:11px;
+  font-weight:700;
+  background:white;
+  padding:0;
+}
+
+.entries-table input:focus{
+  background:#eff6ff;
+}
+
+.name-input{
+  text-align:left !important;
+  padding-left:4px !important;
+}
+
+/* TOTAL */
+
+.total-row td{
+  position:sticky;
+  bottom:0;
+  z-index:2;
+  background:#111827;
+  color:white;
+  font-weight:900;
+}
+
+.total-row td:first-child{
+  text-align:left;
+  padding-left:5px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:rgba(15,23,42,.72);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal{
+  width:min(360px,100%);
+  background:white;
+  border-radius:10px;
+  padding:18px;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);
+}
+
+.modal-title{
+  text-align:center;
+  font-size:18px;
+  font-weight:900;
+  color:#111827;
+  margin-bottom:5px;
+}
+
+.modal-subtitle{
+  text-align:center;
+  font-size:11px;
+  color:#64748b;
+  margin-bottom:15px;
+}
+
+.modal label{
+  display:block;
+  font-size:11px;
+  font-weight:800;
+  color:#334155;
+  margin-bottom:4px;
+}
+
+.modal input{
+  width:100%;
+  height:40px;
+  border:1px solid #cbd5e1;
+  border-radius:6px;
+  outline:none;
+  padding:0 10px;
+  font-size:14px;
+  margin-bottom:12px;
+}
+
+.modal input:focus{
+  border-color:#2563eb;
+}
+
+.start-btn{
+  width:100%;
+  height:42px;
+  border:0;
+  border-radius:6px;
+  background:#16a34a;
+  color:white;
+  font-size:14px;
+  font-weight:900;
+}
+
+.start-btn:active{
+  transform:scale(.98);
+}
+
+.error-message{
+  text-align:center;
+  color:#dc2626;
+  font-size:11px;
+  font-weight:700;
+  min-height:15px;
+  margin-bottom:5px;
+}
+
+/* =========================
+   SMALL SCREEN
+========================= */
+
+@media(max-width:480px){
+
+  .app{
+    padding:3px;
+  }
+
+  .app-title{
+    height:27px;
+    font-size:14px;
+  }
+
+  .info-bar{
+    height:30px;
+    font-size:10px;
+    gap:8px;
+  }
+
+  th,
+  td{
+    height:24px;
+    font-size:10px;
+  }
+
+  .entries-table input,
+  .summary-table input{
+    font-size:10px;
+  }
+
+}
+
+</style>
 </head>
+
 <body>
 
-  <div class="app-container">
-    <div class="table-title">Summary</div>
-    <table id="table1">
-      <colgroup>
-        <col class="col-name">
-        <col class="col-item"><col class="col-item"><col class="col-item"><col class="col-item"><col class="col-item">
-      </colgroup>
-      <thead>
-        <tr>
-          <th>Metric</th>
-          <th>R</th><th>P</th><th>L</th><th>M</th><th>C</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Del</strong></td>
-          <td><input type="number" class="del-input" value="0" oninput="calculate()"></td>
-          <td><input type="number" class="del-input" value="0" oninput="calculate()"></td>
-          <td><input type="number" class="del-input" value="0" oninput="calculate()"></td>
-          <td><input type="number" class="del-input" value="0" oninput="calculate()"></td>
-          <td><input type="number" class="del-input" value="0" oninput="calculate()"></td>
-        </tr>
-        <tr>
-          <td><strong>Sales</strong></td>
-          <td id="sales-r" class="calc-val">0</td>
-          <td id="sales-p" class="calc-val">0</td>
-          <td id="sales-l" class="calc-val">0</td>
-          <td id="sales-m" class="calc-val">0</td>
-          <td id="sales-c" class="calc-val">0</td>
-        </tr>
-        <tr>
-          <td><strong>Ret</strong></td>
-          <td id="ret-r" class="calc-val">0</td>
-          <td id="ret-p" class="calc-val">0</td>
-          <td id="ret-l" class="calc-val">0</td>
-          <td id="ret-m" class="calc-val">0</td>
-          <td id="ret-c" class="calc-val">0</td>
-        </tr>
-      </tbody>
-    </table>
+<div class="app">
 
-    <div class="table-title">Itemized Entries</div>
-    <table id="table2">
-      <colgroup>
-        <col class="col-name">
-        <col class="col-item"><col class="col-item"><col class="col-item"><col class="col-item"><col class="col-item">
-      </colgroup>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>R</th><th>P</th><th>L</th><th>M</th><th>C</th>
-        </tr>
-      </thead>
-      <tbody id="table2-body">
-        <!-- 19 entry rows generated dynamically -->
-      </tbody>
-      <tfoot>
-        <tr class="total-row">
-          <td>TOTAL</td>
-          <td id="tot-r">0</td>
-          <td id="tot-p">0</td>
-          <td id="tot-l">0</td>
-          <td id="tot-m">0</td>
-          <td id="tot-c">0</td>
-        </tr>
-      </tfoot>
-    </table>
+  <div class="app-title">
+    RPLMC TRACKER
   </div>
 
-  <script>
-    const tbody = document.getElementById('table2-body');
-    
-    // Generate Rows 2 to 20 (19 rows total)
-    for (let i = 1; i <= 19; i++) {
-      const tr = document.createElement('tr');
-      
-      // Rounded text box for Name column
-      const tdName = document.createElement('td');
-      tdName.innerHTML = `<input type="text" class="name-input">`;
-      tr.appendChild(tdName);
+  <!-- DATE + NAME -->
+  <div class="info-bar">
 
-      // RPLMC entry fields
-      ['r', 'p', 'l', 'm', 'c'].forEach(col => {
-        const td = document.createElement('td');
-        td.innerHTML = `<input type="number" class="input-${col}" oninput="calculate()">`;
-        tr.appendChild(td);
-      });
+    <span
+      class="info-date"
+      id="displayDate">
+      Oct 5, 2026
+    </span>
 
-      tbody.appendChild(tr);
+    <span class="info-separator">•</span>
+
+    <span
+      class="info-name"
+      id="displayName">
+      Name
+    </span>
+
+  </div>
+
+
+  <!-- =========================
+       SUMMARY TABLE
+  ========================== -->
+
+  <div class="table-wrap">
+
+    <table class="summary-table">
+
+      <thead>
+
+        <tr>
+
+          <th colspan="6" class="summary-title">
+            SUMMARY
+          </th>
+
+        </tr>
+
+        <tr>
+
+          <th>Metric</th>
+          <th>R</th>
+          <th>P</th>
+          <th>L</th>
+          <th>M</th>
+          <th>C</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <!-- DEL -->
+
+        <tr class="del-row">
+
+          <td class="metric">
+            DEL
+          </td>
+
+          <td>
+            <input
+              type="number"
+              id="delR"
+              inputmode="decimal"
+              oninput="calculate()"
+            >
+          </td>
+
+          <td>
+            <input
+              type="number"
+              id="delP"
+              inputmode="decimal"
+              oninput="calculate()"
+            >
+          </td>
+
+          <td>
+            <input
+              type="number"
+              id="delL"
+              inputmode="decimal"
+              oninput="calculate()"
+            >
+          </td>
+
+          <td>
+            <input
+              type="number"
+              id="delM"
+              inputmode="decimal"
+              oninput="calculate()"
+            >
+          </td>
+
+          <td>
+            <input
+              type="number"
+              id="delC"
+              inputmode="decimal"
+              oninput="calculate()"
+            >
+          </td>
+
+        </tr>
+
+
+        <!-- SALES -->
+
+        <tr class="sales-row">
+
+          <td class="metric">
+            SALES
+          </td>
+
+          <td
+            id="salesR"
+            class="sales-value">
+            0
+          </td>
+
+          <td
+            id="salesP"
+            class="sales-value">
+            0
+          </td>
+
+          <td
+            id="salesL"
+            class="sales-value">
+            0
+          </td>
+
+          <td
+            id="salesM"
+            class="sales-value">
+            0
+          </td>
+
+          <td
+            id="salesC"
+            class="sales-value">
+            0
+          </td>
+
+        </tr>
+
+
+        <!-- RET -->
+
+        <tr class="ret-row">
+
+          <td class="metric">
+            RET
+          </td>
+
+          <td
+            id="retR"
+            class="ret-value">
+            0
+          </td>
+
+          <td
+            id="retP"
+            class="ret-value">
+            0
+          </td>
+
+          <td
+            id="retL"
+            class="ret-value">
+            0
+          </td>
+
+          <td
+            id="retM"
+            class="ret-value">
+            0
+          </td>
+
+          <td
+            id="retC"
+            class="ret-value">
+            0
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+
+  <!-- =========================
+       ITEMIZED ENTRIES
+  ========================== -->
+
+  <div class="entries-wrap">
+
+    <div class="entries-scroll">
+
+      <table class="entries-table">
+
+        <thead>
+
+          <tr>
+
+            <th>Name</th>
+            <th>R</th>
+            <th>P</th>
+            <th>L</th>
+            <th>M</th>
+            <th>C</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="entryBody">
+        </tbody>
+
+        <tfoot>
+
+          <tr class="total-row">
+
+            <td>
+              TOTAL
+            </td>
+
+            <td id="totalR">
+              0
+            </td>
+
+            <td id="totalP">
+              0
+            </td>
+
+            <td id="totalL">
+              0
+            </td>
+
+            <td id="totalM">
+              0
+            </td>
+
+            <td id="totalC">
+              0
+            </td>
+
+          </tr>
+
+        </tfoot>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     DATE + NAME MODAL
+========================= -->
+
+<div
+  class="modal-overlay"
+  id="setupModal"
+>
+
+  <div class="modal">
+
+    <div class="modal-title">
+      Start Ledger
+    </div>
+
+    <div class="modal-subtitle">
+      Enter the date and name before opening the ledger.
+    </div>
+
+    <label for="ledgerDate">
+      Date
+    </label>
+
+    <input
+      type="date"
+      id="ledgerDate"
+    >
+
+    <label for="ledgerName">
+      Name
+    </label>
+
+    <input
+      type="text"
+      id="ledgerName"
+      placeholder="Enter name"
+      autocomplete="off"
+    >
+
+    <div
+      class="error-message"
+      id="setupError">
+    </div>
+
+    <button
+      class="start-btn"
+      onclick="startLedger()">
+      OPEN LEDGER
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   VARIABLES
+========================= */
+
+const ROW_COUNT = 19;
+
+
+/* =========================
+   DATE FORMAT
+========================= */
+
+function formatDate(value){
+
+  if(!value) return "";
+
+  const parts=value.split("-");
+
+  if(parts.length!==3){
+    return value;
+  }
+
+  const year=Number(parts[0]);
+  const month=Number(parts[1]);
+  const day=Number(parts[2]);
+
+  const months=[
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+
+  return `${months[month-1]} ${day}, ${year}`;
+}
+
+
+/* =========================
+   TODAY
+========================= */
+
+function getToday(){
+
+  const now=new Date();
+
+  const year=now.getFullYear();
+
+  const month=String(
+    now.getMonth()+1
+  ).padStart(2,"0");
+
+  const day=String(
+    now.getDate()
+  ).padStart(2,"0");
+
+  return `${year}-${month}-${day}`;
+}
+
+
+/* =========================
+   BUILD 19 ROWS
+========================= */
+
+function buildRows(){
+
+  const body=
+    document.getElementById(
+      "entryBody"
+    );
+
+  body.innerHTML="";
+
+  for(let i=1;i<=ROW_COUNT;i++){
+
+    const tr=document.createElement("tr");
+
+    tr.innerHTML=`
+
+      <td>
+        <input
+          type="text"
+          class="name-input"
+          placeholder="${i}"
+          autocomplete="off"
+        >
+      </td>
+
+      <td>
+        <input
+          type="number"
+          class="qty-r"
+          inputmode="decimal"
+          oninput="calculate()"
+        >
+      </td>
+
+      <td>
+        <input
+          type="number"
+          class="qty-p"
+          inputmode="decimal"
+          oninput="calculate()"
+        >
+      </td>
+
+      <td>
+        <input
+          type="number"
+          class="qty-l"
+          inputmode="decimal"
+          oninput="calculate()"
+        >
+      </td>
+
+      <td>
+        <input
+          type="number"
+          class="qty-m"
+          inputmode="decimal"
+          oninput="calculate()"
+        >
+      </td>
+
+      <td>
+        <input
+          type="number"
+          class="qty-c"
+          inputmode="decimal"
+          oninput="calculate()"
+        >
+      </td>
+
+    `;
+
+    body.appendChild(tr);
+  }
+
+}
+
+
+/* =========================
+   NUMBER HELPER
+========================= */
+
+function num(value){
+
+  const n=parseFloat(value);
+
+  return Number.isFinite(n) ? n : 0;
+}
+
+
+/* =========================
+   CALCULATE
+========================= */
+
+function calculate(){
+
+  const types=[
+    "R",
+    "P",
+    "L",
+    "M",
+    "C"
+  ];
+
+  const totals={
+    R:0,
+    P:0,
+    L:0,
+    M:0,
+    C:0
+  };
+
+
+  /* ITEMIZED SALES */
+
+  document
+    .querySelectorAll(".qty-r")
+    .forEach(input=>{
+      totals.R += num(input.value);
+    });
+
+  document
+    .querySelectorAll(".qty-p")
+    .forEach(input=>{
+      totals.P += num(input.value);
+    });
+
+  document
+    .querySelectorAll(".qty-l")
+    .forEach(input=>{
+      totals.L += num(input.value);
+    });
+
+  document
+    .querySelectorAll(".qty-m")
+    .forEach(input=>{
+      totals.M += num(input.value);
+    });
+
+  document
+    .querySelectorAll(".qty-c")
+    .forEach(input=>{
+      totals.C += num(input.value);
+    });
+
+
+  /* DISPLAY SALES */
+
+  document.getElementById("salesR")
+    .textContent=totals.R;
+
+  document.getElementById("salesP")
+    .textContent=totals.P;
+
+  document.getElementById("salesL")
+    .textContent=totals.L;
+
+  document.getElementById("salesM")
+    .textContent=totals.M;
+
+  document.getElementById("salesC")
+    .textContent=totals.C;
+
+
+  /* DISPLAY TOTAL */
+
+  document.getElementById("totalR")
+    .textContent=totals.R;
+
+  document.getElementById("totalP")
+    .textContent=totals.P;
+
+  document.getElementById("totalL")
+    .textContent=totals.L;
+
+  document.getElementById("totalM")
+    .textContent=totals.M;
+
+  document.getElementById("totalC")
+    .textContent=totals.C;
+
+
+  /* =========================
+     RET = DEL - SALES
+  ========================== */
+
+  types.forEach(type=>{
+
+    const delInput=
+      document.getElementById(
+        "del"+type
+      );
+
+    const sales=
+      totals[type];
+
+    const del=
+      num(delInput.value);
+
+    const ret=
+      del-sales;
+
+    document.getElementById(
+      "ret"+type
+    ).textContent=ret;
+
+  });
+
+}
+
+
+/* =========================
+   START LEDGER
+========================= */
+
+function startLedger(){
+
+  const date=
+    document.getElementById(
+      "ledgerDate"
+    ).value;
+
+  const name=
+    document.getElementById(
+      "ledgerName"
+    ).value.trim();
+
+  const error=
+    document.getElementById(
+      "setupError"
+    );
+
+
+  if(!date){
+
+    error.textContent=
+      "Please select a date.";
+
+    return;
+  }
+
+
+  if(!name){
+
+    error.textContent=
+      "Please enter a name.";
+
+    return;
+  }
+
+
+  /* SAVE SESSION INFO */
+
+  localStorage.setItem(
+    "rplmc_ledger_date",
+    date
+  );
+
+  localStorage.setItem(
+    "rplmc_ledger_name",
+    name
+  );
+
+
+  /* DISPLAY */
+
+  document.getElementById(
+    "displayDate"
+  ).textContent=
+    formatDate(date);
+
+  document.getElementById(
+    "displayName"
+  ).textContent=
+    name;
+
+
+  /* CLOSE MODAL */
+
+  document.getElementById(
+    "setupModal"
+  ).style.display="none";
+
+
+  calculate();
+
+}
+
+
+/* =========================
+   LOAD SAVED SESSION
+========================= */
+
+function loadSession(){
+
+  const savedDate=
+    localStorage.getItem(
+      "rplmc_ledger_date"
+    );
+
+  const savedName=
+    localStorage.getItem(
+      "rplmc_ledger_name"
+    );
+
+
+  /*
+    Always show the modal when
+    the ledger is opened.
+  */
+
+  document.getElementById(
+    "setupModal"
+  ).style.display="flex";
+
+
+  /*
+    Pre-fill today's date or
+    previously used date.
+  */
+
+  document.getElementById(
+    "ledgerDate"
+  ).value=
+    savedDate || getToday();
+
+
+  if(savedName){
+
+    document.getElementById(
+      "ledgerName"
+    ).value=savedName;
+
+  }
+
+}
+
+
+/* =========================
+   INITIALIZE
+========================= */
+
+buildRows();
+
+loadSession();
+
+calculate();
+
+
+/* =========================
+   ENTER KEY
+========================= */
+
+document
+  .getElementById("ledgerName")
+  .addEventListener(
+    "keydown",
+    function(e){
+
+      if(e.key==="Enter"){
+        startLedger();
+      }
+
     }
+  );
 
-    function calculate() {
-      const cols = ['r', 'p', 'l', 'm', 'c'];
-      const delInputs = document.querySelectorAll('.del-input');
-
-      cols.forEach((col, index) => {
-        const inputs = document.querySelectorAll(`.input-${col}`);
-        let sum = 0;
-        inputs.forEach(input => {
-          sum += parseFloat(input.value) || 0;
-        });
-
-        // Update Table 2 Totals
-        document.getElementById(`tot-${col}`).innerText = sum;
-
-        // Update Table 1 Sales
-        document.getElementById(`sales-${col}`).innerText = sum;
-
-        // Calculate and Update Table 1 Ret (Del - Sales)
-        const delVal = parseFloat(delInputs[index].value) || 0;
-        document.getElementById(`ret-${col}`).innerText = delVal - sum;
-      });
-    }
-  </script>
+</script>
 
 </body>
 </html>
