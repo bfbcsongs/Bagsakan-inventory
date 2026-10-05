@@ -280,15 +280,6 @@ th,td{
   user-select:none;
 }
 
-#lastModifiedTime{
-  display:block;
-  width:100%;
-  text-align:center;
-  white-space:nowrap;
-  font-size:8px;
-  line-height:1;
-}
-
 .customer-row{
   height:14px;
   font-size:8px;
@@ -778,10 +769,6 @@ th,td{
     font-size:8px;
   }
 
-  #lastModifiedTime{
-    font-size:7px;
-  }
-
   .customer-row{
     height:14px;
   }
@@ -867,10 +854,6 @@ th,td{
   .customer-header{
     height:14px;
     font-size:7px;
-  }
-
-  #lastModifiedTime{
-    font-size:6px;
   }
 
   .customer-row{
@@ -1077,7 +1060,7 @@ th,td{
               id="nameHeader"
               title="5 taps to open multiplier settings"
             >
-              <span id="lastModifiedTime">--:-- am</span>
+              NAME
             </th>
 
             <th>R</th>
@@ -1144,12 +1127,8 @@ th,td{
 </div>
 
 
-<!-- =========================
-     START LEDGER MODAL
-========================= -->
-
+<!-- START LEDGER MODAL -->
 <div class="modal" id="setupModal">
-
   <div class="modal-box">
 
     <div class="modal-title">
@@ -1157,7 +1136,6 @@ th,td{
     </div>
 
     <div class="modal-field">
-
       <label for="ledgerDate">
         DATE
       </label>
@@ -1167,11 +1145,9 @@ th,td{
         id="ledgerDate"
         autocomplete="off"
       >
-
     </div>
 
     <div class="modal-field">
-
       <label for="ledgerName">
         NAME
       </label>
@@ -1182,7 +1158,6 @@ th,td{
         autocomplete="off"
         placeholder="Enter name"
       >
-
     </div>
 
     <div
@@ -1198,18 +1173,11 @@ th,td{
     </button>
 
   </div>
-
 </div>
 
 
-<!-- =========================
-     SAVE MODAL
-========================= -->
-
-<div
-  class="modal hidden"
-  id="saveModal"
->
+<!-- SAVE MODAL -->
+<div class="modal hidden" id="saveModal">
 
   <div class="modal-box">
 
@@ -1274,14 +1242,54 @@ th,td{
 </div>
 
 
-<!-- =========================
-     MULTIPLIER MODAL
-========================= -->
+<!-- UNSAVED CURRENT MODAL -->
+<div class="modal hidden" id="unsavedModal">
 
-<div
-  class="modal hidden"
-  id="multiplierModal"
->
+  <div class="modal-box">
+
+    <div class="modal-title">
+      Unsaved Current Ledger
+    </div>
+
+    <div
+      style="
+        text-align:center;
+        font-size:13px;
+        font-weight:800;
+        color:#334155;
+        line-height:1.4;
+        margin-bottom:15px;
+      "
+    >
+      Your current ledger has unsaved entries.<br>
+      Save it before opening the selected file?
+    </div>
+
+    <div class="multiplier-actions">
+
+      <button
+        class="cancel-btn"
+        id="cancelUnsaved"
+      >
+        CANCEL
+      </button>
+
+      <button
+        class="save-btn"
+        id="saveCurrentBeforeEdit"
+      >
+        SAVE CURRENT
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- MULTIPLIER MODAL -->
+<div class="modal hidden" id="multiplierModal">
 
   <div class="modal-box">
 
@@ -1293,27 +1301,47 @@ th,td{
 
       <div class="multiplier-item">
         <label>R</label>
-        <input id="multR" type="number" inputmode="decimal">
+        <input
+          id="multR"
+          type="number"
+          inputmode="decimal"
+        >
       </div>
 
       <div class="multiplier-item">
         <label>P</label>
-        <input id="multP" type="number" inputmode="decimal">
+        <input
+          id="multP"
+          type="number"
+          inputmode="decimal"
+        >
       </div>
 
       <div class="multiplier-item">
         <label>L</label>
-        <input id="multL" type="number" inputmode="decimal">
+        <input
+          id="multL"
+          type="number"
+          inputmode="decimal"
+        >
       </div>
 
       <div class="multiplier-item">
         <label>M</label>
-        <input id="multM" type="number" inputmode="decimal">
+        <input
+          id="multM"
+          type="number"
+          inputmode="decimal"
+        >
       </div>
 
       <div class="multiplier-item">
         <label>C</label>
-        <input id="multC" type="number" inputmode="decimal">
+        <input
+          id="multC"
+          type="number"
+          inputmode="decimal"
+        >
       </div>
 
     </div>
@@ -1353,23 +1381,26 @@ if('serviceWorker' in navigator){
     'load',
     () => {
 
-      navigator.serviceWorker.register(
-        './sw.js?v=2',
-        {scope:'./'}
-      )
-      .then(
-        reg =>
-          console.log(
-            'Service Worker Registered!'
-          )
-      )
-      .catch(
-        err =>
-          console.log(
-            'Service Worker Registration Failed:',
-            err
-          )
-      );
+      navigator.serviceWorker
+        .register(
+          './sw.js?v=2',
+          {
+            scope:'./'
+          }
+        )
+        .then(
+          reg =>
+            console.log(
+              'Service Worker Registered!'
+            )
+        )
+        .catch(
+          err =>
+            console.log(
+              'Service Worker Registration Failed:',
+              err
+            )
+        );
 
     }
   );
@@ -1387,7 +1418,8 @@ const SAVED_FILES_KEY =
 const CURRENT_DRAFT_KEY =
   "rplmc_current_draft";
 
-const MAX_SAVED_FILES = 30;
+const MAX_SAVED_FILES =
+  30;
 
 
 /* =========================
@@ -1395,11 +1427,13 @@ const MAX_SAVED_FILES = 30;
 ========================= */
 
 const DEFAULT_MULTIPLIERS = {
+
   R:45,
   P:45,
   L:45,
   M:45,
   C:40
+
 };
 
 let multipliers =
@@ -1407,7 +1441,11 @@ let multipliers =
     localStorage.getItem(
       "rplmc_multipliers"
     )
-  ) || {...DEFAULT_MULTIPLIERS};
+  )
+  ||
+  {
+    ...DEFAULT_MULTIPLIERS
+  };
 
 
 /* =========================
@@ -1415,78 +1453,116 @@ let multipliers =
 ========================= */
 
 const setupModal =
-  document.getElementById("setupModal");
+  document.getElementById(
+    "setupModal"
+  );
 
 const setupError =
-  document.getElementById("setupError");
+  document.getElementById(
+    "setupError"
+  );
 
 const ledgerDate =
-  document.getElementById("ledgerDate");
+  document.getElementById(
+    "ledgerDate"
+  );
 
 const ledgerName =
-  document.getElementById("ledgerName");
+  document.getElementById(
+    "ledgerName"
+  );
 
 const displayDate =
-  document.getElementById("displayDate");
+  document.getElementById(
+    "displayDate"
+  );
 
 const displayName =
-  document.getElementById("displayName");
+  document.getElementById(
+    "displayName"
+  );
 
 const customerBody =
-  document.getElementById("customerBody");
+  document.getElementById(
+    "customerBody"
+  );
 
 const multiplierModal =
-  document.getElementById("multiplierModal");
+  document.getElementById(
+    "multiplierModal"
+  );
 
 const nameHeader =
-  document.getElementById("nameHeader");
-
-const lastModifiedTime =
-  document.getElementById("lastModifiedTime");
+  document.getElementById(
+    "nameHeader"
+  );
 
 const savedList =
-  document.getElementById("savedList");
+  document.getElementById(
+    "savedList"
+  );
 
 const saveModal =
-  document.getElementById("saveModal");
+  document.getElementById(
+    "saveModal"
+  );
 
 const saveDate =
-  document.getElementById("saveDate");
+  document.getElementById(
+    "saveDate"
+  );
 
 const saveName =
-  document.getElementById("saveName");
+  document.getElementById(
+    "saveName"
+  );
 
 const saveError =
-  document.getElementById("saveError");
+  document.getElementById(
+    "saveError"
+  );
+
+const unsavedModal =
+  document.getElementById(
+    "unsavedModal"
+  );
 
 
 /* =========================
    STATE
 ========================= */
 
-let readonlyMode = false;
+let readonlyMode =
+  false;
 
-let selectedSavedId = null;
+let selectedSavedId =
+  null;
 
-let currentPreviewId = null;
+let currentPreviewId =
+  null;
 
-let currentLedgerStarted = false;
+let currentLedgerStarted =
+  false;
 
-let temporaryCurrentState = null;
+let temporaryCurrentState =
+  null;
 
-let temporaryCurrentEditingId = null;
+let temporaryCurrentEditingId =
+  null;
 
-let editingSavedId = null;
+let editingSavedId =
+  null;
 
-let lastModifiedAt = null;
+let lastModifiedAt =
+  Date.now();
 
 /*
-   When EDIT is tapped while the current
-   ledger contains data, this stores the
-   saved file that should be opened after
-   the current ledger is successfully saved.
+   Pending EDIT request.
+   Used when the current ledger must
+   be saved before opening another file.
 */
-let pendingEditId = null;
+let pendingEditId =
+  null;
 
 
 /* =========================
@@ -1511,7 +1587,8 @@ function num(value){
 
 function formatAmount(value){
 
-  const n = num(value);
+  const n =
+    num(value);
 
   if(n === 0){
     return "0";
@@ -1523,7 +1600,10 @@ function formatAmount(value){
 
   return n
     .toFixed(2)
-    .replace(/\.?0+$/,"");
+    .replace(
+      /\.?0+$/,
+      ""
+    );
 
 }
 
@@ -1545,20 +1625,41 @@ function formatDate(value){
     return value;
   }
 
-  const y = Number(parts[0]);
-  const m = Number(parts[1]);
-  const d = Number(parts[2]);
+  const y =
+    Number(parts[0]);
+
+  const m =
+    Number(parts[1]);
+
+  const d =
+    Number(parts[2]);
 
   const months = [
-    "Jan","Feb","Mar","Apr",
-    "May","Jun","Jul","Aug",
-    "Sep","Oct","Nov","Dec"
+
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+
   ];
 
   const date =
-    new Date(y,m-1,d);
+    new Date(
+      y,
+      m - 1,
+      d
+    );
 
   const days = [
+
     "Sunday",
     "Monday",
     "Tuesday",
@@ -1566,6 +1667,7 @@ function formatDate(value){
     "Thursday",
     "Friday",
     "Saturday"
+
   ];
 
   return `${days[date.getDay()]}, ${months[m-1]} ${d}, ${y}`;
@@ -1574,49 +1676,7 @@ function formatDate(value){
 
 
 /* =========================
-   MODIFICATION TIME
-========================= */
-
-function formatModifiedTime(timestamp){
-
-  if(!timestamp){
-    return "--:-- am";
-  }
-
-  const d =
-    new Date(timestamp);
-
-  if(Number.isNaN(d.getTime())){
-    return "--:-- am";
-  }
-
-  return d.toLocaleTimeString(
-    [],
-    {
-      hour:"numeric",
-      minute:"2-digit",
-      hour12:true
-    }
-  ).toLowerCase();
-
-}
-
-
-function updateModificationTime(){
-
-  lastModifiedAt =
-    Date.now();
-
-  lastModifiedTime.textContent =
-    formatModifiedTime(
-      lastModifiedAt
-    );
-
-}
-
-
-/* =========================
-   SAVED TIME
+   TIME FORMAT
 ========================= */
 
 function formatSavedTime(timestamp){
@@ -1637,9 +1697,21 @@ function formatSavedTime(timestamp){
     {
       hour:"numeric",
       minute:"2-digit",
-      second:"2-digit"
+      hour12:true
     }
-  );
+  ).toLowerCase();
+
+}
+
+
+/* =========================
+   MODIFICATION TIME
+========================= */
+
+function updateModificationTime(){
+
+  lastModifiedAt =
+    Date.now();
 
 }
 
@@ -1696,7 +1768,9 @@ function saveCurrentDraft(){
     !currentLedgerStarted ||
     readonlyMode
   ){
+
     return;
+
   }
 
   try{
@@ -1755,7 +1829,9 @@ function loadCurrentDraft(){
       !draft ||
       !draft.ledger
     ){
+
       return null;
+
     }
 
     return draft;
@@ -1775,12 +1851,19 @@ function loadCurrentDraft(){
 
 function buildRows(){
 
-  customerBody.innerHTML = "";
+  customerBody.innerHTML =
+    "";
 
-  for(let i=1;i<=19;i++){
+  for(
+    let i = 1;
+    i <= 19;
+    i++
+  ){
 
     const tr =
-      document.createElement("tr");
+      document.createElement(
+        "tr"
+      );
 
     tr.className =
       "customer-row";
@@ -1788,6 +1871,7 @@ function buildRows(){
     tr.innerHTML = `
 
       <td>
+
         <div class="name-cell">
 
           <span class="row-number">
@@ -1801,67 +1885,90 @@ function buildRows(){
           >
 
         </div>
+
       </td>
 
       <td>
+
         <input
           class="qty-input qty-r"
           type="number"
           inputmode="decimal"
         >
+
       </td>
 
       <td>
+
         <input
           class="qty-input qty-p"
           type="number"
           inputmode="decimal"
         >
+
       </td>
 
       <td>
+
         <input
           class="qty-input qty-l"
           type="number"
           inputmode="decimal"
         >
+
       </td>
 
       <td>
+
         <input
           class="qty-input qty-m"
           type="number"
           inputmode="decimal"
         >
+
       </td>
 
       <td>
+
         <input
           class="qty-input qty-c"
           type="number"
           inputmode="decimal"
         >
+
       </td>
 
       <td>
-        <span class="amount-value">0</span>
+
+        <span class="amount-value">
+          0
+        </span>
+
       </td>
 
       <td>
+
         <input
           class="bayad-input"
           type="number"
           inputmode="decimal"
         >
+
       </td>
 
       <td>
-        <span class="sukli-value">0</span>
+
+        <span class="sukli-value">
+          0
+        </span>
+
       </td>
 
     `;
 
-    customerBody.appendChild(tr);
+    customerBody.appendChild(
+      tr
+    );
 
   }
 
@@ -1870,22 +1977,24 @@ function buildRows(){
     .querySelectorAll(
       ".qty-input, .name-input, .bayad-input"
     )
-    .forEach(input => {
+    .forEach(
+      input => {
 
-      input.addEventListener(
-        "input",
-        () => {
+        input.addEventListener(
+          "input",
+          () => {
 
-          calculate();
+            calculate();
 
-          updateModificationTime();
+            updateModificationTime();
 
-          saveCurrentDraft();
+            saveCurrentDraft();
 
-        }
-      );
+          }
+        );
 
-    });
+      }
+    );
 
 }
 
@@ -1906,155 +2015,265 @@ function calculate(){
   let totalBayad = 0;
   let totalSukli = 0;
 
-
   const rows =
     document.querySelectorAll(
       ".customer-row"
     );
 
 
-  rows.forEach(row => {
+  rows.forEach(
+    row => {
 
-    const r =
-      num(
-        row.querySelector(".qty-r").value
-      );
+      const r =
+        num(
+          row.querySelector(
+            ".qty-r"
+          ).value
+        );
 
-    const p =
-      num(
-        row.querySelector(".qty-p").value
-      );
+      const p =
+        num(
+          row.querySelector(
+            ".qty-p"
+          ).value
+        );
 
-    const l =
-      num(
-        row.querySelector(".qty-l").value
-      );
+      const l =
+        num(
+          row.querySelector(
+            ".qty-l"
+          ).value
+        );
 
-    const m =
-      num(
-        row.querySelector(".qty-m").value
-      );
+      const m =
+        num(
+          row.querySelector(
+            ".qty-m"
+          ).value
+        );
 
-    const c =
-      num(
-        row.querySelector(".qty-c").value
-      );
+      const c =
+        num(
+          row.querySelector(
+            ".qty-c"
+          ).value
+        );
 
-    const bayad =
-      num(
-        row.querySelector(".bayad-input").value
-      );
-
-
-    totalR += r;
-    totalP += p;
-    totalL += l;
-    totalM += m;
-    totalC += c;
-
-
-    const amount =
-      (r * multipliers.R) +
-      (p * multipliers.P) +
-      (l * multipliers.L) +
-      (m * multipliers.M) +
-      (c * multipliers.C);
+      const bayad =
+        num(
+          row.querySelector(
+            ".bayad-input"
+          ).value
+        );
 
 
-    const sukli =
-      bayad - amount;
+      totalR += r;
+      totalP += p;
+      totalL += l;
+      totalM += m;
+      totalC += c;
 
 
-    totalAmount += amount;
-    totalBayad += bayad;
-    totalSukli += sukli;
+      const amount =
+        (r * multipliers.R) +
+        (p * multipliers.P) +
+        (l * multipliers.L) +
+        (m * multipliers.M) +
+        (c * multipliers.C);
 
 
-    row.querySelector(
-      ".amount-value"
-    ).textContent =
-      formatAmount(amount);
+      const sukli =
+        bayad - amount;
 
 
-    row.querySelector(
-      ".sukli-value"
-    ).textContent =
-      formatAmount(sukli);
-
-  });
+      totalAmount += amount;
+      totalBayad += bayad;
+      totalSukli += sukli;
 
 
-  document.getElementById("totalR").textContent =
-    formatAmount(totalR);
-
-  document.getElementById("totalP").textContent =
-    formatAmount(totalP);
-
-  document.getElementById("totalL").textContent =
-    formatAmount(totalL);
-
-  document.getElementById("totalM").textContent =
-    formatAmount(totalM);
-
-  document.getElementById("totalC").textContent =
-    formatAmount(totalC);
-
-  document.getElementById("totalAmount").textContent =
-    formatAmount(totalAmount);
-
-  document.getElementById("totalBayad").textContent =
-    formatAmount(totalBayad);
-
-  document.getElementById("totalSukli").textContent =
-    formatAmount(totalSukli);
+      row.querySelector(
+        ".amount-value"
+      ).textContent =
+        formatAmount(
+          amount
+        );
 
 
-  document.getElementById("salesR").textContent =
-    formatAmount(totalR);
+      row.querySelector(
+        ".sukli-value"
+      ).textContent =
+        formatAmount(
+          sukli
+        );
 
-  document.getElementById("salesP").textContent =
-    formatAmount(totalP);
+    }
+  );
 
-  document.getElementById("salesL").textContent =
-    formatAmount(totalL);
 
-  document.getElementById("salesM").textContent =
-    formatAmount(totalM);
+  document.getElementById(
+    "totalR"
+  ).textContent =
+    formatAmount(
+      totalR
+    );
 
-  document.getElementById("salesC").textContent =
-    formatAmount(totalC);
+  document.getElementById(
+    "totalP"
+  ).textContent =
+    formatAmount(
+      totalP
+    );
+
+  document.getElementById(
+    "totalL"
+  ).textContent =
+    formatAmount(
+      totalL
+    );
+
+  document.getElementById(
+    "totalM"
+  ).textContent =
+    formatAmount(
+      totalM
+    );
+
+  document.getElementById(
+    "totalC"
+  ).textContent =
+    formatAmount(
+      totalC
+    );
+
+
+  document.getElementById(
+    "totalAmount"
+  ).textContent =
+    formatAmount(
+      totalAmount
+    );
+
+  document.getElementById(
+    "totalBayad"
+  ).textContent =
+    formatAmount(
+      totalBayad
+    );
+
+  document.getElementById(
+    "totalSukli"
+  ).textContent =
+    formatAmount(
+      totalSukli
+    );
+
+
+  document.getElementById(
+    "salesR"
+  ).textContent =
+    formatAmount(
+      totalR
+    );
+
+  document.getElementById(
+    "salesP"
+  ).textContent =
+    formatAmount(
+      totalP
+    );
+
+  document.getElementById(
+    "salesL"
+  ).textContent =
+    formatAmount(
+      totalL
+    );
+
+  document.getElementById(
+    "salesM"
+  ).textContent =
+    formatAmount(
+      totalM
+    );
+
+  document.getElementById(
+    "salesC"
+  ).textContent =
+    formatAmount(
+      totalC
+    );
 
 
   const delR =
-    num(document.getElementById("delR").value);
+    num(
+      document.getElementById(
+        "delR"
+      ).value
+    );
 
   const delP =
-    num(document.getElementById("delP").value);
+    num(
+      document.getElementById(
+        "delP"
+      ).value
+    );
 
   const delL =
-    num(document.getElementById("delL").value);
+    num(
+      document.getElementById(
+        "delL"
+      ).value
+    );
 
   const delM =
-    num(document.getElementById("delM").value);
+    num(
+      document.getElementById(
+        "delM"
+      ).value
+    );
 
   const delC =
-    num(document.getElementById("delC").value);
+    num(
+      document.getElementById(
+        "delC"
+      ).value
+    );
 
 
-  document.getElementById("retR").textContent =
-    formatAmount(delR - totalR);
+  document.getElementById(
+    "retR"
+  ).textContent =
+    formatAmount(
+      delR - totalR
+    );
 
-  document.getElementById("retP").textContent =
-    formatAmount(delP - totalP);
+  document.getElementById(
+    "retP"
+  ).textContent =
+    formatAmount(
+      delP - totalP
+    );
 
-  document.getElementById("retL").textContent =
-    formatAmount(delL - totalL);
+  document.getElementById(
+    "retL"
+  ).textContent =
+    formatAmount(
+      delL - totalL
+    );
 
-  document.getElementById("retM").textContent =
-    formatAmount(delM - totalM);
+  document.getElementById(
+    "retM"
+  ).textContent =
+    formatAmount(
+      delM - totalM
+    );
 
-  document.getElementById("retC").textContent =
-    formatAmount(delC - totalC);
+  document.getElementById(
+    "retC"
+  ).textContent =
+    formatAmount(
+      delC - totalC
+    );
 
 }
 
@@ -2072,6 +2291,7 @@ function captureLedger(){
       )
     );
 
+
   return {
 
     date:
@@ -2084,38 +2304,76 @@ function captureLedger(){
       lastModifiedAt,
 
     del:{
-      R:document.getElementById("delR").value,
-      P:document.getElementById("delP").value,
-      L:document.getElementById("delL").value,
-      M:document.getElementById("delM").value,
-      C:document.getElementById("delC").value
+
+      R:
+        document.getElementById(
+          "delR"
+        ).value,
+
+      P:
+        document.getElementById(
+          "delP"
+        ).value,
+
+      L:
+        document.getElementById(
+          "delL"
+        ).value,
+
+      M:
+        document.getElementById(
+          "delM"
+        ).value,
+
+      C:
+        document.getElementById(
+          "delC"
+        ).value
+
     },
 
     rows:
-      rows.map(row => ({
 
-        name:
-          row.querySelector(".name-input").value,
+      rows.map(
+        row => ({
 
-        R:
-          row.querySelector(".qty-r").value,
+          name:
+            row.querySelector(
+              ".name-input"
+            ).value,
 
-        P:
-          row.querySelector(".qty-p").value,
+          R:
+            row.querySelector(
+              ".qty-r"
+            ).value,
 
-        L:
-          row.querySelector(".qty-l").value,
+          P:
+            row.querySelector(
+              ".qty-p"
+            ).value,
 
-        M:
-          row.querySelector(".qty-m").value,
+          L:
+            row.querySelector(
+              ".qty-l"
+            ).value,
 
-        C:
-          row.querySelector(".qty-c").value,
+          M:
+            row.querySelector(
+              ".qty-m"
+            ).value,
 
-        bayad:
-          row.querySelector(".bayad-input").value
+          C:
+            row.querySelector(
+              ".qty-c"
+            ).value,
 
-      }))
+          bayad:
+            row.querySelector(
+              ".bayad-input"
+            ).value
+
+        })
+      )
 
   };
 
@@ -2126,7 +2384,7 @@ function captureLedger(){
    APPLY LEDGER
 ========================= */
 
-function applyLedger(data, fallbackModifiedAt){
+function applyLedger(data){
 
   if(!data){
     return;
@@ -2142,33 +2400,36 @@ function applyLedger(data, fallbackModifiedAt){
 
   lastModifiedAt =
     data.modifiedAt ||
-    fallbackModifiedAt ||
-    null;
-
-
-  lastModifiedTime.textContent =
-    formatModifiedTime(
-      lastModifiedAt
-    );
+    Date.now();
 
 
   const del =
     data.del || {};
 
 
-  document.getElementById("delR").value =
+  document.getElementById(
+    "delR"
+  ).value =
     del.R || "";
 
-  document.getElementById("delP").value =
+  document.getElementById(
+    "delP"
+  ).value =
     del.P || "";
 
-  document.getElementById("delL").value =
+  document.getElementById(
+    "delL"
+  ).value =
     del.L || "";
 
-  document.getElementById("delM").value =
+  document.getElementById(
+    "delM"
+  ).value =
     del.M || "";
 
-  document.getElementById("delC").value =
+  document.getElementById(
+    "delC"
+  ).value =
     del.C || "";
 
 
@@ -2183,38 +2444,56 @@ function applyLedger(data, fallbackModifiedAt){
       : [];
 
 
-  rows.forEach((row,index) => {
+  rows.forEach(
+    (row,index) => {
 
-    const item =
-      savedRows[index] || {};
+      const item =
+        savedRows[index] || {};
 
 
-    row.querySelector(".name-input").value =
-      item.name || "";
+      row.querySelector(
+        ".name-input"
+      ).value =
+        item.name || "";
 
-    row.querySelector(".qty-r").value =
-      item.R || "";
+      row.querySelector(
+        ".qty-r"
+      ).value =
+        item.R || "";
 
-    row.querySelector(".qty-p").value =
-      item.P || "";
+      row.querySelector(
+        ".qty-p"
+      ).value =
+        item.P || "";
 
-    row.querySelector(".qty-l").value =
-      item.L || "";
+      row.querySelector(
+        ".qty-l"
+      ).value =
+        item.L || "";
 
-    row.querySelector(".qty-m").value =
-      item.M || "";
+      row.querySelector(
+        ".qty-m"
+      ).value =
+        item.M || "";
 
-    row.querySelector(".qty-c").value =
-      item.C || "";
+      row.querySelector(
+        ".qty-c"
+      ).value =
+        item.C || "";
 
-    row.querySelector(".bayad-input").value =
-      item.bayad || "";
+      row.querySelector(
+        ".bayad-input"
+      ).value =
+        item.bayad || "";
 
-  });
+    }
+  );
 
 
   displayDate.textContent =
-    formatDate(data.date || "");
+    formatDate(
+      data.date || ""
+    );
 
   displayName.textContent =
     data.name || "";
@@ -2232,31 +2511,61 @@ function applyLedger(data, fallbackModifiedAt){
 function clearLedgerValues(){
 
   [
+
     "delR",
     "delP",
     "delL",
     "delM",
     "delC"
-  ].forEach(id => {
 
-    document.getElementById(id).value = "";
+  ].forEach(
+    id => {
 
-  });
+      document.getElementById(
+        id
+      ).value = "";
+
+    }
+  );
 
 
   document
-    .querySelectorAll(".customer-row")
-    .forEach(row => {
+    .querySelectorAll(
+      ".customer-row"
+    )
+    .forEach(
+      row => {
 
-      row.querySelector(".name-input").value = "";
-      row.querySelector(".qty-r").value = "";
-      row.querySelector(".qty-p").value = "";
-      row.querySelector(".qty-l").value = "";
-      row.querySelector(".qty-m").value = "";
-      row.querySelector(".qty-c").value = "";
-      row.querySelector(".bayad-input").value = "";
+        row.querySelector(
+          ".name-input"
+        ).value = "";
 
-    });
+        row.querySelector(
+          ".qty-r"
+        ).value = "";
+
+        row.querySelector(
+          ".qty-p"
+        ).value = "";
+
+        row.querySelector(
+          ".qty-l"
+        ).value = "";
+
+        row.querySelector(
+          ".qty-m"
+        ).value = "";
+
+        row.querySelector(
+          ".qty-c"
+        ).value = "";
+
+        row.querySelector(
+          ".bayad-input"
+        ).value = "";
+
+      }
+    );
 
 
   calculate();
@@ -2306,39 +2615,45 @@ function startLedger(){
 
 
   displayDate.textContent =
-    formatDate(date);
+    formatDate(
+      date
+    );
 
   displayName.textContent =
     name;
 
+  setupError.textContent =
+    "";
 
-  setupError.textContent = "";
 
   setupModal.classList.add(
     "hidden"
   );
 
-  currentLedgerStarted = true;
 
-  readonlyMode = false;
+  currentLedgerStarted =
+    true;
 
-  currentPreviewId = null;
+  readonlyMode =
+    false;
 
-  selectedSavedId = null;
+  currentPreviewId =
+    null;
 
-  temporaryCurrentState = null;
+  selectedSavedId =
+    null;
 
-  temporaryCurrentEditingId = null;
+  temporaryCurrentState =
+    null;
 
-  editingSavedId = null;
+  temporaryCurrentEditingId =
+    null;
 
-  lastModifiedAt =
-    Date.now();
+  editingSavedId =
+    null;
 
-  lastModifiedTime.textContent =
-    formatModifiedTime(
-      lastModifiedAt
-    );
+
+  updateModificationTime();
 
 
   document.body.classList.remove(
@@ -2367,25 +2682,32 @@ function loadSession(){
   ){
 
     applyLedger(
-      draft.ledger,
-      draft.savedAt
+      draft.ledger
     );
 
 
     editingSavedId =
-      draft.editingSavedId || null;
+      draft.editingSavedId ||
+      null;
 
-    currentLedgerStarted = true;
 
-    readonlyMode = false;
+    currentLedgerStarted =
+      true;
 
-    currentPreviewId = null;
+    readonlyMode =
+      false;
 
-    selectedSavedId = null;
+    currentPreviewId =
+      null;
 
-    temporaryCurrentState = null;
+    selectedSavedId =
+      null;
 
-    temporaryCurrentEditingId = null;
+    temporaryCurrentState =
+      null;
+
+    temporaryCurrentEditingId =
+      null;
 
 
     document.body.classList.remove(
@@ -2402,7 +2724,8 @@ function loadSession(){
         "hidden"
       );
 
-      setupError.textContent = "";
+      setupError.textContent =
+        "";
 
       return;
 
@@ -2411,22 +2734,29 @@ function loadSession(){
   }
 
 
-  ledgerDate.value = "";
-  ledgerName.value = "";
+  ledgerDate.value =
+    "";
 
-  displayDate.textContent = "";
-  displayName.textContent = "";
+  ledgerName.value =
+    "";
 
-  lastModifiedAt = null;
+  displayDate.textContent =
+    "";
 
-  lastModifiedTime.textContent =
-    "--:-- am";
+  displayName.textContent =
+    "";
 
-  setupError.textContent = "";
 
-  currentLedgerStarted = false;
+  setupError.textContent =
+    "";
 
-  readonlyMode = false;
+
+  currentLedgerStarted =
+    false;
+
+  readonlyMode =
+    false;
+
 
   setupModal.classList.remove(
     "hidden"
@@ -2452,19 +2782,29 @@ function openMultiplierEditor(){
   }
 
 
-  document.getElementById("multR").value =
+  document.getElementById(
+    "multR"
+  ).value =
     multipliers.R;
 
-  document.getElementById("multP").value =
+  document.getElementById(
+    "multP"
+  ).value =
     multipliers.P;
 
-  document.getElementById("multL").value =
+  document.getElementById(
+    "multL"
+  ).value =
     multipliers.L;
 
-  document.getElementById("multM").value =
+  document.getElementById(
+    "multM"
+  ).value =
     multipliers.M;
 
-  document.getElementById("multC").value =
+  document.getElementById(
+    "multC"
+  ).value =
     multipliers.C;
 
 
@@ -2483,18 +2823,49 @@ function saveMultipliers(){
 
   multipliers = {
 
-    R:num(document.getElementById("multR").value),
-    P:num(document.getElementById("multP").value),
-    L:num(document.getElementById("multL").value),
-    M:num(document.getElementById("multM").value),
-    C:num(document.getElementById("multC").value)
+    R:
+      num(
+        document.getElementById(
+          "multR"
+        ).value
+      ),
+
+    P:
+      num(
+        document.getElementById(
+          "multP"
+        ).value
+      ),
+
+    L:
+      num(
+        document.getElementById(
+          "multL"
+        ).value
+      ),
+
+    M:
+      num(
+        document.getElementById(
+          "multM"
+        ).value
+      ),
+
+    C:
+      num(
+        document.getElementById(
+          "multC"
+        ).value
+      )
 
   };
 
 
   localStorage.setItem(
     "rplmc_multipliers",
-    JSON.stringify(multipliers)
+    JSON.stringify(
+      multipliers
+    )
   );
 
 
@@ -2546,7 +2917,9 @@ function saveCurrentFile(){
   saveName.value =
     ledgerName.value;
 
-  saveError.textContent = "";
+  saveError.textContent =
+    "";
+
 
   saveModal.classList.remove(
     "hidden"
@@ -2604,7 +2977,8 @@ function performSave(){
     editingSavedId
       ? files.findIndex(
           file =>
-            file.id === editingSavedId
+            file.id ===
+            editingSavedId
         )
       : -1;
 
@@ -2622,13 +2996,15 @@ function performSave(){
     const existing =
       files[dateIndex];
 
+
     const okay =
       confirm(
         `A saved file already exists for ${formatDate(date)}.\n\n` +
         `Name: ${existing.name}\n` +
-        `Saved: ${formatSavedTime(existing.savedAt)}\n\n` +
+        `Time: ${formatSavedTime(existing.savedAt)}\n\n` +
         `Replace that file with this ledger?`
       );
+
 
     if(!okay){
 
@@ -2643,27 +3019,36 @@ function performSave(){
     );
 
 
-    if(editingIndex > dateIndex){
+    if(
+      editingIndex >
+      dateIndex
+    ){
+
       editingIndex--;
+
     }
 
   }
 
 
-  lastModifiedAt =
-    now;
-
+  /*
+     The row's timestamp is updated
+     whenever that particular file
+     is saved.
+  */
 
   const data =
     captureLedger();
 
-  data.date = date;
-  data.name = name;
+
+  data.date =
+    date;
+
+  data.name =
+    name;
+
   data.modifiedAt =
-    lastModifiedAt;
-
-
-  let savedFileId = null;
+    now;
 
 
   if(
@@ -2690,11 +3075,10 @@ function performSave(){
     };
 
 
-    savedFileId =
-      files[editingIndex].id;
-
     editingSavedId =
-      savedFileId;
+      files[
+        editingIndex
+      ].id;
 
   }
 
@@ -2721,10 +3105,10 @@ function performSave(){
     };
 
 
-    files.push(file);
+    files.push(
+      file
+    );
 
-    savedFileId =
-      file.id;
 
     editingSavedId =
       file.id;
@@ -2736,18 +3120,33 @@ function performSave(){
     (a,b) => {
 
       const dateCompare =
-        String(b.date || "")
-          .localeCompare(
-            String(a.date || "")
-          );
+        String(
+          b.date || ""
+        )
+        .localeCompare(
+          String(
+            a.date || ""
+          )
+        );
 
-      if(dateCompare !== 0){
+
+      if(
+        dateCompare !== 0
+      ){
+
         return dateCompare;
+
       }
 
+
       return (
-        Number(b.savedAt || 0) -
-        Number(a.savedAt || 0)
+        Number(
+          b.savedAt || 0
+        )
+        -
+        Number(
+          a.savedAt || 0
+        )
       );
 
     }
@@ -2768,7 +3167,9 @@ function performSave(){
   }
 
 
-  setSavedFiles(files);
+  setSavedFiles(
+    files
+  );
 
 
   ledgerDate.value =
@@ -2777,21 +3178,14 @@ function performSave(){
   ledgerName.value =
     name;
 
+
   displayDate.textContent =
-    formatDate(date);
+    formatDate(
+      date
+    );
 
   displayName.textContent =
     name;
-
-
-  /*
-     Keep the saved file's actual
-     modification time before clearing
-     the current ledger.
-  */
-
-  const savedModificationTime =
-    lastModifiedAt;
 
 
   saveModal.classList.add(
@@ -2799,42 +3193,26 @@ function performSave(){
   );
 
 
-  /*
-     Clear the current ledger exactly
-     as before, then make it empty
-     and read-only.
-  */
-
   clearLedgerValues();
 
 
-  currentLedgerStarted = true;
+  currentLedgerStarted =
+    true;
 
-  readonlyMode = true;
+  readonlyMode =
+    true;
 
-  currentPreviewId = null;
+  currentPreviewId =
+    null;
 
-  selectedSavedId = null;
+  selectedSavedId =
+    null;
 
-  temporaryCurrentState = null;
+  temporaryCurrentState =
+    null;
 
-  temporaryCurrentEditingId = null;
-
-
-  /*
-     The saved file is complete.
-     Keep the header showing the save/
-     modification time rather than the
-     internal clear operation.
-  */
-
-  lastModifiedAt =
-    savedModificationTime;
-
-  lastModifiedTime.textContent =
-    formatModifiedTime(
-      lastModifiedAt
-    );
+  temporaryCurrentEditingId =
+    null;
 
 
   document.body.classList.add(
@@ -2850,43 +3228,32 @@ function performSave(){
   renderSavedList();
 
 
-  /*
-     IMPORTANT:
-     If EDIT was waiting for the current
-     ledger to be saved, continue to the
-     selected saved file now.
-  */
-
-  const editAfterSave =
-    pendingEditId;
-
-  pendingEditId = null;
-
-
-  if(editAfterSave){
-
-    const targetStillExists =
-      getSavedFiles().some(
-        file =>
-          file.id === editAfterSave
-      );
-
-    if(targetStillExists){
-
-      editSavedFile(
-        editAfterSave
-      );
-
-      return true;
-
-    }
-
-  }
-
-
   alert(
     "Ledger saved successfully.\n\nThe current ledger is now empty and read-only."
   );
+
+
+  /*
+     If this save was required before
+     opening another saved file, now
+     continue with that EDIT request.
+  */
+
+  const nextEditId =
+    pendingEditId;
+
+  pendingEditId =
+    null;
+
+
+  if(nextEditId){
+
+    editSavedFile(
+      nextEditId
+    );
+
+  }
+
 
   return true;
 
@@ -2899,7 +3266,8 @@ function performSave(){
 
 function renderSavedList(){
 
-  savedList.innerHTML = "";
+  savedList.innerHTML =
+    "";
 
 
   let files =
@@ -2910,33 +3278,52 @@ function renderSavedList(){
     (a,b) => {
 
       const dateCompare =
-        String(b.date || "")
-          .localeCompare(
-            String(a.date || "")
-          );
+        String(
+          b.date || ""
+        )
+        .localeCompare(
+          String(
+            a.date || ""
+          )
+        );
 
-      if(dateCompare !== 0){
+
+      if(
+        dateCompare !== 0
+      ){
+
         return dateCompare;
+
       }
 
+
       return (
-        Number(b.savedAt || 0) -
-        Number(a.savedAt || 0)
+        Number(
+          b.savedAt || 0
+        )
+        -
+        Number(
+          a.savedAt || 0
+        )
       );
 
     }
   );
 
 
-  setSavedFiles(files);
+  setSavedFiles(
+    files
+  );
 
 
   if(files.length === 0){
 
     savedList.innerHTML = `
+
       <div class="empty-list">
         No saved ledger files yet.
       </div>
+
     `;
 
     return;
@@ -2948,13 +3335,16 @@ function renderSavedList(){
     (file,index) => {
 
       const item =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
 
       item.className =
         "saved-item" +
         (
-          selectedSavedId === file.id
+          selectedSavedId ===
+          file.id
             ? " highlighted"
             : ""
         );
@@ -2975,7 +3365,9 @@ function renderSavedList(){
 
             <div class="saved-date">
               ${escapeHtml(
-                formatDate(file.date)
+                formatDate(
+                  file.date
+                )
               )}
             </div>
 
@@ -2986,8 +3378,10 @@ function renderSavedList(){
             </div>
 
             <div class="saved-time">
-              Saved ${escapeHtml(
-                formatSavedTime(file.savedAt)
+              ${escapeHtml(
+                formatSavedTime(
+                  file.savedAt
+                )
               )}
             </div>
 
@@ -3016,7 +3410,9 @@ function renderSavedList(){
       `;
 
 
-      savedList.appendChild(item);
+      savedList.appendChild(
+        item
+      );
 
     }
   );
@@ -3030,12 +3426,29 @@ function renderSavedList(){
 
 function escapeHtml(value){
 
-  return String(value || "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+  return String(
+    value || ""
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
 
 }
 
@@ -3048,6 +3461,7 @@ function previewSavedFile(id){
 
   const files =
     getSavedFiles();
+
 
   const file =
     files.find(
@@ -3072,14 +3486,6 @@ function previewSavedFile(id){
 
   }
 
-
-  /*
-     PREVIEW is read-only.
-     We only preserve the current
-     editable ledger temporarily so
-     tapping the file again can return
-     to it.
-  */
 
   if(
     !readonlyMode &&
@@ -3106,8 +3512,7 @@ function previewSavedFile(id){
 
 
   applyLedger(
-    file.data,
-    file.savedAt
+    file.data
   );
 
 
@@ -3135,14 +3540,17 @@ function returnToCurrent(){
       temporaryCurrentState
     );
 
+
     editingSavedId =
       temporaryCurrentEditingId;
+
 
     currentLedgerStarted =
       true;
 
     readonlyMode =
       false;
+
 
     saveCurrentDraft();
 
@@ -3170,13 +3578,14 @@ function returnToCurrent(){
 
 
 /* =========================
-   EDIT SAVED FILE
+   REQUEST EDIT SAVED FILE
 ========================= */
 
-function editSavedFile(id){
+function requestEditSavedFile(id){
 
   const files =
     getSavedFiles();
+
 
   const file =
     files.find(
@@ -3191,74 +3600,96 @@ function editSavedFile(id){
 
 
   /*
-     SAFETY LOCK:
-     Never replace an active current
-     ledger that contains data.
-
-     If there is current data, ask first.
-     SAVE CURRENT continues only after
-     the normal Save Ledger process is
-     successfully completed.
+     No editable current ledger:
+     load immediately.
   */
 
   if(
-    !readonlyMode &&
-    currentLedgerStarted
+    !currentLedgerStarted ||
+    readonlyMode
   ){
 
-    const current =
-      captureLedger();
+    pendingEditId =
+      null;
 
-    const hasData =
-      hasLedgerData(current);
+    editSavedFile(
+      id
+    );
 
+    return;
 
-    if(hasData){
-
-      const okay =
-        confirm(
-          "You have an active ledger with unsaved data.\n\n" +
-          "SAVE CURRENT before editing this saved file?\n\n" +
-          "Choose OK to save the current ledger.\n" +
-          "Choose Cancel to stay on the current ledger."
-        );
+  }
 
 
-      if(!okay){
-
-        return;
-
-      }
+  const current =
+    captureLedger();
 
 
-      /*
-         Remember which saved file the user
-         wanted to edit. The normal SAVE
-         process will continue here after
-         successful saving.
-      */
-
-      pendingEditId =
-        id;
+  const hasData =
+    hasLedgerData(
+      current
+    );
 
 
-      saveCurrentFile();
+  /*
+     Current ledger is open but empty:
+     load immediately.
+  */
 
-      return;
+  if(!hasData){
 
-    }
+    pendingEditId =
+      null;
+
+    editSavedFile(
+      id
+    );
+
+    return;
 
   }
 
 
   /*
-     No unsaved current data, so the
-     saved file can be opened directly.
+     Current ledger contains unsaved data.
+     Ask before replacing it.
   */
 
+  pendingEditId =
+    id;
+
+
+  unsavedModal.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+/* =========================
+   EDIT SAVED FILE
+========================= */
+
+function editSavedFile(id){
+
+  const files =
+    getSavedFiles();
+
+
+  const file =
+    files.find(
+      item =>
+        item.id === id
+    );
+
+
+  if(!file){
+    return;
+  }
+
+
   applyLedger(
-    file.data,
-    file.savedAt
+    file.data
   );
 
 
@@ -3280,6 +3711,7 @@ function editSavedFile(id){
   temporaryCurrentEditingId =
     null;
 
+
   editingSavedId =
     file.id;
 
@@ -3293,7 +3725,9 @@ function editSavedFile(id){
 
 
   document
-    .querySelector(".ledger-screen")
+    .querySelector(
+      ".ledger-screen"
+    )
     .scrollIntoView({
       behavior:"smooth",
       block:"start"
@@ -3310,6 +3744,7 @@ function deleteSavedFile(id){
 
   const files =
     getSavedFiles();
+
 
   const file =
     files.find(
@@ -3373,6 +3808,7 @@ function deleteSavedFile(id){
     readonlyMode =
       false;
 
+
     document.body.classList.remove(
       "readonly-mode"
     );
@@ -3412,7 +3848,9 @@ function clearCurrentLedger(){
 
 
   const hasData =
-    hasLedgerData(current);
+    hasLedgerData(
+      current
+    );
 
 
   if(hasData){
@@ -3467,7 +3905,9 @@ function hasLedgerData(data){
     Object.values(del)
       .some(
         value =>
-          String(value || "").trim() !== ""
+          String(
+            value || ""
+          ).trim() !== ""
       )
   ){
 
@@ -3477,7 +3917,9 @@ function hasLedgerData(data){
 
 
   if(
-    Array.isArray(data.rows)
+    Array.isArray(
+      data.rows
+    )
   ){
 
     return data.rows.some(
@@ -3485,7 +3927,9 @@ function hasLedgerData(data){
         Object.values(row)
           .some(
             value =>
-              String(value || "").trim() !== ""
+              String(
+                value || ""
+              ).trim() !== ""
           )
     );
 
@@ -3515,13 +3959,15 @@ document.addEventListener(
       .querySelectorAll(
         ".customer-row"
       )
-      .forEach(r => {
+      .forEach(
+        r => {
 
-        r.classList.remove(
-          "active-row"
-        );
+          r.classList.remove(
+            "active-row"
+          );
 
-      });
+        }
+      );
 
 
     if(row){
@@ -3541,7 +3987,9 @@ document.addEventListener(
 ========================= */
 
 document
-  .getElementById("openLedgerBtn")
+  .getElementById(
+    "openLedgerBtn"
+  )
   .addEventListener(
     "click",
     startLedger
@@ -3557,7 +4005,9 @@ ledgerName.addEventListener(
   e => {
 
     if(e.key === "Enter"){
+
       startLedger();
+
     }
 
   }
@@ -3572,16 +4022,19 @@ ledgerDate.addEventListener(
   "input",
   () => {
 
-    setupError.textContent = "";
+    setupError.textContent =
+      "";
 
   }
 );
+
 
 ledgerName.addEventListener(
   "input",
   () => {
 
-    setupError.textContent = "";
+    setupError.textContent =
+      "";
 
   }
 );
@@ -3592,7 +4045,9 @@ ledgerName.addEventListener(
 ========================= */
 
 document
-  .getElementById("saveBtn")
+  .getElementById(
+    "saveBtn"
+  )
   .addEventListener(
     "click",
     saveCurrentFile
@@ -3604,24 +4059,19 @@ document
 ========================= */
 
 document
-  .getElementById("cancelSave")
+  .getElementById(
+    "cancelSave"
+  )
   .addEventListener(
     "click",
     () => {
 
-      /*
-         If this save was triggered by
-         EDIT protection, cancelling the
-         save must also cancel the pending
-         edit. The current ledger remains
-         exactly where it was.
-      */
-
-      pendingEditId = null;
-
       saveModal.classList.add(
         "hidden"
       );
+
+      pendingEditId =
+        null;
 
     }
   );
@@ -3632,7 +4082,9 @@ document
 ========================= */
 
 document
-  .getElementById("confirmSave")
+  .getElementById(
+    "confirmSave"
+  )
   .addEventListener(
     "click",
     performSave
@@ -3647,13 +4099,17 @@ saveModal.addEventListener(
   "click",
   e => {
 
-    if(e.target === saveModal){
-
-      pendingEditId = null;
+    if(
+      e.target ===
+      saveModal
+    ){
 
       saveModal.classList.add(
         "hidden"
       );
+
+      pendingEditId =
+        null;
 
     }
 
@@ -3669,16 +4125,19 @@ saveDate.addEventListener(
   "input",
   () => {
 
-    saveError.textContent = "";
+    saveError.textContent =
+      "";
 
   }
 );
+
 
 saveName.addEventListener(
   "input",
   () => {
 
-    saveError.textContent = "";
+    saveError.textContent =
+      "";
 
   }
 );
@@ -3689,11 +4148,84 @@ saveName.addEventListener(
 ========================= */
 
 document
-  .getElementById("clearBtn")
+  .getElementById(
+    "clearBtn"
+  )
   .addEventListener(
     "click",
     clearCurrentLedger
   );
+
+
+/* =========================
+   UNSAVED CURRENT CANCEL
+========================= */
+
+document
+  .getElementById(
+    "cancelUnsaved"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      pendingEditId =
+        null;
+
+      unsavedModal.classList.add(
+        "hidden"
+      );
+
+    }
+  );
+
+
+/* =========================
+   SAVE CURRENT BEFORE EDIT
+========================= */
+
+document
+  .getElementById(
+    "saveCurrentBeforeEdit"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      unsavedModal.classList.add(
+        "hidden"
+      );
+
+      saveCurrentFile();
+
+    }
+  );
+
+
+/* =========================
+   UNSAVED MODAL OUTSIDE TAP
+========================= */
+
+unsavedModal.addEventListener(
+  "click",
+  e => {
+
+    if(
+      e.target ===
+      unsavedModal
+    ){
+
+      pendingEditId =
+        null;
+
+      unsavedModal.classList.add(
+        "hidden"
+      );
+
+    }
+
+  }
+);
 
 
 /* =========================
@@ -3709,10 +4241,12 @@ savedList.addEventListener(
         ".saved-main"
       );
 
+
     const editButton =
       e.target.closest(
         "[data-edit]"
       );
+
 
     const deleteButton =
       e.target.closest(
@@ -3722,7 +4256,7 @@ savedList.addEventListener(
 
     if(editButton){
 
-      editSavedFile(
+      requestEditSavedFile(
         editButton.dataset.edit
       );
 
@@ -3755,11 +4289,15 @@ savedList.addEventListener(
 
 
 /* =========================
-   5-TAP TIME RECORD
+   5-TAP NAME / MULTIPLIER
 ========================= */
 
-let tapCount = 0;
-let tapTimer = null;
+let tapCount =
+  0;
+
+let tapTimer =
+  null;
+
 
 nameHeader.addEventListener(
   "click",
@@ -3767,26 +4305,36 @@ nameHeader.addEventListener(
 
     tapCount++;
 
+
     clearTimeout(
       tapTimer
     );
 
+
     tapTimer =
       setTimeout(
         () => {
-          tapCount = 0;
+
+          tapCount =
+            0;
+
         },
         1000
       );
 
 
-    if(tapCount >= 5){
+    if(
+      tapCount >= 5
+    ){
 
-      tapCount = 0;
+      tapCount =
+        0;
+
 
       clearTimeout(
         tapTimer
       );
+
 
       openMultiplierEditor();
 
@@ -3804,7 +4352,10 @@ multiplierModal.addEventListener(
   "click",
   e => {
 
-    if(e.target === multiplierModal){
+    if(
+      e.target ===
+      multiplierModal
+    ){
 
       multiplierModal.classList.add(
         "hidden"
@@ -3821,7 +4372,9 @@ multiplierModal.addEventListener(
 ========================= */
 
 document
-  .getElementById("cancelMultiplier")
+  .getElementById(
+    "cancelMultiplier"
+  )
   .addEventListener(
     "click",
     () => {
@@ -3839,7 +4392,9 @@ document
 ========================= */
 
 document
-  .getElementById("saveMultiplier")
+  .getElementById(
+    "saveMultiplier"
+  )
   .addEventListener(
     "click",
     saveMultipliers
@@ -3856,24 +4411,29 @@ document
   "delL",
   "delM",
   "delC"
-].forEach(id => {
+]
+.forEach(
+  id => {
 
-  document
-    .getElementById(id)
-    .addEventListener(
-      "input",
-      () => {
+    document
+      .getElementById(
+        id
+      )
+      .addEventListener(
+        "input",
+        () => {
 
-        calculate();
+          calculate();
 
-        updateModificationTime();
+          updateModificationTime();
 
-        saveCurrentDraft();
+          saveCurrentDraft();
 
-      }
-    );
+        }
+      );
 
-});
+  }
+);
 
 
 /* =========================
