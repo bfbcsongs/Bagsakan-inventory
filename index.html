@@ -933,7 +933,6 @@ th,td{
 
     </div>
 
-
     <div class="table-wrap">
 
       <table>
@@ -1035,7 +1034,6 @@ th,td{
 
     </div>
 
-
     <div class="customer-wrap">
 
       <table class="customer-table">
@@ -1105,7 +1103,6 @@ th,td{
     </div>
 
   </div>
-
 
   <div class="saved-section">
 
@@ -1717,6 +1714,121 @@ function updateModificationTime(){
 
 
 /* =========================
+   TOUCH EDITED SAVED FILE
+========================= */
+
+/*
+   IMPORTANT:
+   If a saved file is currently
+   being edited, every input/change
+   updates ONLY that saved file's
+   modifiedAt timestamp immediately.
+
+   The timestamp shown in the
+   SAVED LEDGER FILES list therefore
+   represents the latest input made
+   to that particular file.
+*/
+
+function touchEditedSavedFile(){
+
+  if(
+    !editingSavedId ||
+    readonlyMode
+  ){
+
+    return;
+
+  }
+
+
+  const files =
+    getSavedFiles();
+
+
+  const index =
+    files.findIndex(
+      file =>
+        file.id ===
+        editingSavedId
+    );
+
+
+  if(index === -1){
+    return;
+  }
+
+
+  const now =
+    Date.now();
+
+
+  files[index].modifiedAt =
+    now;
+
+
+  /*
+     Keep the ledger data's
+     modification timestamp
+     synchronized as well.
+  */
+
+  if(files[index].data){
+
+    files[index].data.modifiedAt =
+      now;
+
+  }
+
+
+  setSavedFiles(
+    files
+  );
+
+
+  /*
+     Update ONLY the visible
+     timestamp of this saved item.
+     We do not rebuild the whole
+     saved list because that could
+     disturb the active input.
+  */
+
+  const item =
+    Array.from(
+      savedList.querySelectorAll(
+        ".saved-item"
+      )
+    ).find(
+      el =>
+        el.dataset.id ===
+        editingSavedId
+    );
+
+
+  if(item){
+
+    const timeEl =
+      item.querySelector(
+        ".saved-time"
+      );
+
+
+    if(timeEl){
+
+      timeEl.textContent =
+        formatSavedTime(
+          now
+        );
+
+    }
+
+  }
+
+}
+
+
+/* =========================
    GET SAVED FILES
 ========================= */
 
@@ -1989,6 +2101,15 @@ function buildRows(){
             updateModificationTime();
 
             saveCurrentDraft();
+
+            /*
+               NEW:
+               If editing a saved file,
+               update its own timestamp
+               immediately.
+            */
+
+            touchEditedSavedFile();
 
           }
         );
@@ -2880,6 +3001,13 @@ function saveMultipliers(){
 
   saveCurrentDraft();
 
+  /*
+     Multiplier changes also modify
+     the currently edited saved file.
+  */
+
+  touchEditedSavedFile();
+
 }
 
 
@@ -3001,7 +3129,7 @@ function performSave(){
       confirm(
         `A saved file already exists for ${formatDate(date)}.\n\n` +
         `Name: ${existing.name}\n` +
-        `Time: ${formatSavedTime(existing.savedAt)}\n\n` +
+        `Time: ${formatSavedTime(existing.modifiedAt || existing.savedAt)}\n\n` +
         `Replace that file with this ledger?`
       );
 
@@ -3030,12 +3158,6 @@ function performSave(){
 
   }
 
-
-  /*
-     The row's timestamp is updated
-     whenever that particular file
-     is saved.
-  */
 
   const data =
     captureLedger();
@@ -3067,7 +3189,7 @@ function performSave(){
       date,
       name,
 
-      savedAt:
+      modifiedAt:
         now,
 
       data
@@ -3097,7 +3219,7 @@ function performSave(){
       date,
       name,
 
-      savedAt:
+      modifiedAt:
         now,
 
       data
@@ -3141,11 +3263,15 @@ function performSave(){
 
       return (
         Number(
-          b.savedAt || 0
+          b.modifiedAt ||
+          b.savedAt ||
+          0
         )
         -
         Number(
-          a.savedAt || 0
+          a.modifiedAt ||
+          a.savedAt ||
+          0
         )
       );
 
@@ -3233,12 +3359,6 @@ function performSave(){
   );
 
 
-  /*
-     If this save was required before
-     opening another saved file, now
-     continue with that EDIT request.
-  */
-
   const nextEditId =
     pendingEditId;
 
@@ -3299,11 +3419,15 @@ function renderSavedList(){
 
       return (
         Number(
-          b.savedAt || 0
+          b.modifiedAt ||
+          b.savedAt ||
+          0
         )
         -
         Number(
-          a.savedAt || 0
+          a.modifiedAt ||
+          a.savedAt ||
+          0
         )
       );
 
@@ -3350,6 +3474,18 @@ function renderSavedList(){
         );
 
 
+      /*
+         NEW:
+         Store the saved-file ID
+         directly on the item so its
+         timestamp can be updated
+         without rebuilding the list.
+      */
+
+      item.dataset.id =
+        file.id;
+
+
       item.innerHTML = `
 
         <div
@@ -3380,6 +3516,7 @@ function renderSavedList(){
             <div class="saved-time">
               ${escapeHtml(
                 formatSavedTime(
+                  file.modifiedAt ||
                   file.savedAt
                 )
               )}
@@ -3599,11 +3736,6 @@ function requestEditSavedFile(id){
   }
 
 
-  /*
-     No editable current ledger:
-     load immediately.
-  */
-
   if(
     !currentLedgerStarted ||
     readonlyMode
@@ -3631,11 +3763,6 @@ function requestEditSavedFile(id){
     );
 
 
-  /*
-     Current ledger is open but empty:
-     load immediately.
-  */
-
   if(!hasData){
 
     pendingEditId =
@@ -3649,11 +3776,6 @@ function requestEditSavedFile(id){
 
   }
 
-
-  /*
-     Current ledger contains unsaved data.
-     Ask before replacing it.
-  */
 
   pendingEditId =
     id;
@@ -4428,6 +4550,15 @@ document
           updateModificationTime();
 
           saveCurrentDraft();
+
+          /*
+             NEW:
+             DEL changes also update
+             the timestamp of the
+             currently edited file.
+          */
+
+          touchEditedSavedFile();
 
         }
       );
