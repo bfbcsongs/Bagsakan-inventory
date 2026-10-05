@@ -2,80 +2,98 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>RPLMC Tracker</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 15px;
-      background-color: #f4f6f9;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100%;
+      height: 100vh;
+      overflow: hidden; /* Fits everything in one screen height */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #ffffff;
       color: #333;
     }
-    h2 {
-      margin-top: 20px;
-      margin-bottom: 10px;
-      color: #2c3e50;
-    }
-    .table-container {
-      overflow-x: auto;
-      margin-bottom: 25px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding: 2px;
     }
     table {
-      border-collapse: collapse;
       width: 100%;
-      min-width: 500px;
+      border-collapse: collapse;
+      table-layout: fixed;
     }
+    /* Ultra-thin grid lines matching screenshot style */
     th, td {
-      border: 1px solid #dfe6e9;
-      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      padding: 1px 2px;
       text-align: center;
+      font-size: 11px;
+      height: 19px;
     }
     th {
-      background-color: #34495e;
-      color: white;
-      font-weight: bold;
+      background-color: #f8fafc;
+      font-weight: 600;
+      color: #475569;
     }
-    tr:nth-child(even) {
-      background-color: #f8f9fa;
-    }
-    input[type="number"], input[type="text"] {
-      width: 85%;
-      padding: 6px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      text-align: center;
-      box-sizing: border-box;
-    }
-    input[type="number"]:focus, input[type="text"]:focus {
-      border-color: #3498db;
+    input {
+      width: 100%;
+      height: 100%;
+      border: none;
       outline: none;
+      background: transparent;
+      text-align: center;
+      font-size: 11px;
+      color: #1e293b;
+      padding: 0;
     }
-    .calculated-cell {
-      background-color: #e8f4f8;
-      font-weight: bold;
+    /* Rounded box style for name column inputs */
+    .name-input {
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      background-color: #f8fafc;
+      height: 16px;
+    }
+    .calc-val {
+      font-weight: 600;
+      color: #0f172a;
     }
     .total-row {
-      background-color: #eaeded !important;
+      background-color: #f1f5f9;
       font-weight: bold;
+      color: #dc2626; /* Highlight total line */
     }
+    .table-title {
+      font-size: 10px;
+      font-weight: bold;
+      color: #64748b;
+      text-transform: uppercase;
+      margin: 2px 0 1px 2px;
+    }
+    /* Column widths */
+    col.col-name { width: 25%; }
+    col.col-item { width: 15%; }
   </style>
 </head>
 <body>
 
-  <h2>Summary Table</h2>
-  <div class="table-container">
+  <div class="app-container">
+    <div class="table-title">Summary</div>
     <table id="table1">
+      <colgroup>
+        <col class="col-name">
+        <col class="col-item"><col class="col-item"><col class="col-item"><col class="col-item"><col class="col-item">
+      </colgroup>
       <thead>
         <tr>
           <th>Metric</th>
-          <th>R</th>
-          <th>P</th>
-          <th>L</th>
-          <th>M</th>
-          <th>C</th>
+          <th>R</th><th>P</th><th>L</th><th>M</th><th>C</th>
         </tr>
       </thead>
       <tbody>
@@ -89,43 +107,41 @@
         </tr>
         <tr>
           <td><strong>Sales</strong></td>
-          <td id="sales-r" class="calculated-cell">0</td>
-          <td id="sales-p" class="calculated-cell">0</td>
-          <td id="sales-l" class="calculated-cell">0</td>
-          <td id="sales-m" class="calculated-cell">0</td>
-          <td id="sales-c" class="calculated-cell">0</td>
+          <td id="sales-r" class="calc-val">0</td>
+          <td id="sales-p" class="calc-val">0</td>
+          <td id="sales-l" class="calc-val">0</td>
+          <td id="sales-m" class="calc-val">0</td>
+          <td id="sales-c" class="calc-val">0</td>
         </tr>
         <tr>
           <td><strong>Ret</strong></td>
-          <td id="ret-r" class="calculated-cell">0</td>
-          <td id="ret-p" class="calculated-cell">0</td>
-          <td id="ret-l" class="calculated-cell">0</td>
-          <td id="ret-m" class="calculated-cell">0</td>
-          <td id="ret-c" class="calculated-cell">0</td>
+          <td id="ret-r" class="calc-val">0</td>
+          <td id="ret-p" class="calc-val">0</td>
+          <td id="ret-l" class="calc-val">0</td>
+          <td id="ret-m" class="calc-val">0</td>
+          <td id="ret-c" class="calc-val">0</td>
         </tr>
       </tbody>
     </table>
-  </div>
 
-  <h2>Itemized Sales Table</h2>
-  <div class="table-container">
+    <div class="table-title">Itemized Entries</div>
     <table id="table2">
+      <colgroup>
+        <col class="col-name">
+        <col class="col-item"><col class="col-item"><col class="col-item"><col class="col-item"><col class="col-item">
+      </colgroup>
       <thead>
         <tr>
           <th>Name</th>
-          <th>R</th>
-          <th>P</th>
-          <th>L</th>
-          <th>M</th>
-          <th>C</th>
+          <th>R</th><th>P</th><th>L</th><th>M</th><th>C</th>
         </tr>
       </thead>
       <tbody id="table2-body">
-        <!-- Rows 2 to 20 dynamically generated -->
+        <!-- 19 entry rows generated dynamically -->
       </tbody>
       <tfoot>
         <tr class="total-row">
-          <td>Total</td>
+          <td>TOTAL</td>
           <td id="tot-r">0</td>
           <td id="tot-p">0</td>
           <td id="tot-l">0</td>
@@ -137,20 +153,21 @@
   </div>
 
   <script>
-    // Build rows 2 to 20 for Table 2
     const tbody = document.getElementById('table2-body');
+    
+    // Generate Rows 2 to 20 (19 rows total)
     for (let i = 1; i <= 19; i++) {
       const tr = document.createElement('tr');
       
-      // Name input
+      // Rounded text box for Name column
       const tdName = document.createElement('td');
-      tdName.innerHTML = `<input type="text" placeholder="Entry ${i}">`;
+      tdName.innerHTML = `<input type="text" class="name-input">`;
       tr.appendChild(tdName);
 
-      // RPLMC inputs
+      // RPLMC entry fields
       ['r', 'p', 'l', 'm', 'c'].forEach(col => {
         const td = document.createElement('td');
-        td.innerHTML = `<input type="number" class="input-${col}" value="0" oninput="calculate()">`;
+        td.innerHTML = `<input type="number" class="input-${col}" oninput="calculate()">`;
         tr.appendChild(td);
       });
 
@@ -162,7 +179,6 @@
       const delInputs = document.querySelectorAll('.del-input');
 
       cols.forEach((col, index) => {
-        // Calculate Total for Table 2
         const inputs = document.querySelectorAll(`.input-${col}`);
         let sum = 0;
         inputs.forEach(input => {
@@ -177,8 +193,7 @@
 
         // Calculate and Update Table 1 Ret (Del - Sales)
         const delVal = parseFloat(delInputs[index].value) || 0;
-        const retVal = delVal - sum;
-        document.getElementById(`ret-${col}`).innerText = retVal;
+        document.getElementById(`ret-${col}`).innerText = delVal - sum;
       });
     }
   </script>
