@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 
 <meta
@@ -38,358 +39,672 @@ body{
   width:100%;
   max-width:900px;
   height:100vh;
-  padding:4px;
+  padding:3px;
   display:flex;
   flex-direction:column;
   overflow:hidden;
 }
 
-/* =========================
-   HEADER
-========================= */
 
-.app-title{
-  height:28px;
-  flex-shrink:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:15px;
-  font-weight:900;
-  background:#111827;
-  color:white;
-  border-radius:5px;
-  margin-bottom:3px;
-}
-
-/* =========================
-   DATE + NAME BAR
-========================= */
+/* =================================
+   DATE + NAME
+================================= */
 
 .info-bar{
-  position:relative;
-  height:32px;
+
+  height:48px;
+
   flex-shrink:0;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:12px;
-  background:white;
+
+  gap:14px;
+
+  background:#ffffff;
+
   border:1px solid #cbd5e1;
+
   border-radius:5px;
+
   margin-bottom:3px;
-  font-size:11px;
-  font-weight:800;
-  color:#334155;
-  text-transform:none;
+
+  overflow:hidden;
 }
 
 .info-date{
+
+  font-size:19px;
+
+  font-weight:900;
+
   color:#1d4ed8;
+
+  white-space:nowrap;
 }
 
 .info-separator{
+
+  font-size:18px;
+
+  font-weight:900;
+
   color:#94a3b8;
 }
 
 .info-name{
+
+  font-size:19px;
+
+  font-weight:900;
+
   color:#111827;
+
+  white-space:nowrap;
+
+  max-width:48%;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
 }
 
-/* =========================
-   TABLE CONTAINERS
-========================= */
+
+/* =================================
+   TABLE
+================================= */
 
 .table-wrap{
-  background:white;
+
+  background:#ffffff;
+
   border:1px solid #cbd5e1;
+
   border-radius:5px;
+
   overflow:hidden;
+
   flex-shrink:0;
 }
 
 table{
+
   width:100%;
+
   border-collapse:collapse;
+
   table-layout:fixed;
 }
 
 th,
 td{
+
   border:1px solid #cbd5e1;
-  padding:2px;
+
+  padding:1px 2px;
+
   text-align:center;
-  height:25px;
-  font-size:11px;
+
+  height:22px;
+
+  font-size:10px;
 }
 
 th{
+
   background:#e2e8f0;
+
   font-weight:900;
 }
 
-td:first-child,
-th:first-child{
-  width:25%;
-}
 
-/* =========================
-   SUMMARY TABLE
-========================= */
+/* =================================
+   SUMMARY
+================================= */
 
 .summary-title{
+
   background:#1e293b;
-  color:white;
-  font-size:11px;
+
+  color:#ffffff;
+
+  font-size:10px;
+
   font-weight:900;
+
+  height:20px;
+}
+
+.summary-table th:first-child,
+.summary-table td:first-child{
+
+  width:24%;
+}
+
+.summary-table th:not(:first-child),
+.summary-table td:not(:first-child){
+
+  width:15.2%;
 }
 
 .summary-table input{
+
   width:100%;
-  height:21px;
+
+  height:19px;
+
   border:0;
+
   outline:none;
+
   text-align:center;
-  font-size:11px;
-  font-weight:700;
+
+  font-size:10px;
+
+  font-weight:800;
+
   background:transparent;
+
+  padding:0;
 }
 
-.summary-table .metric{
-  font-weight:900;
-  background:#f8fafc;
-}
-
-/* SALES */
-
-.sales-row td{
-  background:#eff6ff;
-}
-
-.sales-row .metric{
-  color:#1d4ed8;
-}
-
-.sales-value{
-  color:#1d4ed8;
-  font-weight:900;
-}
-
-/* RET */
-
-.ret-row td{
-  background:#fff7ed;
-}
-
-.ret-row .metric{
-  color:#c2410c;
-}
-
-.ret-value{
-  color:#c2410c;
-  font-weight:900;
-}
 
 /* DEL */
 
 .del-row td{
+
   background:#f0fdf4;
 }
 
 .del-row .metric{
+
   color:#15803d;
+
+  font-weight:900;
 }
 
-/* =========================
-   ITEMIZED TABLE
-========================= */
+
+/* SALES */
+
+.sales-row td{
+
+  background:#eff6ff;
+}
+
+.sales-row .metric{
+
+  color:#1d4ed8;
+
+  font-weight:900;
+}
+
+.sales-value{
+
+  color:#1d4ed8;
+
+  font-weight:900;
+}
+
+
+/* RET */
+
+.ret-row td{
+
+  background:#fff7ed;
+}
+
+.ret-row .metric{
+
+  color:#c2410c;
+
+  font-weight:900;
+}
+
+.ret-value{
+
+  color:#c2410c;
+
+  font-weight:900;
+}
+
+
+/* =================================
+   CUSTOMER TABLE
+================================= */
 
 .entries-wrap{
+
   flex:1;
+
   min-height:0;
+
   margin-top:3px;
-  background:white;
+
+  background:#ffffff;
+
   border:1px solid #cbd5e1;
+
   border-radius:5px;
+
   overflow:hidden;
+
   display:flex;
+
   flex-direction:column;
 }
 
 .entries-scroll{
+
   flex:1;
-  overflow-y:auto;
-  overflow-x:hidden;
+
+  overflow:hidden;
 }
 
-.entries-table th{
-  position:sticky;
-  top:0;
-  z-index:3;
-  background:#1e293b;
-  color:white;
+.entries-table{
+
+  width:100%;
+
+  table-layout:fixed;
 }
+
+
+/*
+   NAME
+*/
 
 .entries-table th:first-child{
-  width:30%;
+
+  width:25%;
 }
 
-.entries-table th:not(:first-child){
-  width:14%;
+
+/*
+   R P L M C
+*/
+
+.entries-table th:nth-child(2),
+.entries-table th:nth-child(3),
+.entries-table th:nth-child(4),
+.entries-table th:nth-child(5),
+.entries-table th:nth-child(6){
+
+  width:10%;
 }
+
+
+/*
+   AMOUNT
+*/
+
+.entries-table th:nth-child(7){
+
+  width:25%;
+}
+
+
+.entries-table thead th{
+
+  background:#1e293b;
+
+  color:#ffffff;
+
+  height:22px;
+
+  font-size:10px;
+
+  position:relative;
+
+  z-index:2;
+}
+
+
+.entries-table tbody td{
+
+  height:21px;
+
+  font-size:10px;
+}
+
 
 .entries-table input{
+
   width:100%;
-  height:22px;
+
+  height:19px;
+
   border:0;
+
   outline:none;
+
   text-align:center;
-  font-size:11px;
+
+  font-size:10px;
+
   font-weight:700;
-  background:white;
+
+  background:#ffffff;
+
   padding:0;
 }
 
-.entries-table input:focus{
-  background:#eff6ff;
-}
-
 .name-input{
+
   text-align:left !important;
+
   padding-left:4px !important;
 }
 
-/* TOTAL */
+
+/*
+   AMOUNT CELL
+*/
+
+.amount-cell{
+
+  font-weight:900;
+
+  color:#111827;
+
+  background:#f8fafc;
+}
+
+
+/* =================================
+   TOTAL
+================================= */
 
 .total-row td{
-  position:sticky;
-  bottom:0;
-  z-index:2;
+
+  height:23px;
+
   background:#111827;
-  color:white;
+
+  color:#ffffff;
+
   font-weight:900;
+
+  font-size:10px;
 }
 
 .total-row td:first-child{
+
   text-align:left;
-  padding-left:5px;
+
+  padding-left:4px;
 }
 
-/* =========================
-   MODAL
-========================= */
+
+/* =================================
+   MODALS
+================================= */
 
 .modal-overlay{
+
   position:fixed;
+
   inset:0;
+
   z-index:9999;
+
   background:rgba(15,23,42,.72);
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
-  padding:20px;
+
+  padding:18px;
 }
 
 .modal{
+
   width:min(360px,100%);
-  background:white;
+
+  background:#ffffff;
+
   border-radius:10px;
+
   padding:18px;
+
   box-shadow:0 20px 50px rgba(0,0,0,.3);
 }
 
 .modal-title{
+
   text-align:center;
+
   font-size:18px;
+
   font-weight:900;
+
   color:#111827;
+
   margin-bottom:5px;
 }
 
 .modal-subtitle{
+
   text-align:center;
+
   font-size:11px;
+
   color:#64748b;
+
   margin-bottom:15px;
 }
 
 .modal label{
+
   display:block;
+
   font-size:11px;
+
   font-weight:800;
+
   color:#334155;
+
   margin-bottom:4px;
 }
 
 .modal input{
+
   width:100%;
+
   height:40px;
+
   border:1px solid #cbd5e1;
+
   border-radius:6px;
+
   outline:none;
+
   padding:0 10px;
+
   font-size:14px;
+
   margin-bottom:12px;
 }
 
 .modal input:focus{
+
   border-color:#2563eb;
 }
 
 .start-btn{
+
   width:100%;
+
   height:42px;
+
   border:0;
+
   border-radius:6px;
+
   background:#16a34a;
-  color:white;
+
+  color:#ffffff;
+
   font-size:14px;
+
   font-weight:900;
 }
 
 .start-btn:active{
+
   transform:scale(.98);
 }
 
 .error-message{
+
   text-align:center;
+
   color:#dc2626;
+
   font-size:11px;
+
   font-weight:700;
+
   min-height:15px;
+
   margin-bottom:5px;
 }
 
-/* =========================
+
+/* =================================
+   MULTIPLIER MODAL
+================================= */
+
+.multiplier-grid{
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:8px;
+
+  margin-top:12px;
+
+  margin-bottom:15px;
+}
+
+.multiplier-item{
+
+  border:1px solid #cbd5e1;
+
+  border-radius:6px;
+
+  padding:7px;
+
+  background:#f8fafc;
+}
+
+.multiplier-item label{
+
+  margin-bottom:4px;
+
+  font-size:10px;
+}
+
+.multiplier-item input{
+
+  height:34px;
+
+  margin:0;
+
+  text-align:center;
+
+  font-size:13px;
+
+  font-weight:900;
+}
+
+.save-multiplier{
+
+  width:100%;
+
+  height:40px;
+
+  border:0;
+
+  border-radius:6px;
+
+  background:#2563eb;
+
+  color:#ffffff;
+
+  font-size:13px;
+
+  font-weight:900;
+}
+
+
+/* =================================
    SMALL SCREEN
-========================= */
+================================= */
 
 @media(max-width:480px){
 
   .app{
-    padding:3px;
-  }
-
-  .app-title{
-    height:27px;
-    font-size:14px;
+    padding:2px;
   }
 
   .info-bar{
-    height:30px;
-    font-size:10px;
-    gap:8px;
+    height:45px;
+  }
+
+  .info-date,
+  .info-name{
+    font-size:17px;
+  }
+
+  .info-separator{
+    font-size:16px;
   }
 
   th,
   td{
-    height:24px;
-    font-size:10px;
+    height:21px;
   }
 
-  .entries-table input,
-  .summary-table input{
-    font-size:10px;
+  .entries-table tbody td{
+    height:20px;
+  }
+
+}
+
+
+/* =================================
+   VERY SMALL SCREEN
+================================= */
+
+@media(max-height:650px){
+
+  .info-bar{
+    height:40px;
+  }
+
+  .info-date,
+  .info-name{
+    font-size:16px;
+  }
+
+  .summary-title{
+    height:18px;
+  }
+
+  th,
+  td{
+    height:19px;
+  }
+
+  .entries-table tbody td{
+    height:18px;
+  }
+
+  .entries-table input{
+    height:17px;
   }
 
 }
@@ -399,13 +714,14 @@ th:first-child{
 
 <body>
 
+
 <div class="app">
 
-  <div class="app-title">
-    RPLMC TRACKER
-  </div>
 
-  <!-- DATE + NAME -->
+  <!-- ===============================
+       DATE + NAME
+  ================================ -->
+
   <div class="info-bar">
 
     <span
@@ -414,7 +730,9 @@ th:first-child{
       Oct 5, 2026
     </span>
 
-    <span class="info-separator">•</span>
+    <span class="info-separator">
+      •
+    </span>
 
     <span
       class="info-name"
@@ -425,9 +743,9 @@ th:first-child{
   </div>
 
 
-  <!-- =========================
+  <!-- ===============================
        SUMMARY TABLE
-  ========================== -->
+  ================================ -->
 
   <div class="table-wrap">
 
@@ -437,7 +755,9 @@ th:first-child{
 
         <tr>
 
-          <th colspan="6" class="summary-title">
+          <th
+            colspan="6"
+            class="summary-title">
             SUMMARY
           </th>
 
@@ -446,17 +766,24 @@ th:first-child{
         <tr>
 
           <th>Metric</th>
+
           <th>R</th>
+
           <th>P</th>
+
           <th>L</th>
+
           <th>M</th>
+
           <th>C</th>
 
         </tr>
 
       </thead>
 
+
       <tbody>
+
 
         <!-- DEL -->
 
@@ -602,9 +929,9 @@ th:first-child{
   </div>
 
 
-  <!-- =========================
-       ITEMIZED ENTRIES
-  ========================== -->
+  <!-- ===============================
+       CUSTOMER LIST
+  ================================ -->
 
   <div class="entries-wrap">
 
@@ -612,23 +939,36 @@ th:first-child{
 
       <table class="entries-table">
 
+
         <thead>
 
           <tr>
 
-            <th>Name</th>
+            <th
+              id="nameHeader">
+              NAME
+            </th>
+
             <th>R</th>
+
             <th>P</th>
+
             <th>L</th>
+
             <th>M</th>
+
             <th>C</th>
+
+            <th>AMOUNT</th>
 
           </tr>
 
         </thead>
 
+
         <tbody id="entryBody">
         </tbody>
+
 
         <tfoot>
 
@@ -658,9 +998,14 @@ th:first-child{
               0
             </td>
 
+            <td id="totalAmount">
+              0.00
+            </td>
+
           </tr>
 
         </tfoot>
+
 
       </table>
 
@@ -671,9 +1016,9 @@ th:first-child{
 </div>
 
 
-<!-- =========================
+<!-- =====================================
      DATE + NAME MODAL
-========================= -->
+====================================== -->
 
 <div
   class="modal-overlay"
@@ -687,8 +1032,9 @@ th:first-child{
     </div>
 
     <div class="modal-subtitle">
-      Enter the date and name before opening the ledger.
+      Enter the date and name before opening.
     </div>
+
 
     <label for="ledgerDate">
       Date
@@ -698,6 +1044,7 @@ th:first-child{
       type="date"
       id="ledgerDate"
     >
+
 
     <label for="ledgerName">
       Name
@@ -710,15 +1057,134 @@ th:first-child{
       autocomplete="off"
     >
 
+
     <div
       class="error-message"
       id="setupError">
     </div>
 
+
     <button
       class="start-btn"
       onclick="startLedger()">
+
       OPEN LEDGER
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================
+     MULTIPLIER MODAL
+====================================== -->
+
+<div
+  class="modal-overlay"
+  id="multiplierModal"
+  style="display:none;"
+>
+
+  <div class="modal">
+
+    <div class="modal-title">
+      Edit Multipliers
+    </div>
+
+    <div class="modal-subtitle">
+      Set the amount multiplier for each product.
+    </div>
+
+
+    <div class="multiplier-grid">
+
+
+      <div class="multiplier-item">
+
+        <label>
+          R
+        </label>
+
+        <input
+          type="number"
+          id="multR"
+          inputmode="decimal"
+        >
+
+      </div>
+
+
+      <div class="multiplier-item">
+
+        <label>
+          P
+        </label>
+
+        <input
+          type="number"
+          id="multP"
+          inputmode="decimal"
+        >
+
+      </div>
+
+
+      <div class="multiplier-item">
+
+        <label>
+          L
+        </label>
+
+        <input
+          type="number"
+          id="multL"
+          inputmode="decimal"
+        >
+
+      </div>
+
+
+      <div class="multiplier-item">
+
+        <label>
+          M
+        </label>
+
+        <input
+          type="number"
+          id="multM"
+          inputmode="decimal"
+        >
+
+      </div>
+
+
+      <div class="multiplier-item">
+
+        <label>
+          C
+        </label>
+
+        <input
+          type="number"
+          id="multC"
+          inputmode="decimal"
+        >
+
+      </div>
+
+
+    </div>
+
+
+    <button
+      class="save-multiplier"
+      onclick="saveMultipliers()">
+
+      SAVE MULTIPLIERS
+
     </button>
 
   </div>
@@ -728,32 +1194,104 @@ th:first-child{
 
 <script>
 
-/* =========================
-   VARIABLES
-========================= */
+
+/* =================================
+   SETTINGS
+================================= */
 
 const ROW_COUNT = 19;
 
+const DEFAULT_MULTIPLIERS = {
 
-/* =========================
-   DATE FORMAT
-========================= */
+  R:45,
+
+  P:45,
+
+  L:45,
+
+  M:45,
+
+  C:40
+
+};
+
+
+/* =================================
+   MULTIPLIERS
+================================= */
+
+let multipliers =
+  JSON.parse(
+    localStorage.getItem(
+      "rplmc_multipliers"
+    )
+  ) || DEFAULT_MULTIPLIERS;
+
+
+/* =================================
+   NUMBER
+================================= */
+
+function num(value){
+
+  const n=parseFloat(value);
+
+  return Number.isFinite(n)
+    ? n
+    : 0;
+}
+
+
+/* =================================
+   DATE
+================================= */
+
+function getToday(){
+
+  const now=new Date();
+
+  const year=
+    now.getFullYear();
+
+  const month=
+    String(
+      now.getMonth()+1
+    ).padStart(2,"0");
+
+  const day=
+    String(
+      now.getDate()
+    ).padStart(2,"0");
+
+  return `${year}-${month}-${day}`;
+}
+
 
 function formatDate(value){
 
-  if(!value) return "";
+  if(!value){
+    return "";
+  }
 
-  const parts=value.split("-");
+  const parts=
+    value.split("-");
 
   if(parts.length!==3){
     return value;
   }
 
-  const year=Number(parts[0]);
-  const month=Number(parts[1]);
-  const day=Number(parts[2]);
+  const year=
+    Number(parts[0]);
+
+  const month=
+    Number(parts[1]);
+
+  const day=
+    Number(parts[2]);
+
 
   const months=[
+
     "Jan",
     "Feb",
     "Mar",
@@ -766,37 +1304,17 @@ function formatDate(value){
     "Oct",
     "Nov",
     "Dec"
+
   ];
+
 
   return `${months[month-1]} ${day}, ${year}`;
 }
 
 
-/* =========================
-   TODAY
-========================= */
-
-function getToday(){
-
-  const now=new Date();
-
-  const year=now.getFullYear();
-
-  const month=String(
-    now.getMonth()+1
-  ).padStart(2,"0");
-
-  const day=String(
-    now.getDate()
-  ).padStart(2,"0");
-
-  return `${year}-${month}-${day}`;
-}
-
-
-/* =========================
-   BUILD 19 ROWS
-========================= */
+/* =================================
+   BUILD CUSTOMER ROWS
+================================= */
 
 function buildRows(){
 
@@ -807,91 +1325,286 @@ function buildRows(){
 
   body.innerHTML="";
 
-  for(let i=1;i<=ROW_COUNT;i++){
 
-    const tr=document.createElement("tr");
+  for(
+    let i=1;
+    i<=ROW_COUNT;
+    i++
+  ){
+
+    const tr=
+      document.createElement("tr");
+
 
     tr.innerHTML=`
 
       <td>
+
         <input
           type="text"
           class="name-input"
           placeholder="${i}"
           autocomplete="off"
         >
+
       </td>
 
+
       <td>
+
         <input
           type="number"
           class="qty-r"
           inputmode="decimal"
           oninput="calculate()"
         >
+
       </td>
 
+
       <td>
+
         <input
           type="number"
           class="qty-p"
           inputmode="decimal"
           oninput="calculate()"
         >
+
       </td>
 
+
       <td>
+
         <input
           type="number"
           class="qty-l"
           inputmode="decimal"
           oninput="calculate()"
         >
+
       </td>
 
+
       <td>
+
         <input
           type="number"
           class="qty-m"
           inputmode="decimal"
           oninput="calculate()"
         >
+
       </td>
 
+
       <td>
+
         <input
           type="number"
           class="qty-c"
           inputmode="decimal"
           oninput="calculate()"
         >
+
+      </td>
+
+
+      <td
+        class="amount-cell amount-value">
+
+        0.00
+
       </td>
 
     `;
 
+
     body.appendChild(tr);
+
   }
 
 }
 
 
-/* =========================
-   NUMBER HELPER
-========================= */
-
-function num(value){
-
-  const n=parseFloat(value);
-
-  return Number.isFinite(n) ? n : 0;
-}
-
-
-/* =========================
+/* =================================
    CALCULATE
-========================= */
+================================= */
 
 function calculate(){
+
+  const totals={
+
+    R:0,
+
+    P:0,
+
+    L:0,
+
+    M:0,
+
+    C:0,
+
+    amount:0
+
+  };
+
+
+  const rows=
+    document.querySelectorAll(
+      "#entryBody tr"
+    );
+
+
+  rows.forEach(row=>{
+
+    const r=
+      num(
+        row.querySelector(
+          ".qty-r"
+        ).value
+      );
+
+    const p=
+      num(
+        row.querySelector(
+          ".qty-p"
+        ).value
+      );
+
+    const l=
+      num(
+        row.querySelector(
+          ".qty-l"
+        ).value
+      );
+
+    const m=
+      num(
+        row.querySelector(
+          ".qty-m"
+        ).value
+      );
+
+    const c=
+      num(
+        row.querySelector(
+          ".qty-c"
+        ).value
+      );
+
+
+    /* =============================
+       AMOUNT FORMULA
+    ============================== */
+
+    const amount=
+
+      (r * multipliers.R) +
+
+      (p * multipliers.P) +
+
+      (l * multipliers.L) +
+
+      (m * multipliers.M) +
+
+      (c * multipliers.C);
+
+
+    row.querySelector(
+      ".amount-value"
+    ).textContent=
+      amount.toFixed(2);
+
+
+    totals.R += r;
+
+    totals.P += p;
+
+    totals.L += l;
+
+    totals.M += m;
+
+    totals.C += c;
+
+    totals.amount += amount;
+
+  });
+
+
+  /* =============================
+     SALES
+  ============================== */
+
+  document.getElementById(
+    "salesR"
+  ).textContent=
+    totals.R;
+
+  document.getElementById(
+    "salesP"
+  ).textContent=
+    totals.P;
+
+  document.getElementById(
+    "salesL"
+  ).textContent=
+    totals.L;
+
+  document.getElementById(
+    "salesM"
+  ).textContent=
+    totals.M;
+
+  document.getElementById(
+    "salesC"
+  ).textContent=
+    totals.C;
+
+
+  /* =============================
+     TOTAL QUANTITIES
+  ============================== */
+
+  document.getElementById(
+    "totalR"
+  ).textContent=
+    totals.R;
+
+  document.getElementById(
+    "totalP"
+  ).textContent=
+    totals.P;
+
+  document.getElementById(
+    "totalL"
+  ).textContent=
+    totals.L;
+
+  document.getElementById(
+    "totalM"
+  ).textContent=
+    totals.M;
+
+  document.getElementById(
+    "totalC"
+  ).textContent=
+    totals.C;
+
+
+  /* =============================
+     TOTAL AMOUNT
+  ============================== */
+
+  document.getElementById(
+    "totalAmount"
+  ).textContent=
+    totals.amount.toFixed(2);
+
+
+  /* =============================
+     RET = DEL - SALES
+  ============================== */
 
   const types=[
     "R",
@@ -901,116 +1614,38 @@ function calculate(){
     "C"
   ];
 
-  const totals={
-    R:0,
-    P:0,
-    L:0,
-    M:0,
-    C:0
-  };
-
-
-  /* ITEMIZED SALES */
-
-  document
-    .querySelectorAll(".qty-r")
-    .forEach(input=>{
-      totals.R += num(input.value);
-    });
-
-  document
-    .querySelectorAll(".qty-p")
-    .forEach(input=>{
-      totals.P += num(input.value);
-    });
-
-  document
-    .querySelectorAll(".qty-l")
-    .forEach(input=>{
-      totals.L += num(input.value);
-    });
-
-  document
-    .querySelectorAll(".qty-m")
-    .forEach(input=>{
-      totals.M += num(input.value);
-    });
-
-  document
-    .querySelectorAll(".qty-c")
-    .forEach(input=>{
-      totals.C += num(input.value);
-    });
-
-
-  /* DISPLAY SALES */
-
-  document.getElementById("salesR")
-    .textContent=totals.R;
-
-  document.getElementById("salesP")
-    .textContent=totals.P;
-
-  document.getElementById("salesL")
-    .textContent=totals.L;
-
-  document.getElementById("salesM")
-    .textContent=totals.M;
-
-  document.getElementById("salesC")
-    .textContent=totals.C;
-
-
-  /* DISPLAY TOTAL */
-
-  document.getElementById("totalR")
-    .textContent=totals.R;
-
-  document.getElementById("totalP")
-    .textContent=totals.P;
-
-  document.getElementById("totalL")
-    .textContent=totals.L;
-
-  document.getElementById("totalM")
-    .textContent=totals.M;
-
-  document.getElementById("totalC")
-    .textContent=totals.C;
-
-
-  /* =========================
-     RET = DEL - SALES
-  ========================== */
 
   types.forEach(type=>{
 
-    const delInput=
-      document.getElementById(
-        "del"+type
+    const del=
+      num(
+        document.getElementById(
+          "del"+type
+        ).value
       );
+
 
     const sales=
       totals[type];
 
-    const del=
-      num(delInput.value);
 
     const ret=
       del-sales;
 
+
     document.getElementById(
       "ret"+type
-    ).textContent=ret;
+    ).textContent=
+      ret;
 
   });
 
 }
 
 
-/* =========================
+/* =================================
    START LEDGER
-========================= */
+================================= */
 
 function startLedger(){
 
@@ -1019,10 +1654,12 @@ function startLedger(){
       "ledgerDate"
     ).value;
 
+
   const name=
     document.getElementById(
       "ledgerName"
     ).value.trim();
+
 
   const error=
     document.getElementById(
@@ -1036,6 +1673,7 @@ function startLedger(){
       "Please select a date.";
 
     return;
+
   }
 
 
@@ -1045,15 +1683,15 @@ function startLedger(){
       "Please enter a name.";
 
     return;
+
   }
 
-
-  /* SAVE SESSION INFO */
 
   localStorage.setItem(
     "rplmc_ledger_date",
     date
   );
+
 
   localStorage.setItem(
     "rplmc_ledger_name",
@@ -1061,12 +1699,11 @@ function startLedger(){
   );
 
 
-  /* DISPLAY */
-
   document.getElementById(
     "displayDate"
   ).textContent=
     formatDate(date);
+
 
   document.getElementById(
     "displayName"
@@ -1074,11 +1711,10 @@ function startLedger(){
     name;
 
 
-  /* CLOSE MODAL */
-
   document.getElementById(
     "setupModal"
-  ).style.display="none";
+  ).style.display=
+    "none";
 
 
   calculate();
@@ -1086,9 +1722,9 @@ function startLedger(){
 }
 
 
-/* =========================
-   LOAD SAVED SESSION
-========================= */
+/* =================================
+   LOAD SESSION
+================================= */
 
 function loadSession(){
 
@@ -1097,26 +1733,18 @@ function loadSession(){
       "rplmc_ledger_date"
     );
 
+
   const savedName=
     localStorage.getItem(
       "rplmc_ledger_name"
     );
 
 
-  /*
-    Always show the modal when
-    the ledger is opened.
-  */
-
   document.getElementById(
     "setupModal"
-  ).style.display="flex";
+  ).style.display=
+    "flex";
 
-
-  /*
-    Pre-fill today's date or
-    previously used date.
-  */
 
   document.getElementById(
     "ledgerDate"
@@ -1128,16 +1756,193 @@ function loadSession(){
 
     document.getElementById(
       "ledgerName"
-    ).value=savedName;
+    ).value=
+      savedName;
 
   }
 
 }
 
 
-/* =========================
+/* =================================
+   MULTIPLIER MODAL
+================================= */
+
+function openMultiplierEditor(){
+
+  document.getElementById(
+    "multR"
+  ).value=
+    multipliers.R;
+
+
+  document.getElementById(
+    "multP"
+  ).value=
+    multipliers.P;
+
+
+  document.getElementById(
+    "multL"
+  ).value=
+    multipliers.L;
+
+
+  document.getElementById(
+    "multM"
+  ).value=
+    multipliers.M;
+
+
+  document.getElementById(
+    "multC"
+  ).value=
+    multipliers.C;
+
+
+  document.getElementById(
+    "multiplierModal"
+  ).style.display=
+    "flex";
+
+}
+
+
+function saveMultipliers(){
+
+  multipliers={
+
+    R:num(
+      document.getElementById(
+        "multR"
+      ).value
+    ),
+
+    P:num(
+      document.getElementById(
+        "multP"
+      ).value
+    ),
+
+    L:num(
+      document.getElementById(
+        "multL"
+      ).value
+    ),
+
+    M:num(
+      document.getElementById(
+        "multM"
+      ).value
+    ),
+
+    C:num(
+      document.getElementById(
+        "multC"
+      ).value
+    )
+
+  };
+
+
+  localStorage.setItem(
+    "rplmc_multipliers",
+    JSON.stringify(
+      multipliers
+    )
+  );
+
+
+  document.getElementById(
+    "multiplierModal"
+  ).style.display=
+    "none";
+
+
+  calculate();
+
+}
+
+
+/* =================================
+   5 TAP NAME HEADER
+================================= */
+
+let nameTapCount=0;
+
+let nameTapTimer=null;
+
+
+document
+  .getElementById("nameHeader")
+  .addEventListener(
+    "click",
+    function(){
+
+      nameTapCount++;
+
+
+      clearTimeout(
+        nameTapTimer
+      );
+
+
+      nameTapTimer=
+        setTimeout(
+          function(){
+
+            nameTapCount=0;
+
+          },
+          1000
+        );
+
+
+      if(nameTapCount>=5){
+
+        nameTapCount=0;
+
+        clearTimeout(
+          nameTapTimer
+        );
+
+        openMultiplierEditor();
+
+      }
+
+    }
+  );
+
+
+/* =================================
+   CLOSE MULTIPLIER MODAL
+   BY TAPPING OUTSIDE
+================================= */
+
+document
+  .getElementById(
+    "multiplierModal"
+  )
+  .addEventListener(
+    "click",
+    function(e){
+
+      if(
+        e.target === this
+      ){
+
+        this.style.display=
+          "none";
+
+      }
+
+    }
+  );
+
+
+/* =================================
    INITIALIZE
-========================= */
+================================= */
 
 buildRows();
 
@@ -1146,18 +1951,22 @@ loadSession();
 calculate();
 
 
-/* =========================
+/* =================================
    ENTER KEY
-========================= */
+================================= */
 
 document
-  .getElementById("ledgerName")
+  .getElementById(
+    "ledgerName"
+  )
   .addEventListener(
     "keydown",
     function(e){
 
       if(e.key==="Enter"){
+
         startLedger();
+
       }
 
     }
