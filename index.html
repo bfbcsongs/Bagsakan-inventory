@@ -45,7 +45,7 @@ body{
 }
 
 /* =========================
-   DATE + NAME
+   DATE + NAME + BUTTONS
 ========================= */
 
 .info-bar{
@@ -57,32 +57,63 @@ body{
   margin-bottom:2px;
   display:flex;
   align-items:center;
-  justify-content:center;
-  gap:7px;
-  padding:0 6px;
+  gap:5px;
+  padding:0 4px;
   overflow:hidden;
 }
 
 .info-date{
   color:#1d4ed8;
-  font-size:18px;
+  font-size:17px;
   font-weight:900;
   white-space:nowrap;
+  flex-shrink:0;
 }
 
 .info-separator{
   color:#64748b;
-  font-size:16px;
+  font-size:15px;
   font-weight:900;
+  flex-shrink:0;
 }
 
 .info-name{
   color:#111827;
-  font-size:18px;
+  font-size:17px;
   font-weight:900;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
+  flex:1;
+  min-width:20px;
+}
+
+.info-buttons{
+  display:flex;
+  gap:3px;
+  flex-shrink:0;
+}
+
+.info-btn{
+  height:30px;
+  border:0;
+  border-radius:5px;
+  padding:0 7px;
+  color:#fff;
+  font-size:9px;
+  font-weight:900;
+}
+
+.clear-btn{
+  background:#dc2626;
+}
+
+.save-main-btn{
+  background:#16a34a;
+}
+
+.list-btn{
+  background:#1d4ed8;
 }
 
 /* =========================
@@ -112,7 +143,7 @@ th,td{
 }
 
 .summary-title{
-  height:19px;
+  height:18px;
   background:#111827;
   color:#fff;
   font-size:10px;
@@ -121,7 +152,7 @@ th,td{
 }
 
 .summary-head{
-  height:18px;
+  height:17px;
   background:#e2e8f0;
   color:#111827;
   font-size:9px;
@@ -129,7 +160,7 @@ th,td{
 }
 
 .summary-row{
-  height:19px;
+  height:17px;
   font-size:9px;
   font-weight:900;
 }
@@ -161,7 +192,7 @@ th,td{
 
 .del-input{
   width:100%;
-  height:17px;
+  height:15px;
   border:0;
   outline:none;
   background:transparent;
@@ -177,8 +208,9 @@ th,td{
 ========================= */
 
 .customer-wrap{
-  flex:1;
+  flex:1 1 0;
   min-height:0;
+  height:0;
   overflow:hidden;
   background:#fff;
   border:1px solid #cbd5e1;
@@ -205,7 +237,7 @@ th,td{
 }
 
 .customer-header{
-  height:18px;
+  height:16px;
   background:#1e293b;
   color:#fff;
   font-size:9px;
@@ -219,8 +251,8 @@ th,td{
 }
 
 .customer-row{
-  height:18px;
-  font-size:9px;
+  height:15px;
+  font-size:8px;
   font-weight:700;
   background:#fff;
 }
@@ -236,12 +268,12 @@ th,td{
 .name-input,
 .qty-input{
   width:100%;
-  height:17px;
+  height:14px;
   border:0;
   outline:none;
   background:transparent;
   text-align:center;
-  font-size:9px;
+  font-size:8px;
   font-weight:700;
   padding:0 2px;
   color:#111827;
@@ -262,17 +294,17 @@ th,td{
   width:100%;
   text-align:right;
   padding-right:4px;
-  font-size:9px;
+  font-size:8px;
   font-weight:900;
   color:#111827;
   white-space:nowrap;
 }
 
 .total-row{
-  height:19px;
+  height:17px;
   background:#111827;
   color:#fff;
-  font-size:9px;
+  font-size:8px;
   font-weight:900;
 }
 
@@ -306,10 +338,12 @@ th,td{
 
 .modal-box{
   width:min(360px,95vw);
+  max-height:90vh;
   background:#fff;
   border-radius:12px;
   padding:18px;
   box-shadow:0 20px 50px rgba(0,0,0,.3);
+  overflow:hidden;
 }
 
 .modal-title{
@@ -426,6 +460,176 @@ th,td{
 }
 
 /* =========================
+   LIST MODAL
+========================= */
+
+.list-modal-box{
+  width:min(420px,95vw);
+  max-height:88vh;
+  background:#fff;
+  border-radius:12px;
+  padding:12px;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+}
+
+.list-title{
+  text-align:center;
+  font-size:18px;
+  font-weight:900;
+  color:#111827;
+  margin-bottom:9px;
+  flex-shrink:0;
+}
+
+.list-subtitle{
+  text-align:center;
+  font-size:10px;
+  color:#64748b;
+  font-weight:700;
+  margin-bottom:8px;
+  flex-shrink:0;
+}
+
+.saved-list{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  min-height:0;
+  max-height:360px;
+  overflow-y:auto;
+  padding-right:2px;
+}
+
+.saved-item{
+  border:1px solid #cbd5e1;
+  border-radius:7px;
+  background:#f8fafc;
+  padding:7px;
+  flex-shrink:0;
+  user-select:none;
+}
+
+.saved-item.highlighted{
+  background:#dbeafe;
+  border:2px solid #2563eb;
+}
+
+.saved-main{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  cursor:pointer;
+}
+
+.saved-number{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#111827;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:9px;
+  font-weight:900;
+  flex-shrink:0;
+}
+
+.saved-item.highlighted .saved-number{
+  background:#2563eb;
+}
+
+.saved-info{
+  flex:1;
+  min-width:0;
+}
+
+.saved-date{
+  font-size:12px;
+  font-weight:900;
+  color:#1d4ed8;
+  white-space:nowrap;
+}
+
+.saved-name{
+  font-size:12px;
+  font-weight:900;
+  color:#111827;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.saved-time{
+  font-size:9px;
+  color:#64748b;
+  font-weight:700;
+  margin-top:2px;
+}
+
+.saved-actions{
+  display:flex;
+  gap:4px;
+  margin-top:5px;
+  padding-left:29px;
+}
+
+.saved-action{
+  height:25px;
+  border:0;
+  border-radius:5px;
+  color:#fff;
+  font-size:9px;
+  font-weight:900;
+  padding:0 10px;
+}
+
+.edit-saved-btn{
+  background:#16a34a;
+}
+
+.delete-saved-btn{
+  background:#dc2626;
+}
+
+.list-close-btn{
+  width:100%;
+  height:40px;
+  border:0;
+  border-radius:7px;
+  background:#111827;
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  margin-top:9px;
+  flex-shrink:0;
+}
+
+.empty-list{
+  text-align:center;
+  padding:25px 10px;
+  color:#64748b;
+  font-size:12px;
+  font-weight:800;
+}
+
+/* =========================
+   READ ONLY
+========================= */
+
+.readonly-mode input{
+  pointer-events:none;
+  user-select:none;
+}
+
+.readonly-mode .del-input{
+  color:#166534;
+}
+
+/* =========================
    MOBILE
 ========================= */
 
@@ -433,47 +637,56 @@ th,td{
 
   .info-bar{
     height:40px;
+    gap:3px;
+    padding:0 3px;
   }
 
   .info-date,
   .info-name{
-    font-size:16px;
+    font-size:14px;
   }
 
   .info-separator{
-    font-size:15px;
+    font-size:13px;
+  }
+
+  .info-btn{
+    height:28px;
+    padding:0 5px;
+    font-size:8px;
   }
 
   .summary-title{
-    height:18px;
+    height:17px;
   }
 
   .summary-head,
   .summary-row{
-    height:18px;
+    height:16px;
   }
 
   .customer-header{
-    height:17px;
+    height:15px;
   }
 
   .customer-row{
-    height:17px;
+    height:14px;
   }
 
   .name-input,
   .qty-input{
-    height:16px;
-    font-size:8px;
+    height:13px;
+    font-size:7px;
   }
 
   .amount-value{
-    font-size:8px;
+    font-size:7px;
   }
 
   .total-row{
-    height:18px;
+    height:16px;
   }
+
 }
 
 /* =========================
@@ -487,59 +700,66 @@ th,td{
   }
 
   .info-bar{
-    height:36px;
+    height:34px;
     margin-bottom:1px;
   }
 
   .info-date,
   .info-name{
-    font-size:15px;
+    font-size:13px;
   }
 
   .info-separator{
-    font-size:14px;
+    font-size:12px;
+  }
+
+  .info-btn{
+    height:25px;
+    font-size:7px;
+    padding:0 4px;
   }
 
   .summary-title{
-    height:16px;
+    height:15px;
     font-size:8px;
   }
 
   .summary-head,
   .summary-row{
-    height:16px;
+    height:14px;
     font-size:8px;
   }
 
   .del-input{
-    height:14px;
+    height:12px;
     font-size:8px;
   }
 
   .customer-header{
-    height:16px;
-    font-size:8px;
+    height:14px;
+    font-size:7px;
   }
 
   .customer-row{
-    height:16px;
-    font-size:8px;
+    height:13px;
+    font-size:7px;
   }
 
   .name-input,
   .qty-input{
-    height:14px;
-    font-size:8px;
+    height:12px;
+    font-size:7px;
   }
 
   .amount-value{
-    font-size:8px;
+    font-size:7px;
   }
 
   .total-row{
-    height:17px;
-    font-size:8px;
+    height:15px;
+    font-size:7px;
   }
+
 }
 </style>
 </head>
@@ -548,12 +768,42 @@ th,td{
 
 <div class="app">
 
-  <!-- DATE + NAME -->
+  <!-- DATE + NAME + BUTTONS -->
   <div class="info-bar">
+
     <div class="info-date" id="displayDate"></div>
+
     <div class="info-separator">•</div>
+
     <div class="info-name" id="displayName"></div>
+
+    <div class="info-buttons">
+
+      <button
+        class="info-btn clear-btn"
+        id="clearBtn"
+      >
+        CLEAR
+      </button>
+
+      <button
+        class="info-btn save-main-btn"
+        id="saveBtn"
+      >
+        SAVE
+      </button>
+
+      <button
+        class="info-btn list-btn"
+        id="listBtn"
+      >
+        LIST
+      </button>
+
+    </div>
+
   </div>
+
 
   <!-- SUMMARY -->
   <div class="table-wrap">
@@ -676,6 +926,7 @@ th,td{
     </table>
 
   </div>
+
 
   <!-- CUSTOMER TABLE -->
   <div class="customer-wrap">
@@ -888,6 +1139,42 @@ th,td{
 </div>
 
 
+<!-- =========================
+     SAVED FILE LIST MODAL
+========================= -->
+
+<div
+  class="modal hidden"
+  id="listModal"
+>
+
+  <div class="list-modal-box">
+
+    <div class="list-title">
+      SAVED LEDGER FILES
+    </div>
+
+    <div class="list-subtitle">
+      Tap a file to preview • Tap again to return to current
+    </div>
+
+    <div
+      class="saved-list"
+      id="savedList"
+    ></div>
+
+    <button
+      class="list-close-btn"
+      id="closeListBtn"
+    >
+      CLOSE
+    </button>
+
+  </div>
+
+</div>
+
+
 <script>
 
 /* =========================
@@ -901,7 +1188,7 @@ if('serviceWorker' in navigator){
     () => {
 
       navigator.serviceWorker.register(
-        './sw.js?v=1',
+        './sw.js?v=2',
         {scope:'./'}
       )
       .then(
@@ -922,6 +1209,16 @@ if('serviceWorker' in navigator){
   );
 
 }
+
+
+/* =========================
+   STORAGE
+========================= */
+
+const SAVED_FILES_KEY =
+  "rplmc_saved_files";
+
+const MAX_SAVED_FILES = 30;
 
 
 /* =========================
@@ -993,6 +1290,31 @@ const nameHeader =
     "nameHeader"
   );
 
+const listModal =
+  document.getElementById(
+    "listModal"
+  );
+
+const savedList =
+  document.getElementById(
+    "savedList"
+  );
+
+
+/* =========================
+   STATE
+========================= */
+
+let readonlyMode = false;
+
+let selectedSavedId = null;
+
+let currentPreviewId = null;
+
+let currentLedgerStarted = false;
+
+let temporaryCurrentState = null;
+
 
 /* =========================
    NUMBER
@@ -1012,8 +1334,6 @@ function num(value){
 
 /* =========================
    AMOUNT FORMAT
-   45.00 -> 45
-   45.50 -> 45.5
 ========================= */
 
 function formatAmount(value){
@@ -1068,6 +1388,79 @@ function formatDate(value){
   ];
 
   return `${months[m-1]} ${d}, ${y}`;
+
+}
+
+
+/* =========================
+   TIME FORMAT
+========================= */
+
+function formatSavedTime(timestamp){
+
+  if(!timestamp){
+    return "";
+  }
+
+  const d =
+    new Date(timestamp);
+
+  if(Number.isNaN(d.getTime())){
+    return "";
+  }
+
+  return d.toLocaleTimeString(
+    [],
+    {
+      hour:"numeric",
+      minute:"2-digit",
+      second:"2-digit"
+    }
+  );
+
+}
+
+
+/* =========================
+   GET SAVED FILES
+========================= */
+
+function getSavedFiles(){
+
+  try{
+
+    const data =
+      JSON.parse(
+        localStorage.getItem(
+          SAVED_FILES_KEY
+        )
+      );
+
+    if(!Array.isArray(data)){
+      return [];
+    }
+
+    return data;
+
+  }catch(e){
+
+    return [];
+
+  }
+
+}
+
+
+/* =========================
+   SAVE FILES
+========================= */
+
+function setSavedFiles(files){
+
+  localStorage.setItem(
+    SAVED_FILES_KEY,
+    JSON.stringify(files)
+  );
 
 }
 
@@ -1262,8 +1655,6 @@ function calculate(){
   });
 
 
-  /* TOTALS */
-
   document.getElementById(
     "totalR"
   ).textContent =
@@ -1400,6 +1791,252 @@ function calculate(){
 
 
 /* =========================
+   CAPTURE LEDGER
+========================= */
+
+function captureLedger(){
+
+  const rows =
+    Array.from(
+      document.querySelectorAll(
+        ".customer-row"
+      )
+    );
+
+  return {
+
+    date:
+      ledgerDate.value.trim(),
+
+    name:
+      ledgerName.value.trim(),
+
+    del:{
+      R:document.getElementById("delR").value,
+      P:document.getElementById("delP").value,
+      L:document.getElementById("delL").value,
+      M:document.getElementById("delM").value,
+      C:document.getElementById("delC").value
+    },
+
+    rows:
+      rows.map(row => ({
+
+        name:
+          row.querySelector(
+            ".name-input"
+          ).value,
+
+        R:
+          row.querySelector(
+            ".qty-r"
+          ).value,
+
+        P:
+          row.querySelector(
+            ".qty-p"
+          ).value,
+
+        L:
+          row.querySelector(
+            ".qty-l"
+          ).value,
+
+        M:
+          row.querySelector(
+            ".qty-m"
+          ).value,
+
+        C:
+          row.querySelector(
+            ".qty-c"
+          ).value
+
+      }))
+
+  };
+
+}
+
+
+/* =========================
+   APPLY LEDGER
+========================= */
+
+function applyLedger(data){
+
+  if(!data){
+    return;
+  }
+
+
+  ledgerDate.value =
+    data.date || "";
+
+  ledgerName.value =
+    data.name || "";
+
+
+  const del =
+    data.del || {};
+
+
+  document.getElementById(
+    "delR"
+  ).value =
+    del.R || "";
+
+  document.getElementById(
+    "delP"
+  ).value =
+    del.P || "";
+
+  document.getElementById(
+    "delL"
+  ).value =
+    del.L || "";
+
+  document.getElementById(
+    "delM"
+  ).value =
+    del.M || "";
+
+  document.getElementById(
+    "delC"
+  ).value =
+    del.C || "";
+
+
+  const rows =
+    document.querySelectorAll(
+      ".customer-row"
+    );
+
+  const savedRows =
+    Array.isArray(data.rows)
+      ? data.rows
+      : [];
+
+
+  rows.forEach((row,index) => {
+
+    const item =
+      savedRows[index] || {};
+
+
+    row.querySelector(
+      ".name-input"
+    ).value =
+      item.name || "";
+
+    row.querySelector(
+      ".qty-r"
+    ).value =
+      item.R || "";
+
+    row.querySelector(
+      ".qty-p"
+    ).value =
+      item.P || "";
+
+    row.querySelector(
+      ".qty-l"
+    ).value =
+      item.L || "";
+
+    row.querySelector(
+      ".qty-m"
+    ).value =
+      item.M || "";
+
+    row.querySelector(
+      ".qty-c"
+    ).value =
+      item.C || "";
+
+  });
+
+
+  displayDate.textContent =
+    formatDate(
+      data.date || ""
+    );
+
+  displayName.textContent =
+    data.name || "";
+
+
+  calculate();
+
+}
+
+
+/* =========================
+   CLEAR LEDGER VALUES
+========================= */
+
+function clearLedgerValues(){
+
+  document.getElementById(
+    "delR"
+  ).value = "";
+
+  document.getElementById(
+    "delP"
+  ).value = "";
+
+  document.getElementById(
+    "delL"
+  ).value = "";
+
+  document.getElementById(
+    "delM"
+  ).value = "";
+
+  document.getElementById(
+    "delC"
+  ).value = "";
+
+
+  document
+    .querySelectorAll(
+      ".customer-row"
+    )
+    .forEach(row => {
+
+      row.querySelector(
+        ".name-input"
+      ).value = "";
+
+      row.querySelector(
+        ".qty-r"
+      ).value = "";
+
+      row.querySelector(
+        ".qty-p"
+      ).value = "";
+
+      row.querySelector(
+        ".qty-l"
+      ).value = "";
+
+      row.querySelector(
+        ".qty-m"
+      ).value = "";
+
+      row.querySelector(
+        ".qty-c"
+      ).value = "";
+
+    });
+
+
+  calculate();
+
+}
+
+
+/* =========================
    START LEDGER
 ========================= */
 
@@ -1447,6 +2084,16 @@ function startLedger(){
 
   setupModal.classList.add(
     "hidden"
+  );
+
+  currentLedgerStarted = true;
+
+  readonlyMode = false;
+
+  currentPreviewId = null;
+
+  document.body.classList.remove(
+    "readonly-mode"
   );
 
 }
@@ -1578,6 +2225,714 @@ function saveMultipliers(){
 
 
 /* =========================
+   SAVE CURRENT FILE
+========================= */
+
+function saveCurrentFile(){
+
+  if(!currentLedgerStarted){
+
+    alert(
+      "Please start the ledger first."
+    );
+
+    return;
+
+  }
+
+
+  if(readonlyMode){
+
+    alert(
+      "This is a read-only preview. Tap EDIT first."
+    );
+
+    return;
+
+  }
+
+
+  const date =
+    ledgerDate.value.trim();
+
+  const name =
+    ledgerName.value.trim();
+
+
+  if(!date){
+
+    alert(
+      "Please enter the Date first."
+    );
+
+    return;
+
+  }
+
+
+  if(!name){
+
+    alert(
+      "Please enter the Name first."
+    );
+
+    return;
+
+  }
+
+
+  const now =
+    Date.now();
+
+  const data =
+    captureLedger();
+
+  let files =
+    getSavedFiles();
+
+
+  const existingIndex =
+    files.findIndex(
+      file =>
+        file.date === date
+    );
+
+
+  if(existingIndex !== -1){
+
+    const existing =
+      files[existingIndex];
+
+    const replace =
+      confirm(
+        `A saved file already exists for ${formatDate(date)}.\n\n` +
+        `Name: ${existing.name}\n` +
+        `Saved: ${formatSavedTime(existing.savedAt)}\n\n` +
+        `Replace it with the current ledger?`
+      );
+
+    if(!replace){
+      return;
+    }
+
+
+    files.splice(
+      existingIndex,
+      1
+    );
+
+  }
+
+
+  const file = {
+
+    id:
+      "rplmc-" +
+      now +
+      "-" +
+      Math.random()
+        .toString(36)
+        .slice(2,8),
+
+    date:
+      date,
+
+    name:
+      name,
+
+    savedAt:
+      now,
+
+    data:
+      data
+
+  };
+
+
+  files.unshift(file);
+
+
+  files.sort(
+    (a,b) =>
+      Number(b.savedAt || 0) -
+      Number(a.savedAt || 0)
+  );
+
+
+  if(
+    files.length >
+    MAX_SAVED_FILES
+  ){
+
+    files =
+      files.slice(
+        0,
+        MAX_SAVED_FILES
+      );
+
+  }
+
+
+  setSavedFiles(files);
+
+
+  alert(
+    "Ledger saved successfully."
+  );
+
+
+  renderSavedList();
+
+}
+
+
+/* =========================
+   OPEN LIST
+========================= */
+
+function openSavedList(){
+
+  renderSavedList();
+
+  listModal.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+/* =========================
+   RENDER LIST
+========================= */
+
+function renderSavedList(){
+
+  savedList.innerHTML = "";
+
+
+  let files =
+    getSavedFiles();
+
+
+  files.sort(
+    (a,b) =>
+      Number(b.savedAt || 0) -
+      Number(a.savedAt || 0)
+  );
+
+
+  if(files.length === 0){
+
+    savedList.innerHTML = `
+      <div class="empty-list">
+        No saved ledger files yet.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  files.forEach(
+    (file,index) => {
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+      item.className =
+        "saved-item" +
+        (
+          selectedSavedId === file.id
+            ? " highlighted"
+            : ""
+        );
+
+
+      item.innerHTML = `
+
+        <div
+          class="saved-main"
+          data-id="${file.id}"
+        >
+
+          <div class="saved-number">
+            ${index + 1}
+          </div>
+
+          <div class="saved-info">
+
+            <div class="saved-date">
+              ${escapeHtml(
+                formatDate(file.date)
+              )}
+            </div>
+
+            <div class="saved-name">
+              ${escapeHtml(
+                file.name || ""
+              )}
+            </div>
+
+            <div class="saved-time">
+              Saved ${escapeHtml(
+                formatSavedTime(
+                  file.savedAt
+                )
+              )}
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="saved-actions">
+
+          <button
+            class="saved-action edit-saved-btn"
+            data-edit="${file.id}"
+          >
+            EDIT
+          </button>
+
+          <button
+            class="saved-action delete-saved-btn"
+            data-delete="${file.id}"
+          >
+            DELETE
+          </button>
+
+        </div>
+
+      `;
+
+
+      savedList.appendChild(
+        item
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(value){
+
+  return String(value || "")
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================
+   PREVIEW SAVED FILE
+========================= */
+
+function previewSavedFile(id){
+
+  const files =
+    getSavedFiles();
+
+  const file =
+    files.find(
+      item =>
+        item.id === id
+    );
+
+
+  if(!file){
+    return;
+  }
+
+
+  /* Same highlighted item:
+     return to current */
+
+  if(
+    selectedSavedId === id &&
+    readonlyMode
+  ){
+
+    returnToCurrent();
+
+    return;
+
+  }
+
+
+  /* Save current editable
+     state before preview */
+
+  if(
+    !readonlyMode &&
+    currentLedgerStarted
+  ){
+
+    temporaryCurrentState =
+      captureLedger();
+
+  }
+
+
+  selectedSavedId =
+    id;
+
+  currentPreviewId =
+    id;
+
+  readonlyMode =
+    true;
+
+
+  applyLedger(
+    file.data
+  );
+
+
+  document.body.classList.add(
+    "readonly-mode"
+  );
+
+
+  renderSavedList();
+
+}
+
+
+/* =========================
+   RETURN TO CURRENT
+========================= */
+
+function returnToCurrent(){
+
+  if(
+    temporaryCurrentState
+  ){
+
+    applyLedger(
+      temporaryCurrentState
+    );
+
+  }
+
+
+  readonlyMode =
+    false;
+
+  currentPreviewId =
+    null;
+
+  selectedSavedId =
+    null;
+
+  document.body.classList.remove(
+    "readonly-mode"
+  );
+
+
+  renderSavedList();
+
+}
+
+
+/* =========================
+   EDIT SAVED FILE
+========================= */
+
+function editSavedFile(id){
+
+  const files =
+    getSavedFiles();
+
+  const file =
+    files.find(
+      item =>
+        item.id === id
+    );
+
+
+  if(!file){
+    return;
+  }
+
+
+  applyLedger(
+    file.data
+  );
+
+
+  currentLedgerStarted =
+    true;
+
+  readonlyMode =
+    false;
+
+  currentPreviewId =
+    null;
+
+  selectedSavedId =
+    null;
+
+  temporaryCurrentState =
+    null;
+
+
+  document.body.classList.remove(
+    "readonly-mode"
+  );
+
+
+  listModal.classList.add(
+    "hidden"
+  );
+
+}
+
+
+/* =========================
+   DELETE SAVED FILE
+========================= */
+
+function deleteSavedFile(id){
+
+  const files =
+    getSavedFiles();
+
+  const file =
+    files.find(
+      item =>
+        item.id === id
+    );
+
+
+  if(!file){
+    return;
+  }
+
+
+  const okay =
+    confirm(
+      `Delete this saved file?\n\n` +
+      `${formatDate(file.date)}\n` +
+      `${file.name}`
+    );
+
+
+  if(!okay){
+    return;
+  }
+
+
+  const remaining =
+    files.filter(
+      item =>
+        item.id !== id
+    );
+
+
+  setSavedFiles(
+    remaining
+  );
+
+
+  if(
+    selectedSavedId === id
+  ){
+
+    selectedSavedId =
+      null;
+
+    currentPreviewId =
+      null;
+
+    readonlyMode =
+      false;
+
+    document.body.classList.remove(
+      "readonly-mode"
+    );
+
+  }
+
+
+  renderSavedList();
+
+}
+
+
+/* =========================
+   CLEAR CURRENT
+========================= */
+
+function clearCurrentLedger(){
+
+  if(!currentLedgerStarted){
+
+    return;
+
+  }
+
+
+  if(readonlyMode){
+
+    alert(
+      "This is a read-only preview. Return to the current ledger first."
+    );
+
+    return;
+
+  }
+
+
+  const current =
+    captureLedger();
+
+
+  const hasData =
+    hasLedgerData(current);
+
+
+  if(hasData){
+
+    const saveFirst =
+      confirm(
+        "The current ledger contains data.\n\n" +
+        "Do you want to SAVE the current ledger before clearing it?\n\n" +
+        "OK = Save first\n" +
+        "Cancel = Continue without saving"
+      );
+
+
+    if(saveFirst){
+
+      saveCurrentFile();
+
+      /*
+       * If user cancelled an overwrite
+       * or saving failed, don't clear.
+       */
+      const date =
+        current.date;
+
+      const files =
+        getSavedFiles();
+
+      const saved =
+        files.some(
+          file =>
+            file.date === date
+        );
+
+      if(!saved){
+        return;
+      }
+
+    }else{
+
+      const confirmClear =
+        confirm(
+          "Clear the current ledger without saving?"
+        );
+
+      if(!confirmClear){
+        return;
+      }
+
+    }
+
+  }else{
+
+    const confirmClear =
+      confirm(
+        "Clear the current ledger?"
+      );
+
+    if(!confirmClear){
+      return;
+    }
+
+  }
+
+
+  clearLedgerValues();
+
+}
+
+
+/* =========================
+   HAS LEDGER DATA
+========================= */
+
+function hasLedgerData(data){
+
+  if(!data){
+    return false;
+  }
+
+
+  const del =
+    data.del || {};
+
+
+  if(
+    Object.values(del)
+      .some(value =>
+        String(value || "").trim() !== ""
+      )
+  ){
+
+    return true;
+
+  }
+
+
+  if(
+    Array.isArray(data.rows)
+  ){
+
+    return data.rows.some(
+      row =>
+        Object.values(row)
+          .some(value =>
+            String(value || "").trim() !== ""
+          )
+    );
+
+  }
+
+
+  return false;
+
+}
+
+
+/* =========================
    OPEN BUTTON
 ========================= */
 
@@ -1627,6 +2982,148 @@ ledgerName.addEventListener(
 
 
 /* =========================
+   SAVE BUTTON
+========================= */
+
+document
+  .getElementById(
+    "saveBtn"
+  )
+  .addEventListener(
+    "click",
+    saveCurrentFile
+  );
+
+
+/* =========================
+   CLEAR BUTTON
+========================= */
+
+document
+  .getElementById(
+    "clearBtn"
+  )
+  .addEventListener(
+    "click",
+    clearCurrentLedger
+  );
+
+
+/* =========================
+   LIST BUTTON
+========================= */
+
+document
+  .getElementById(
+    "listBtn"
+  )
+  .addEventListener(
+    "click",
+    openSavedList
+  );
+
+
+/* =========================
+   CLOSE LIST
+========================= */
+
+document
+  .getElementById(
+    "closeListBtn"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      listModal.classList.add(
+        "hidden"
+      );
+
+    }
+  );
+
+
+/* =========================
+   LIST ITEM ACTIONS
+========================= */
+
+savedList.addEventListener(
+  "click",
+  e => {
+
+    const main =
+      e.target.closest(
+        ".saved-main"
+      );
+
+    const editButton =
+      e.target.closest(
+        "[data-edit]"
+      );
+
+    const deleteButton =
+      e.target.closest(
+        "[data-delete]"
+      );
+
+
+    if(editButton){
+
+      editSavedFile(
+        editButton.dataset.edit
+      );
+
+      return;
+
+    }
+
+
+    if(deleteButton){
+
+      deleteSavedFile(
+        deleteButton.dataset.delete
+      );
+
+      return;
+
+    }
+
+
+    if(main){
+
+      previewSavedFile(
+        main.dataset.id
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================
+   CLOSE LIST BY OUTSIDE TAP
+========================= */
+
+listModal.addEventListener(
+  "click",
+  e => {
+
+    if(
+      e.target === listModal
+    ){
+
+      listModal.classList.add(
+        "hidden"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================
    5-TAP KEY
 ========================= */
 
@@ -1639,7 +3136,9 @@ nameHeader.addEventListener(
 
     tapCount++;
 
-    clearTimeout(tapTimer);
+    clearTimeout(
+      tapTimer
+    );
 
     tapTimer =
       setTimeout(
@@ -1654,7 +3153,9 @@ nameHeader.addEventListener(
 
       tapCount = 0;
 
-      clearTimeout(tapTimer);
+      clearTimeout(
+        tapTimer
+      );
 
       openMultiplierEditor();
 
@@ -1672,7 +3173,9 @@ multiplierModal.addEventListener(
   "click",
   e => {
 
-    if(e.target === multiplierModal){
+    if(
+      e.target === multiplierModal
+    ){
 
       multiplierModal.classList.add(
         "hidden"
@@ -1685,7 +3188,7 @@ multiplierModal.addEventListener(
 
 
 /* =========================
-   CANCEL
+   CANCEL MULTIPLIER
 ========================= */
 
 document
@@ -1705,7 +3208,7 @@ document
 
 
 /* =========================
-   SAVE
+   SAVE MULTIPLIER
 ========================= */
 
 document
