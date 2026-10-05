@@ -38,47 +38,47 @@ body{
   width:100%;
   max-width:900px;
   height:100vh;
-  padding:3px;
+  padding:2px;
   display:flex;
   flex-direction:column;
   overflow:hidden;
 }
 
 /* =========================
-   DATE + NAME BAR
+   DATE + NAME
 ========================= */
 
 .info-bar{
-  height:48px;
+  height:43px;
   flex-shrink:0;
   background:#fff;
   border:1px solid #cbd5e1;
-  border-radius:5px;
-  margin-bottom:3px;
+  border-radius:4px;
+  margin-bottom:2px;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:8px;
-  padding:0 8px;
+  gap:7px;
+  padding:0 6px;
   overflow:hidden;
 }
 
 .info-date{
   color:#1d4ed8;
-  font-size:19px;
+  font-size:18px;
   font-weight:900;
   white-space:nowrap;
 }
 
 .info-separator{
   color:#64748b;
-  font-size:18px;
+  font-size:16px;
   font-weight:900;
 }
 
 .info-name{
   color:#111827;
-  font-size:19px;
+  font-size:18px;
   font-weight:900;
   white-space:nowrap;
   overflow:hidden;
@@ -86,14 +86,14 @@ body{
 }
 
 /* =========================
-   TABLE WRAP
+   SUMMARY
 ========================= */
 
 .table-wrap{
   width:100%;
   background:#fff;
   border:1px solid #cbd5e1;
-  border-radius:5px;
+  border-radius:4px;
   overflow:hidden;
   flex-shrink:0;
 }
@@ -111,37 +111,33 @@ th,td{
   overflow:hidden;
 }
 
-/* =========================
-   SUMMARY
-========================= */
-
 .summary-title{
-  height:22px;
+  height:19px;
   background:#111827;
   color:#fff;
-  font-size:11px;
+  font-size:10px;
   font-weight:900;
-  letter-spacing:.5px;
+  letter-spacing:.4px;
 }
 
 .summary-head{
-  height:20px;
+  height:18px;
   background:#e2e8f0;
   color:#111827;
-  font-size:10px;
+  font-size:9px;
   font-weight:900;
 }
 
 .summary-row{
-  height:22px;
-  font-size:10px;
+  height:19px;
+  font-size:9px;
   font-weight:900;
 }
 
 .summary-label{
   width:18%;
   text-align:left;
-  padding-left:6px;
+  padding-left:5px;
 }
 
 .summary-value{
@@ -165,13 +161,13 @@ th,td{
 
 .del-input{
   width:100%;
-  height:20px;
+  height:17px;
   border:0;
   outline:none;
   background:transparent;
   text-align:center;
   font-weight:900;
-  font-size:10px;
+  font-size:9px;
   color:#166534;
   padding:0;
 }
@@ -186,11 +182,14 @@ th,td{
   overflow:hidden;
   background:#fff;
   border:1px solid #cbd5e1;
-  border-radius:5px;
+  border-radius:4px;
 }
 
 .customer-table{
+  width:100%;
   height:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
 }
 
 .customer-table col.name-col{
@@ -206,10 +205,10 @@ th,td{
 }
 
 .customer-header{
-  height:21px;
+  height:18px;
   background:#1e293b;
   color:#fff;
-  font-size:10px;
+  font-size:9px;
   font-weight:900;
 }
 
@@ -220,8 +219,8 @@ th,td{
 }
 
 .customer-row{
-  height:21px;
-  font-size:10px;
+  height:18px;
+  font-size:9px;
   font-weight:700;
   background:#fff;
 }
@@ -237,12 +236,12 @@ th,td{
 .name-input,
 .qty-input{
   width:100%;
-  height:20px;
+  height:17px;
   border:0;
   outline:none;
   background:transparent;
   text-align:center;
-  font-size:10px;
+  font-size:9px;
   font-weight:700;
   padding:0 2px;
   color:#111827;
@@ -250,7 +249,7 @@ th,td{
 
 .name-input{
   text-align:left;
-  padding-left:5px;
+  padding-left:4px;
 }
 
 .qty-input:focus,
@@ -262,18 +261,18 @@ th,td{
   display:block;
   width:100%;
   text-align:right;
-  padding-right:5px;
-  font-size:10px;
+  padding-right:4px;
+  font-size:9px;
   font-weight:900;
   color:#111827;
   white-space:nowrap;
 }
 
 .total-row{
-  height:23px;
+  height:19px;
   background:#111827;
   color:#fff;
-  font-size:10px;
+  font-size:9px;
   font-weight:900;
 }
 
@@ -283,7 +282,7 @@ th,td{
 
 .total-label{
   text-align:right;
-  padding-right:5px;
+  padding-right:4px;
 }
 
 /* =========================
@@ -367,11 +366,6 @@ th,td{
   color:#fff;
   font-size:15px;
   font-weight:900;
-  cursor:pointer;
-}
-
-.modal-btn:active{
-  transform:scale(.98);
 }
 
 /* =========================
@@ -438,59 +432,6 @@ th,td{
 @media(max-width:480px){
 
   .info-bar{
-    height:45px;
-  }
-
-  .info-date,
-  .info-name{
-    font-size:17px;
-  }
-
-  .info-separator{
-    font-size:16px;
-  }
-
-  .summary-title{
-    height:21px;
-  }
-
-  .summary-head,
-  .summary-row{
-    height:21px;
-  }
-
-  .summary-value,
-  .summary-label,
-  .del-input{
-    font-size:10px;
-  }
-
-  .customer-header{
-    height:20px;
-  }
-
-  .customer-row{
-    height:20px;
-  }
-
-  .name-input,
-  .qty-input,
-  .amount-value{
-    font-size:10px;
-  }
-
-  .total-row{
-    height:22px;
-  }
-}
-
-/* =========================
-   VERY SHORT SCREENS
-========================= */
-
-@media(max-height:650px){
-
-  .info-bar{
     height:40px;
   }
 
@@ -505,37 +446,99 @@ th,td{
 
   .summary-title{
     height:18px;
-    font-size:10px;
   }
 
   .summary-head,
   .summary-row{
-    height:19px;
-  }
-
-  .summary-value,
-  .summary-label,
-  .del-input{
-    font-size:9px;
+    height:18px;
   }
 
   .customer-header{
-    height:18px;
+    height:17px;
   }
 
   .customer-row{
-    height:18px;
+    height:17px;
   }
 
   .name-input,
-  .qty-input,
+  .qty-input{
+    height:16px;
+    font-size:8px;
+  }
+
   .amount-value{
-    height:17px;
-    font-size:9px;
+    font-size:8px;
   }
 
   .total-row{
-    height:20px;
+    height:18px;
+  }
+}
+
+/* =========================
+   SHORT SCREEN
+========================= */
+
+@media(max-height:650px){
+
+  .app{
+    padding:1px;
+  }
+
+  .info-bar{
+    height:36px;
+    margin-bottom:1px;
+  }
+
+  .info-date,
+  .info-name{
+    font-size:15px;
+  }
+
+  .info-separator{
+    font-size:14px;
+  }
+
+  .summary-title{
+    height:16px;
+    font-size:8px;
+  }
+
+  .summary-head,
+  .summary-row{
+    height:16px;
+    font-size:8px;
+  }
+
+  .del-input{
+    height:14px;
+    font-size:8px;
+  }
+
+  .customer-header{
+    height:16px;
+    font-size:8px;
+  }
+
+  .customer-row{
+    height:16px;
+    font-size:8px;
+  }
+
+  .name-input,
+  .qty-input{
+    height:14px;
+    font-size:8px;
+  }
+
+  .amount-value{
+    font-size:8px;
+  }
+
+  .total-row{
+    height:17px;
+    font-size:8px;
   }
 }
 </style>
@@ -556,6 +559,7 @@ th,td{
   <div class="table-wrap">
 
     <table>
+
       <colgroup>
         <col style="width:18%">
         <col style="width:16.4%">
@@ -566,8 +570,11 @@ th,td{
       </colgroup>
 
       <thead>
+
         <tr>
-          <th colspan="6" class="summary-title">SUMMARY</th>
+          <th colspan="6" class="summary-title">
+            SUMMARY
+          </th>
         </tr>
 
         <tr class="summary-head">
@@ -578,58 +585,99 @@ th,td{
           <th>M</th>
           <th>C</th>
         </tr>
+
       </thead>
 
       <tbody>
 
         <tr class="summary-row del-row">
-          <td class="summary-label">DEL</td>
 
-          <td>
-            <input id="delR" class="del-input" type="number" inputmode="decimal">
+          <td class="summary-label">
+            DEL
           </td>
 
           <td>
-            <input id="delP" class="del-input" type="number" inputmode="decimal">
+            <input
+              id="delR"
+              class="del-input"
+              type="number"
+              inputmode="decimal"
+            >
           </td>
 
           <td>
-            <input id="delL" class="del-input" type="number" inputmode="decimal">
+            <input
+              id="delP"
+              class="del-input"
+              type="number"
+              inputmode="decimal"
+            >
           </td>
 
           <td>
-            <input id="delM" class="del-input" type="number" inputmode="decimal">
+            <input
+              id="delL"
+              class="del-input"
+              type="number"
+              inputmode="decimal"
+            >
           </td>
 
           <td>
-            <input id="delC" class="del-input" type="number" inputmode="decimal">
+            <input
+              id="delM"
+              class="del-input"
+              type="number"
+              inputmode="decimal"
+            >
           </td>
+
+          <td>
+            <input
+              id="delC"
+              class="del-input"
+              type="number"
+              inputmode="decimal"
+            >
+          </td>
+
         </tr>
 
         <tr class="summary-row sales-row">
-          <td class="summary-label">SALES</td>
+
+          <td class="summary-label">
+            SALES
+          </td>
+
           <td id="salesR">0</td>
           <td id="salesP">0</td>
           <td id="salesL">0</td>
           <td id="salesM">0</td>
           <td id="salesC">0</td>
+
         </tr>
 
         <tr class="summary-row ret-row">
-          <td class="summary-label">RET</td>
+
+          <td class="summary-label">
+            RET
+          </td>
+
           <td id="retR">0</td>
           <td id="retP">0</td>
           <td id="retL">0</td>
           <td id="retM">0</td>
           <td id="retC">0</td>
+
         </tr>
 
       </tbody>
+
     </table>
 
   </div>
 
-  <!-- CUSTOMER LIST -->
+  <!-- CUSTOMER TABLE -->
   <div class="customer-wrap">
 
     <table class="customer-table">
@@ -645,28 +693,36 @@ th,td{
       </colgroup>
 
       <thead>
+
         <tr class="customer-header">
 
-          <!-- 5 TAP KEY ICON -->
-          <th id="nameHeader" title="5 taps to open settings">🔑</th>
+          <th
+            id="nameHeader"
+            title="5 taps to open multiplier settings"
+          >
+            🔑
+          </th>
 
           <th>R</th>
           <th>P</th>
           <th>L</th>
           <th>M</th>
           <th>C</th>
-
           <th>Amount</th>
 
         </tr>
+
       </thead>
 
       <tbody id="customerBody"></tbody>
 
       <tfoot>
+
         <tr class="total-row">
 
-          <td class="total-label">TOTAL</td>
+          <td class="total-label">
+            TOTAL
+          </td>
 
           <td id="totalR">0</td>
           <td id="totalP">0</td>
@@ -677,6 +733,7 @@ th,td{
           <td id="totalAmount">0</td>
 
         </tr>
+
       </tfoot>
 
     </table>
@@ -694,30 +751,48 @@ th,td{
 
   <div class="modal-box">
 
-    <div class="modal-title">Start Ledger</div>
+    <div class="modal-title">
+      Start Ledger
+    </div>
 
     <div class="modal-field">
-      <label for="ledgerDate">DATE</label>
+
+      <label for="ledgerDate">
+        DATE
+      </label>
+
       <input
         type="date"
         id="ledgerDate"
         autocomplete="off"
       >
+
     </div>
 
     <div class="modal-field">
-      <label for="ledgerName">NAME</label>
+
+      <label for="ledgerName">
+        NAME
+      </label>
+
       <input
         type="text"
         id="ledgerName"
         autocomplete="off"
         placeholder="Enter name"
       >
+
     </div>
 
-    <div class="setup-error" id="setupError"></div>
+    <div
+      class="setup-error"
+      id="setupError"
+    ></div>
 
-    <button class="modal-btn" id="openLedgerBtn">
+    <button
+      class="modal-btn"
+      id="openLedgerBtn"
+    >
       OPEN LEDGER
     </button>
 
@@ -730,37 +805,62 @@ th,td{
      MULTIPLIER MODAL
 ========================= -->
 
-<div class="modal hidden" id="multiplierModal">
+<div
+  class="modal hidden"
+  id="multiplierModal"
+>
 
   <div class="modal-box">
 
-    <div class="modal-title">Edit Multipliers</div>
+    <div class="modal-title">
+      Edit Multipliers
+    </div>
 
     <div class="multiplier-grid">
 
       <div class="multiplier-item">
         <label>R</label>
-        <input id="multR" type="number" inputmode="decimal">
+        <input
+          id="multR"
+          type="number"
+          inputmode="decimal"
+        >
       </div>
 
       <div class="multiplier-item">
         <label>P</label>
-        <input id="multP" type="number" inputmode="decimal">
+        <input
+          id="multP"
+          type="number"
+          inputmode="decimal"
+        >
       </div>
 
       <div class="multiplier-item">
         <label>L</label>
-        <input id="multL" type="number" inputmode="decimal">
+        <input
+          id="multL"
+          type="number"
+          inputmode="decimal"
+        >
       </div>
 
       <div class="multiplier-item">
         <label>M</label>
-        <input id="multM" type="number" inputmode="decimal">
+        <input
+          id="multM"
+          type="number"
+          inputmode="decimal"
+        >
       </div>
 
       <div class="multiplier-item">
         <label>C</label>
-        <input id="multC" type="number" inputmode="decimal">
+        <input
+          id="multC"
+          type="number"
+          inputmode="decimal"
+        >
       </div>
 
     </div>
@@ -790,38 +890,43 @@ th,td{
 
 <script>
 
-/* =====================================================
+/* =========================
    SERVICE WORKER
-===================================================== */
+========================= */
 
-if ('serviceWorker' in navigator) {
+if('serviceWorker' in navigator){
 
-  window.addEventListener('load', () => {
+  window.addEventListener(
+    'load',
+    () => {
 
-    navigator.serviceWorker.register(
-      './sw.js?v=1',
-      {scope:'./'}
-    )
-
-    .then(reg => {
-      console.log('Service Worker Registered!');
-    })
-
-    .catch(err => {
-      console.log(
-        'Service Worker Registration Failed:',
-        err
+      navigator.serviceWorker.register(
+        './sw.js?v=1',
+        {scope:'./'}
+      )
+      .then(
+        reg =>
+          console.log(
+            'Service Worker Registered!'
+          )
+      )
+      .catch(
+        err =>
+          console.log(
+            'Service Worker Registration Failed:',
+            err
+          )
       );
-    });
 
-  });
+    }
+  );
 
 }
 
 
-/* =====================================================
-   DEFAULT MULTIPLIERS
-===================================================== */
+/* =========================
+   MULTIPLIERS
+========================= */
 
 const DEFAULT_MULTIPLIERS = {
   R:45,
@@ -833,59 +938,83 @@ const DEFAULT_MULTIPLIERS = {
 
 let multipliers =
   JSON.parse(
-    localStorage.getItem("rplmc_multipliers")
+    localStorage.getItem(
+      "rplmc_multipliers"
+    )
   ) || {...DEFAULT_MULTIPLIERS};
 
 
-/* =====================================================
+/* =========================
    ELEMENTS
-===================================================== */
+========================= */
 
 const setupModal =
-  document.getElementById("setupModal");
+  document.getElementById(
+    "setupModal"
+  );
 
 const setupError =
-  document.getElementById("setupError");
+  document.getElementById(
+    "setupError"
+  );
 
 const ledgerDate =
-  document.getElementById("ledgerDate");
+  document.getElementById(
+    "ledgerDate"
+  );
 
 const ledgerName =
-  document.getElementById("ledgerName");
+  document.getElementById(
+    "ledgerName"
+  );
 
 const displayDate =
-  document.getElementById("displayDate");
+  document.getElementById(
+    "displayDate"
+  );
 
 const displayName =
-  document.getElementById("displayName");
+  document.getElementById(
+    "displayName"
+  );
 
 const customerBody =
-  document.getElementById("customerBody");
+  document.getElementById(
+    "customerBody"
+  );
 
 const multiplierModal =
-  document.getElementById("multiplierModal");
+  document.getElementById(
+    "multiplierModal"
+  );
 
 const nameHeader =
-  document.getElementById("nameHeader");
+  document.getElementById(
+    "nameHeader"
+  );
 
 
-/* =====================================================
-   NUMBER HELPER
-===================================================== */
+/* =========================
+   NUMBER
+========================= */
 
 function num(value){
 
-  const n = parseFloat(value);
+  const n =
+    parseFloat(value);
 
-  return Number.isFinite(n) ? n : 0;
+  return Number.isFinite(n)
+    ? n
+    : 0;
 
 }
 
 
-/* =====================================================
+/* =========================
    AMOUNT FORMAT
-   Removes unnecessary .00
-===================================================== */
+   45.00 -> 45
+   45.50 -> 45.5
+========================= */
 
 function formatAmount(value){
 
@@ -906,34 +1035,9 @@ function formatAmount(value){
 }
 
 
-/* =====================================================
-   TODAY
-===================================================== */
-
-function getToday(){
-
-  const d = new Date();
-
-  const y =
-    d.getFullYear();
-
-  const m =
-    String(d.getMonth()+1)
-      .padStart(2,"0");
-
-  const day =
-    String(d.getDate())
-      .padStart(2,"0");
-
-  return `${y}-${m}-${day}`;
-
-}
-
-
-/* =====================================================
-   DATE FORMAT
-   Example: Oct 5, 2026
-===================================================== */
+/* =========================
+   DATE
+========================= */
 
 function formatDate(value){
 
@@ -958,18 +1062,9 @@ function formatDate(value){
     Number(parts[2]);
 
   const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec"
+    "Jan","Feb","Mar","Apr",
+    "May","Jun","Jul","Aug",
+    "Sep","Oct","Nov","Dec"
   ];
 
   return `${months[m-1]} ${d}, ${y}`;
@@ -977,9 +1072,9 @@ function formatDate(value){
 }
 
 
-/* =====================================================
-   BUILD 19 CUSTOMER ROWS
-===================================================== */
+/* =========================
+   BUILD ROWS
+========================= */
 
 function buildRows(){
 
@@ -1044,7 +1139,9 @@ function buildRows(){
       </td>
 
       <td>
-        <span class="amount-value">0</span>
+        <span class="amount-value">
+          0
+        </span>
       </td>
 
     `;
@@ -1080,9 +1177,9 @@ function buildRows(){
 }
 
 
-/* =====================================================
+/* =========================
    CALCULATE
-===================================================== */
+========================= */
 
 function calculate(){
 
@@ -1105,27 +1202,37 @@ function calculate(){
 
     const r =
       num(
-        row.querySelector(".qty-r").value
+        row.querySelector(
+          ".qty-r"
+        ).value
       );
 
     const p =
       num(
-        row.querySelector(".qty-p").value
+        row.querySelector(
+          ".qty-p"
+        ).value
       );
 
     const l =
       num(
-        row.querySelector(".qty-l").value
+        row.querySelector(
+          ".qty-l"
+        ).value
       );
 
     const m =
       num(
-        row.querySelector(".qty-m").value
+        row.querySelector(
+          ".qty-m"
+        ).value
       );
 
     const c =
       num(
-        row.querySelector(".qty-c").value
+        row.querySelector(
+          ".qty-c"
+        ).value
       );
 
 
@@ -1292,10 +1399,9 @@ function calculate(){
 }
 
 
-/* =====================================================
+/* =========================
    START LEDGER
-   DATE + NAME MUST BOTH BE FILLED
-===================================================== */
+========================= */
 
 function startLedger(){
 
@@ -1305,15 +1411,6 @@ function startLedger(){
   const name =
     ledgerName.value.trim();
 
-
-  if(!date && !name){
-
-    setupError.textContent =
-      "Please enter Date and Name.";
-
-    return;
-
-  }
 
   if(!date){
 
@@ -1325,6 +1422,7 @@ function startLedger(){
     return;
 
   }
+
 
   if(!name){
 
@@ -1338,26 +1436,11 @@ function startLedger(){
   }
 
 
-  /* DISPLAY */
-
   displayDate.textContent =
     formatDate(date);
 
   displayName.textContent =
     name;
-
-
-  /* SAVE ONLY AFTER VALID OPEN */
-
-  localStorage.setItem(
-    "rplmc_ledger_date",
-    date
-  );
-
-  localStorage.setItem(
-    "rplmc_ledger_name",
-    name
-  );
 
 
   setupError.textContent = "";
@@ -1369,20 +1452,12 @@ function startLedger(){
 }
 
 
-/* =====================================================
-   LOAD SESSION
-   IMPORTANT:
-   START MODAL IS ALWAYS EMPTY
-===================================================== */
+/* =========================
+   INITIAL START MODAL
+   ALWAYS EMPTY
+========================= */
 
 function loadSession(){
-
-  /*
-    Do NOT prefill Date or Name.
-    User specifically requested that
-    both fields are empty whenever
-    Start Ledger opens.
-  */
 
   ledgerDate.value = "";
   ledgerName.value = "";
@@ -1399,9 +1474,9 @@ function loadSession(){
 }
 
 
-/* =====================================================
+/* =========================
    MULTIPLIER EDITOR
-===================================================== */
+========================= */
 
 function openMultiplierEditor(){
 
@@ -1438,9 +1513,9 @@ function openMultiplierEditor(){
 }
 
 
-/* =====================================================
+/* =========================
    SAVE MULTIPLIERS
-===================================================== */
+========================= */
 
 function saveMultipliers(){
 
@@ -1486,7 +1561,9 @@ function saveMultipliers(){
 
   localStorage.setItem(
     "rplmc_multipliers",
-    JSON.stringify(multipliers)
+    JSON.stringify(
+      multipliers
+    )
   );
 
 
@@ -1500,19 +1577,23 @@ function saveMultipliers(){
 }
 
 
-/* =====================================================
-   EVENTS
-===================================================== */
+/* =========================
+   OPEN BUTTON
+========================= */
 
 document
-  .getElementById("openLedgerBtn")
+  .getElementById(
+    "openLedgerBtn"
+  )
   .addEventListener(
     "click",
     startLedger
   );
 
 
-/* Enter on Name */
+/* =========================
+   ENTER ON NAME
+========================= */
 
 ledgerName.addEventListener(
   "keydown",
@@ -1526,30 +1607,28 @@ ledgerName.addEventListener(
 );
 
 
-/* Date/Name validation feedback */
+/* =========================
+   ERROR CLEAR
+========================= */
 
 ledgerDate.addEventListener(
   "input",
   () => {
-
     setupError.textContent = "";
-
   }
 );
 
 ledgerName.addEventListener(
   "input",
   () => {
-
     setupError.textContent = "";
-
   }
 );
 
 
-/* =====================================================
-   5-TAP KEY ICON
-===================================================== */
+/* =========================
+   5-TAP KEY
+========================= */
 
 let tapCount = 0;
 let tapTimer = null;
@@ -1563,11 +1642,12 @@ nameHeader.addEventListener(
     clearTimeout(tapTimer);
 
     tapTimer =
-      setTimeout(() => {
-
-        tapCount = 0;
-
-      },1000);
+      setTimeout(
+        () => {
+          tapCount = 0;
+        },
+        1000
+      );
 
 
     if(tapCount >= 5){
@@ -1584,10 +1664,9 @@ nameHeader.addEventListener(
 );
 
 
-/* =====================================================
-   CLOSE MULTIPLIER MODAL
-   TAP OUTSIDE
-===================================================== */
+/* =========================
+   CLOSE MULTIPLIER
+========================= */
 
 multiplierModal.addEventListener(
   "click",
@@ -1605,10 +1684,14 @@ multiplierModal.addEventListener(
 );
 
 
-/* CANCEL */
+/* =========================
+   CANCEL
+========================= */
 
 document
-  .getElementById("cancelMultiplier")
+  .getElementById(
+    "cancelMultiplier"
+  )
   .addEventListener(
     "click",
     () => {
@@ -1621,19 +1704,23 @@ document
   );
 
 
-/* SAVE */
+/* =========================
+   SAVE
+========================= */
 
 document
-  .getElementById("saveMultiplier")
+  .getElementById(
+    "saveMultiplier"
+  )
   .addEventListener(
     "click",
     saveMultipliers
   );
 
 
-/* =====================================================
-   DEL INPUT EVENTS
-===================================================== */
+/* =========================
+   DEL INPUTS
+========================= */
 
 [
   "delR",
@@ -1653,9 +1740,9 @@ document
 });
 
 
-/* =====================================================
+/* =========================
    INITIALIZE
-===================================================== */
+========================= */
 
 buildRows();
 
