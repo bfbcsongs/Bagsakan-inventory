@@ -296,32 +296,6 @@ th,td{
 }
 
 /* =========================
-   ACTIVE CUSTOMER ROW
-========================= */
-
-.customer-row.active-row td{
-  background:#fef9c3 !important;
-}
-
-.customer-row.active-row .name-input,
-.customer-row.active-row .qty-input,
-.customer-row.active-row .bayad-input{
-  background:#fef9c3;
-}
-
-.customer-row.active-row td:first-child{
-  box-shadow:inset 3px 0 0 #f59e0b;
-}
-
-.customer-row.active-row .row-number{
-  color:#b45309;
-}
-
-.customer-row.active-row .row-time{
-  color:#b45309;
-}
-
-/* =========================
    LOCKED CUSTOMER ROW
 ========================= */
 
@@ -336,8 +310,8 @@ th,td{
   background:transparent;
 }
 
-.customer-row.row-locked .row-key{
-  opacity:.45;
+.customer-row.row-locked .row-lock-btn{
+  opacity:1;
 }
 
 .customer-row.row-locked .row-time{
@@ -345,22 +319,8 @@ th,td{
   opacity:1;
 }
 
-.customer-row.row-locked.active-row td{
-  background:#f8fafc !important;
-}
-
-.customer-row.row-locked.active-row .name-input,
-.customer-row.row-locked.active-row .qty-input,
-.customer-row.row-locked.active-row .bayad-input{
-  background:#f8fafc;
-}
-
-.customer-row.row-locked.active-row td:first-child{
-  box-shadow:none;
-}
-
 /* =========================
-   ROW NUMBER + KEY + TIME
+   ROW NUMBER + LOCK + TIME
 ========================= */
 
 .name-cell{
@@ -381,13 +341,23 @@ th,td{
   font-weight:900;
 }
 
-.row-key{
-  width:12px;
+.row-lock-btn{
+  width:17px;
+  min-width:17px;
+  height:14px;
   flex-shrink:0;
+  border:0;
+  background:transparent;
+  padding:0;
+  margin:0;
   text-align:center;
-  font-size:8px;
-  line-height:1;
-  opacity:.75;
+  font-size:9px;
+  line-height:14px;
+  cursor:pointer;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:manipulation;
+  -webkit-touch-callout:none;
 }
 
 .row-time{
@@ -399,11 +369,6 @@ th,td{
   font-weight:900;
   line-height:1;
   white-space:nowrap;
-  cursor:pointer;
-  user-select:none;
-  -webkit-user-select:none;
-  touch-action:manipulation;
-  -webkit-touch-callout:none;
 }
 
 .name-input,
@@ -770,6 +735,11 @@ th,td{
   -webkit-user-select:none;
 }
 
+.readonly-mode .row-lock-btn{
+  pointer-events:none;
+  opacity:.45;
+}
+
 .readonly-mode .del-input{
   color:#166534;
 }
@@ -850,8 +820,10 @@ th,td{
     font-size:10px;
   }
 
-  .row-key{
-    font-size:8px;
+  .row-lock-btn{
+    width:17px;
+    min-width:17px;
+    font-size:9px;
   }
 
   .row-time{
@@ -943,8 +915,12 @@ th,td{
     font-size:9px;
   }
 
-  .row-key{
+  .row-lock-btn{
+    width:15px;
+    min-width:15px;
+    height:12px;
     font-size:7px;
+    line-height:12px;
   }
 
   .row-time{
@@ -1544,13 +1520,6 @@ let lastModifiedAt =
 let pendingEditId =
   null;
 
-/*
- * The currently unlocked customer row.
- * Only one row may be unlocked at a time.
- */
-let activeCustomerRow =
-  null;
-
 
 /* =========================
    NUMBER
@@ -1731,6 +1700,55 @@ function updateCustomerRowTime(row){
    ROW LOCKING
 ========================= */
 
+/*
+ * Every row has its own independent
+ * lock state.
+ *
+ * Default:
+ * unlocked = false
+ *
+ * Locked:
+ * locked = true
+ */
+
+function updateRowLockButton(row){
+
+  if(!row){
+    return;
+  }
+
+  const button =
+    row.querySelector(
+      ".row-lock-btn"
+    );
+
+  if(!button){
+    return;
+  }
+
+  const locked =
+    row.dataset.locked === "true";
+
+  button.textContent =
+    locked
+      ? "🔒"
+      : "🔓";
+
+  button.title =
+    locked
+      ? "Unlock row"
+      : "Lock row";
+
+  button.setAttribute(
+    "aria-label",
+    locked
+      ? "Unlock row"
+      : "Lock row"
+  );
+
+}
+
+
 function setRowInputState(row){
 
   if(!row){
@@ -1752,6 +1770,10 @@ function setRowInputState(row){
     }
   );
 
+  updateRowLockButton(
+    row
+  );
+
 }
 
 
@@ -1768,10 +1790,6 @@ function lockCustomerRow(row){
     "row-locked"
   );
 
-  row.classList.remove(
-    "active-row"
-  );
-
   setRowInputState(
     row
   );
@@ -1779,12 +1797,6 @@ function lockCustomerRow(row){
 }
 
 
-/*
- * Unlock the requested row.
- *
- * This function ALWAYS locks the previous
- * active row first, then unlocks the new row.
- */
 function unlockCustomerRow(row){
 
   if(
@@ -1794,28 +1806,6 @@ function unlockCustomerRow(row){
     return;
   }
 
-
-  /*
-   * If another row is active,
-   * lock it completely.
-   */
-  if(
-    activeCustomerRow &&
-    activeCustomerRow !== row
-  ){
-
-    lockCustomerRow(
-      activeCustomerRow
-    );
-
-  }
-
-
-  /*
-   * Explicitly unlock the requested row.
-   * This works even when the row was
-   * previously locked.
-   */
   row.dataset.locked =
     "false";
 
@@ -1823,30 +1813,54 @@ function unlockCustomerRow(row){
     "row-locked"
   );
 
-  row.classList.remove(
-    "active-row"
-  );
-
   setRowInputState(
     row
   );
 
-
-  activeCustomerRow =
-    row;
+}
 
 
-  row.classList.add(
-    "active-row"
-  );
+function toggleCustomerRowLock(row){
 
+  if(
+    !row ||
+    readonlyMode
+  ){
+    return;
+  }
+
+  const locked =
+    row.dataset.locked === "true";
+
+  if(locked){
+
+    unlockCustomerRow(
+      row
+    );
+
+  }else{
+
+    lockCustomerRow(
+      row
+    );
+
+  }
+
+  /*
+   * Lock/unlock is a current-session
+   * UI state and is intentionally not
+   * stored inside the ledger data.
+   *
+   * This means every newly opened
+   * editable ledger starts unlocked.
+   */
 }
 
 
 /*
  * Lock every customer row.
  *
- * Used for read-only previews.
+ * Used only for read-only previews.
  */
 function lockAllCustomerRows(){
 
@@ -1860,25 +1874,16 @@ function lockAllCustomerRows(){
         row.dataset.locked =
           "true";
 
-        lockCustomerRow(
-          row
+        row.classList.add(
+          "row-locked"
         );
 
-        row.dataset.timeTapCount =
-          "0";
-
-        row.dataset.lastTimeTap =
-          "0";
-
-        clearTimeout(
-          row._timeTapTimer
+        setRowInputState(
+          row
         );
 
       }
     );
-
-  activeCustomerRow =
-    null;
 
 }
 
@@ -1886,7 +1891,7 @@ function lockAllCustomerRows(){
 /*
  * Prepare rows for an editable ledger.
  *
- * All rows begin unlocked but inactive.
+ * Every row ALWAYS starts unlocked.
  */
 function prepareRowsForEditing(){
 
@@ -1900,22 +1905,8 @@ function prepareRowsForEditing(){
         row.dataset.locked =
           "false";
 
-        row.dataset.timeTapCount =
-          "0";
-
-        row.dataset.lastTimeTap =
-          "0";
-
-        clearTimeout(
-          row._timeTapTimer
-        );
-
         row.classList.remove(
           "row-locked"
-        );
-
-        row.classList.remove(
-          "active-row"
         );
 
         setRowInputState(
@@ -1924,193 +1915,6 @@ function prepareRowsForEditing(){
 
       }
     );
-
-  activeCustomerRow =
-    null;
-
-}
-
-
-/* =========================
-   FIVE-TAP ROW UNLOCK
-========================= */
-
-/*
- * Five taps on ANY row timestamp
- * unlock that specific row.
- *
- * IMPORTANT:
- *
- * This does NOT care whether the row
- * is currently locked or unlocked.
- *
- * Therefore:
- *
- * Row 1 active
- * -> Row 2 selected
- * -> Row 1 locked
- * -> five taps Row 1 time
- * -> Row 1 unlocks
- *
- * Then:
- *
- * Row 1 active
- * -> five taps Row 2 time
- * -> Row 2 unlocks
- *
- * This can be repeated indefinitely.
- */
-function handleRowTimeTap(row){
-
-  if(
-    !row ||
-    readonlyMode
-  ){
-    return false;
-  }
-
-
-  const now =
-    Date.now();
-
-
-  const lastTap =
-    Number(
-      row.dataset.lastTimeTap || 0
-    );
-
-
-  /*
-   * Start a fresh sequence if more than
-   * 1.5 seconds passed since the previous tap.
-   */
-  if(
-    !lastTap ||
-    now - lastTap > 1500
-  ){
-
-    row.dataset.timeTapCount =
-      "0";
-
-  }
-
-
-  let count =
-    Number(
-      row.dataset.timeTapCount || 0
-    );
-
-
-  count++;
-
-
-  row.dataset.timeTapCount =
-    String(count);
-
-  row.dataset.lastTimeTap =
-    String(now);
-
-
-  clearTimeout(
-    row._timeTapTimer
-  );
-
-
-  row._timeTapTimer =
-    setTimeout(
-      () => {
-
-        row.dataset.timeTapCount =
-          "0";
-
-        row.dataset.lastTimeTap =
-          "0";
-
-      },
-      1500
-    );
-
-
-  /*
-   * FIVE TAPS COMPLETE.
-   */
-  if(
-    count >= 5
-  ){
-
-    row.dataset.timeTapCount =
-      "0";
-
-    row.dataset.lastTimeTap =
-      "0";
-
-
-    clearTimeout(
-      row._timeTapTimer
-    );
-
-
-    /*
-     * This explicitly unlocks the
-     * tapped row, even if locked.
-     *
-     * It also locks whichever row
-     * was previously active.
-     */
-    unlockCustomerRow(
-      row
-    );
-
-
-    /*
-     * Focus the Name field after unlock.
-     */
-    const nameInput =
-      row.querySelector(
-        ".name-input"
-      );
-
-
-    if(nameInput){
-
-      requestAnimationFrame(
-        () => {
-
-          if(
-            !readonlyMode &&
-            row.dataset.locked !== "true"
-          ){
-
-            nameInput.focus();
-
-            try{
-
-              const length =
-                nameInput.value.length;
-
-              nameInput.setSelectionRange(
-                length,
-                length
-              );
-
-            }catch(e){}
-
-          }
-
-        }
-      );
-
-    }
-
-
-    saveCurrentDraft();
-
-    return true;
-
-  }
-
-
-  return false;
 
 }
 
@@ -2323,12 +2127,9 @@ function buildRows(){
     tr.dataset.modifiedAt =
       "";
 
-    tr.dataset.timeTapCount =
-      "0";
-
-    tr.dataset.lastTimeTap =
-      "0";
-
+    /*
+     * Every row starts UNLOCKED.
+     */
     tr.dataset.locked =
       "false";
 
@@ -2343,20 +2144,16 @@ function buildRows(){
             ${i}.
           </span>
 
-          <span
-            class="row-key"
-            aria-label="Customer row key"
+          <button
+            type="button"
+            class="row-lock-btn"
+            title="Lock row"
+            aria-label="Lock row"
           >
-            🔑
-          </span>
+            🔓
+          </button>
 
-          <span
-            class="row-time"
-            role="button"
-            tabindex="0"
-            title="5 taps to unlock this row"
-            aria-label="Five taps to unlock this row"
-          ></span>
+          <span class="row-time"></span>
 
           <input
             class="name-input"
@@ -2465,17 +2262,6 @@ function buildRows(){
             ){
 
               return;
-
-            }
-
-
-            if(
-              activeCustomerRow !== row
-            ){
-
-              unlockCustomerRow(
-                row
-              );
 
             }
 
@@ -2907,26 +2693,18 @@ function applyLedger(data){
           : "";
 
 
-      row.dataset.timeTapCount =
-        "0";
-
-      row.dataset.lastTimeTap =
-        "0";
-
-      clearTimeout(
-        row._timeTapTimer
-      );
-
-
+      /*
+       * Lock state is never restored
+       * from saved data.
+       *
+       * Editable ledgers always begin
+       * with every row unlocked.
+       */
       row.dataset.locked =
         "false";
 
       row.classList.remove(
         "row-locked"
-      );
-
-      row.classList.remove(
-        "active-row"
       );
 
 
@@ -2945,6 +2723,10 @@ function applyLedger(data){
             : "";
 
       }
+
+      setRowInputState(
+        row
+      );
 
     }
   );
@@ -3026,19 +2808,8 @@ function clearLedgerValues(){
         row.dataset.modifiedAt =
           "";
 
-        row.dataset.timeTapCount =
-          "0";
-
-        row.dataset.lastTimeTap =
-          "0";
-
         row.dataset.locked =
           "false";
-
-
-        clearTimeout(
-          row._timeTapTimer
-        );
 
 
         const timeEl =
@@ -4032,9 +3803,6 @@ function returnToCurrent(){
     selectedSavedId =
       null;
 
-    activeCustomerRow =
-      null;
-
   }
 
 
@@ -4408,39 +4176,37 @@ function hasLedgerData(data){
 
 
 /* =========================
-   CUSTOMER ROW TIME TOUCH
+   ROW LOCK BUTTON
 ========================= */
 
 /*
- * IMPORTANT FIX:
+ * Simple per-row lock/unlock.
  *
- * The timestamp uses pointerup instead
- * of pointerdown.
+ * There is NO automatic row switching.
  *
- * The browser-generated click is blocked
- * during the CAPTURE phase so it cannot
- * accidentally interfere with the normal
- * row-click handler.
+ * Row 1 can be unlocked.
+ * Row 2 can also be unlocked.
+ * Row 3 can be locked.
  *
- * This makes five-tap unlocking reliable
- * on Android touch screens.
+ * Every row is independent.
  */
+
 customerBody.addEventListener(
-  "pointerup",
+  "click",
   e => {
 
-    const timeEl =
+    const button =
       e.target.closest(
-        ".row-time"
+        ".row-lock-btn"
       );
 
-    if(!timeEl){
+    if(!button){
       return;
     }
 
 
     const row =
-      timeEl.closest(
+      button.closest(
         ".customer-row"
       );
 
@@ -4456,62 +4222,29 @@ customerBody.addEventListener(
     e.stopPropagation();
 
 
-    handleRowTimeTap(
+    toggleCustomerRowLock(
       row
     );
 
-  },
-  {
-    passive:false
   }
 );
 
 
 /*
- * Block the click generated by a touch
- * on the timestamp BEFORE it reaches the
- * normal customer-row click handler.
- *
- * CAPTURE = true
- */
-customerBody.addEventListener(
-  "click",
-  e => {
-
-    const timeEl =
-      e.target.closest(
-        ".row-time"
-      );
-
-    if(!timeEl){
-      return;
-    }
-
-
-    e.preventDefault();
-    e.stopPropagation();
-
-  },
-  true
-);
-
-
-/*
- * Keyboard accessibility.
- *
- * Enter or Space counts as one tap.
+ * Allow Enter / Space to operate
+ * the row lock button as well.
  */
 customerBody.addEventListener(
   "keydown",
   e => {
 
-    const timeEl =
+    const button =
       e.target.closest(
-        ".row-time"
+        ".row-lock-btn"
       );
 
     if(
-      !timeEl ||
+      !button ||
       readonlyMode
     ){
       return;
@@ -4526,22 +4259,23 @@ customerBody.addEventListener(
     }
 
 
+    const row =
+      button.closest(
+        ".customer-row"
+      );
+
+    if(!row){
+      return;
+    }
+
+
     e.preventDefault();
     e.stopPropagation();
 
 
-    const row =
-      timeEl.closest(
-        ".customer-row"
-      );
-
-    if(row){
-
-      handleRowTimeTap(
-        row
-      );
-
-    }
+    toggleCustomerRowLock(
+      row
+    );
 
   }
 );
@@ -4551,159 +4285,23 @@ customerBody.addEventListener(
    CUSTOMER ROW INTERACTION
 ========================= */
 
+/*
+ * Ordinary taps on a row do NOTHING.
+ *
+ * The row is controlled only by its
+ * own lock/unlock button.
+ */
 customerBody.addEventListener(
   "click",
   e => {
 
-    /*
-     * Timestamp clicks are already
-     * handled separately.
-     */
     if(
       e.target.closest(
-        ".row-time"
+        ".row-lock-btn"
       )
     ){
 
       return;
-
-    }
-
-
-    const row =
-      e.target.closest(
-        ".customer-row"
-      );
-
-
-    if(!row){
-      return;
-    }
-
-
-    if(readonlyMode){
-      return;
-    }
-
-
-    /*
-     * A locked row cannot be opened
-     * by ordinary tapping.
-     *
-     * It requires five taps on its
-     * timestamp.
-     */
-    if(
-      row.dataset.locked === "true"
-    ){
-
-      return;
-
-    }
-
-
-    /*
-     * Selecting another unlocked row
-     * automatically locks the previous
-     * active row.
-     */
-    unlockCustomerRow(
-      row
-    );
-
-  }
-);
-
-
-/* =========================
-   CUSTOMER ROW FOCUS
-========================= */
-
-customerBody.addEventListener(
-  "focusin",
-  e => {
-
-    const input =
-      e.target.closest(
-        ".name-input, .qty-input, .bayad-input"
-      );
-
-    if(
-      !input ||
-      readonlyMode
-    ){
-
-      return;
-
-    }
-
-
-    const row =
-      input.closest(
-        ".customer-row"
-      );
-
-    if(!row){
-      return;
-    }
-
-
-    /*
-     * Locked rows cannot be reopened
-     * by focus.
-     */
-    if(
-      row.dataset.locked === "true"
-    ){
-
-      input.blur();
-
-      return;
-
-    }
-
-
-    if(
-      activeCustomerRow !== row
-    ){
-
-      unlockCustomerRow(
-        row
-      );
-
-    }
-
-  }
-);
-
-
-/* =========================
-   OUTSIDE CUSTOMER ROW
-========================= */
-
-document.addEventListener(
-  "click",
-  e => {
-
-    if(
-      !e.target.closest(
-        ".customer-row"
-      )
-    ){
-
-      document
-        .querySelectorAll(
-          ".customer-row"
-        )
-        .forEach(
-          r => {
-
-            r.classList.remove(
-              "active-row"
-            );
-
-          }
-        );
 
     }
 
