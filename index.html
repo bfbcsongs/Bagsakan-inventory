@@ -164,25 +164,25 @@ th,td{
 }
 
 .summary-title{
-  height:23px;
+  height:28px;
   background:#111827;
   color:#fff;
-  font-size:12px;
+  font-size:14px;
   font-weight:900;
   letter-spacing:.4px;
 }
 
 .summary-head{
-  height:22px;
+  height:29px;
   background:#e2e8f0;
   color:#111827;
-  font-size:11px;
+  font-size:13px;
   font-weight:900;
 }
 
 .summary-row{
-  height:22px;
-  font-size:11px;
+  height:34px;
+  font-size:14px;
   font-weight:900;
 }
 
@@ -213,13 +213,13 @@ th,td{
 
 .del-input{
   width:100%;
-  height:20px;
+  height:30px;
   border:0;
   outline:none;
   background:transparent;
   text-align:center;
   font-weight:900;
-  font-size:15px;
+  font-size:17px;
   color:#166534;
   padding:0;
 }
@@ -229,10 +229,12 @@ th,td{
 ========================= */
 
 .customer-wrap{
-  flex:1 1 0;
-  min-height:0;
-  height:0;
-  overflow:hidden;
+  flex:0 0 220px;
+  height:220px;
+  min-height:220px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
   background:#fff;
   border:1px solid #cbd5e1;
   border-radius:4px;
@@ -241,7 +243,7 @@ th,td{
 
 .customer-table{
   width:100%;
-  height:100%;
+  height:auto;
   border-collapse:collapse;
   table-layout:fixed;
 }
@@ -272,6 +274,9 @@ th,td{
   color:#fff;
   font-size:9px;
   font-weight:900;
+  position:sticky;
+  top:0;
+  z-index:5;
 }
 
 .customer-header th{
@@ -359,7 +364,7 @@ th,td{
   max-width:15px;
   height:12px;
 
-  flex:0 0 30px;
+  flex:0 0 15px;
 
   padding:0;
   margin:0;
@@ -399,12 +404,6 @@ th,td{
   margin:0;
 }
 
-.name-input{
-  flex:1 1 auto;
-  min-width:0;
-  width:0;
-}
-
 /* TIME RECORD
    Slightly wider and centered so AM/PM
    will not be clipped on the right edge.
@@ -420,6 +419,12 @@ th,td{
   line-height:1;
   white-space:nowrap;
   padding:0 6px;
+}
+
+.name-input{
+  flex:1 1 auto;
+  min-width:0;
+  width:0;
 }
 
 .name-input,
@@ -488,6 +493,9 @@ th,td{
   color:#fff;
   font-size:11px;
   font-weight:900;
+  position:sticky;
+  bottom:0;
+  z-index:4;
 }
 
 .total-row td{
@@ -826,24 +834,25 @@ th,td{
     margin-right:7px;
   }
 
+  /* SUMMARY - KEPT LARGE ON MOBILE */
   .summary-title{
-    height:22px;
-    font-size:11px;
+    height:28px;
+    font-size:13px;
   }
 
   .summary-head{
-    height:21px;
-    font-size:10px;
+    height:29px;
+    font-size:13px;
   }
 
   .summary-row{
-    height:21px;
-    font-size:10px;
+    height:34px;
+    font-size:14px;
   }
 
   .del-input{
-    height:25px;
-    font-size:15px;
+    height:30px;
+    font-size:17px;
   }
 
   .customer-header{
@@ -868,35 +877,35 @@ th,td{
   }
 
   .row-number{
-  width:auto;
-  min-width:0;
-  font-size:9px;
-  padding:0;
-}
+    width:auto;
+    min-width:0;
+    font-size:9px;
+    padding:0;
+  }
 
-.row-lock-btn{
-  width:15px;
-  min-width:15px;
-  max-width:15px;
-  flex:0 0 15px;
-  height:12px;
-  font-size:7px;
-  line-height:12px;
-  padding:0;
-  margin:0;
-}
+  .row-lock-btn{
+    width:15px;
+    min-width:15px;
+    max-width:15px;
+    flex:0 0 15px;
+    height:12px;
+    font-size:7px;
+    line-height:12px;
+    padding:0;
+    margin:0;
+  }
 
-.row-time{
-  width:auto;
-  min-width:0;
-  max-width:max-content;
-  flex:0 0 auto;
-  font-size:10px;
-  padding:0;
-  margin:0;
-  text-align:left;
-  white-space:nowrap;
-}
+  .row-time{
+    width:auto;
+    min-width:0;
+    max-width:max-content;
+    flex:0 0 auto;
+    font-size:10px;
+    padding:0;
+    margin:0;
+    text-align:left;
+    white-space:nowrap;
+  }
 
   .total-row{
     height:23px;
@@ -909,6 +918,10 @@ th,td{
   }
 
 }
+
+/* =========================
+   SHORT SCREEN
+========================= */
 
 @media(max-height:1000px){
 
@@ -940,20 +953,25 @@ th,td{
     margin-right:6px;
   }
 
+  /* SUMMARY - DO NOT SHRINK */
   .summary-title{
-    height:18px;
-    font-size:9px;
+    height:28px;
+    font-size:13px;
   }
 
-  .summary-head,
+  .summary-head{
+    height:29px;
+    font-size:13px;
+  }
+
   .summary-row{
-    height:17px;
-    font-size:8px;
+    height:34px;
+    font-size:14px;
   }
 
   .del-input{
-    height:15px;
-    font-size:8px;
+    height:30px;
+    font-size:17px;
   }
 
   .customer-header{
@@ -979,20 +997,20 @@ th,td{
   }
 
   .row-number{
-  width:auto;
-  font-size:9px;
-  padding-right:0;
-}
+    width:auto;
+    font-size:9px;
+    padding-right:0;
+  }
 
-.row-time{
-  width:auto;
-  min-width:0;
-  font-size:10px;
-  padding:0;
-  margin:0;
-  white-space:nowrap;
-  text-align:left;
-}
+  .row-time{
+    width:auto;
+    min-width:0;
+    font-size:10px;
+    padding:0;
+    margin:0;
+    white-space:nowrap;
+    text-align:left;
+  }
 
   .total-row{
     height:20px;
@@ -2307,7 +2325,7 @@ function buildRows(){
 
   for(
     let i = 1;
-    i <= 19;
+    i <= 30;
     i++
   ){
 
