@@ -296,8 +296,16 @@ th,td{
 }
 
 /* =========================
-   LOCKED CUSTOMER ROW
+   ACTIVE / LOCKED CUSTOMER ROW
 ========================= */
+
+.customer-row.row-active{
+  background:#eff6ff !important;
+}
+
+.customer-row.row-active td{
+  border-color:#93c5fd;
+}
 
 .customer-row.row-locked{
   opacity:.82;
@@ -1519,6 +1527,17 @@ let lastModifiedAt =
 let pendingEditId =
   null;
 
+/*
+ * NEW:
+ * Keeps track of the currently active
+ * customer row.
+ *
+ * Only one customer row is allowed
+ * to remain editable at a time.
+ */
+let activeCustomerRow =
+  null;
+
 
 /* =========================
    NUMBER
@@ -1696,7 +1715,144 @@ function updateCustomerRowTime(row){
 
 
 /* =========================
-   ROW LOCKING
+   ACTIVE CUSTOMER ROW
+========================= */
+
+/*
+ * Makes one row the active editable row.
+ *
+ * The previously active row is locked.
+ * All other rows are also locked so there
+ * can only be one editable customer row.
+ */
+
+function activateCustomerRow(row){
+
+  if(
+    !row ||
+    readonlyMode
+  ){
+    return;
+  }
+
+
+  /*
+   * If the row is already active,
+   * simply make sure its state is correct.
+   */
+
+  if(
+    activeCustomerRow === row
+  ){
+
+    setRowLocked(
+      row,
+      false
+    );
+
+    row.classList.add(
+      "row-active"
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * Lock the previously active row.
+   */
+
+  if(
+    activeCustomerRow &&
+    activeCustomerRow !== row
+  ){
+
+    setRowLocked(
+      activeCustomerRow,
+      true
+    );
+
+  }
+
+
+  /*
+   * Lock every other row.
+   *
+   * This also handles situations where
+   * a row was manually unlocked.
+   */
+
+  document
+    .querySelectorAll(
+      ".customer-row"
+    )
+    .forEach(
+      otherRow => {
+
+        if(
+          otherRow !== row
+        ){
+
+          setRowLocked(
+            otherRow,
+            true
+          );
+
+          otherRow.classList.remove(
+            "row-active"
+          );
+
+        }
+
+      }
+    );
+
+
+  /*
+   * Activate the selected row.
+   */
+
+  activeCustomerRow =
+    row;
+
+  setRowLocked(
+    row,
+    false
+  );
+
+  row.classList.add(
+    "row-active"
+  );
+
+
+  saveCurrentDraft();
+
+}
+
+
+/* =========================
+   CLEAR ACTIVE CUSTOMER ROW
+========================= */
+
+function clearActiveCustomerRow(){
+
+  if(activeCustomerRow){
+
+    activeCustomerRow.classList.remove(
+      "row-active"
+    );
+
+  }
+
+  activeCustomerRow =
+    null;
+
+}
+
+
+/* =========================
+   UPDATE ROW LOCK BUTTON
 ========================= */
 
 function updateRowLockButton(row){
@@ -1737,6 +1893,10 @@ function updateRowLockButton(row){
 }
 
 
+/* =========================
+   SET ROW INPUT STATE
+========================= */
+
 function setRowInputState(row){
 
   if(!row){
@@ -1765,6 +1925,10 @@ function setRowInputState(row){
 }
 
 
+/* =========================
+   SET ROW LOCKED
+========================= */
+
 function setRowLocked(row, locked){
 
   if(
@@ -1782,12 +1946,33 @@ function setRowLocked(row, locked){
     locked
   );
 
+  if(locked){
+
+    row.classList.remove(
+      "row-active"
+    );
+
+    if(
+      activeCustomerRow === row
+    ){
+
+      activeCustomerRow =
+        null;
+
+    }
+
+  }
+
   setRowInputState(
     row
   );
 
 }
 
+
+/* =========================
+   TOGGLE CUSTOMER ROW LOCK
+========================= */
 
 function toggleCustomerRowLock(row){
 
@@ -1801,18 +1986,46 @@ function toggleCustomerRowLock(row){
   const locked =
     row.dataset.locked === "true";
 
-  setRowLocked(
-    row,
-    !locked
-  );
 
   /*
-   * Lock state is deliberately NOT
-   * stored in captureLedger().
-   *
-   * Therefore saved files always
-   * reopen with every row unlocked.
+   * If a locked row is manually unlocked,
+   * make it the new active row and lock
+   * everything else.
    */
+
+  if(locked){
+
+    activateCustomerRow(
+      row
+    );
+
+  }else{
+
+    /*
+     * Manually locking the active row
+     * leaves no active row.
+     */
+
+    setRowLocked(
+      row,
+      true
+    );
+
+    row.classList.remove(
+      "row-active"
+    );
+
+    if(
+      activeCustomerRow === row
+    ){
+
+      activeCustomerRow =
+        null;
+
+    }
+
+  }
+
 
   saveCurrentDraft();
 
@@ -1820,10 +2033,12 @@ function toggleCustomerRowLock(row){
 
 
 /* =========================
-   LOCK ALL ROWS
+   LOCK ALL CUSTOMER ROWS
 ========================= */
 
 function lockAllCustomerRows(){
+
+  clearActiveCustomerRow();
 
   document
     .querySelectorAll(
@@ -1834,6 +2049,10 @@ function lockAllCustomerRows(){
 
         row.dataset.locked =
           "true";
+
+        row.classList.remove(
+          "row-active"
+        );
 
         row.classList.add(
           "row-locked"
@@ -1855,6 +2074,8 @@ function lockAllCustomerRows(){
 
 function prepareRowsForEditing(){
 
+  clearActiveCustomerRow();
+
   document
     .querySelectorAll(
       ".customer-row"
@@ -1866,7 +2087,8 @@ function prepareRowsForEditing(){
           "false";
 
         row.classList.remove(
-          "row-locked"
+          "row-locked",
+          "row-active"
         );
 
         setRowInputState(
@@ -2190,12 +2412,48 @@ function buildRows(){
   }
 
 
+  /*
+   * NEW:
+   * Focusing any customer input makes
+   * that row the active row.
+   */
+
   document
     .querySelectorAll(
       ".qty-input, .name-input, .bayad-input"
     )
     .forEach(
       input => {
+
+        input.addEventListener(
+          "focus",
+          () => {
+
+            const row =
+              input.closest(
+                ".customer-row"
+              );
+
+            if(!row){
+              return;
+            }
+
+            if(
+              readonlyMode ||
+              row.dataset.locked === "true"
+            ){
+
+              return;
+
+            }
+
+            activateCustomerRow(
+              row
+            );
+
+          }
+        );
+
 
         input.addEventListener(
           "input",
@@ -2216,6 +2474,21 @@ function buildRows(){
             ){
 
               return;
+
+            }
+
+            /*
+             * Make sure the row remains
+             * the active row while editing.
+             */
+
+            if(
+              activeCustomerRow !== row
+            ){
+
+              activateCustomerRow(
+                row
+              );
 
             }
 
@@ -2567,6 +2840,9 @@ function applyLedger(data){
   }
 
 
+  clearActiveCustomerRow();
+
+
   ledgerDate.value =
     data.date || "";
 
@@ -2665,7 +2941,8 @@ function applyLedger(data){
         "false";
 
       row.classList.remove(
-        "row-locked"
+        "row-locked",
+        "row-active"
       );
 
 
@@ -3411,6 +3688,8 @@ function performSave(){
 
   temporaryCurrentEditingId =
     null;
+
+  clearActiveCustomerRow();
 
 
   document.body.classList.add(
