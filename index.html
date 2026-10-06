@@ -314,11 +314,6 @@ th,td{
   opacity:1;
 }
 
-.customer-row.row-locked .row-time{
-  color:#64748b;
-  opacity:1;
-}
-
 /* =========================
    ROW NUMBER + LOCK + TIME
 ========================= */
@@ -358,6 +353,10 @@ th,td{
   -webkit-user-select:none;
   touch-action:manipulation;
   -webkit-touch-callout:none;
+}
+
+.row-lock-btn:active{
+  transform:scale(.88);
 }
 
 .row-time{
@@ -1346,7 +1345,7 @@ if('serviceWorker' in navigator){
 
       navigator.serviceWorker
         .register(
-          './sw.js?v=4',
+          './sw.js?v=5',
           {
             scope:'./'
           }
@@ -1700,17 +1699,6 @@ function updateCustomerRowTime(row){
    ROW LOCKING
 ========================= */
 
-/*
- * Every row has its own independent
- * lock state.
- *
- * Default:
- * unlocked = false
- *
- * Locked:
- * locked = true
- */
-
 function updateRowLockButton(row){
 
   if(!row){
@@ -1777,27 +1765,7 @@ function setRowInputState(row){
 }
 
 
-function lockCustomerRow(row){
-
-  if(!row){
-    return;
-  }
-
-  row.dataset.locked =
-    "true";
-
-  row.classList.add(
-    "row-locked"
-  );
-
-  setRowInputState(
-    row
-  );
-
-}
-
-
-function unlockCustomerRow(row){
+function setRowLocked(row, locked){
 
   if(
     !row ||
@@ -1807,10 +1775,11 @@ function unlockCustomerRow(row){
   }
 
   row.dataset.locked =
-    "false";
+    locked ? "true" : "false";
 
-  row.classList.remove(
-    "row-locked"
+  row.classList.toggle(
+    "row-locked",
+    locked
   );
 
   setRowInputState(
@@ -1832,36 +1801,28 @@ function toggleCustomerRowLock(row){
   const locked =
     row.dataset.locked === "true";
 
-  if(locked){
-
-    unlockCustomerRow(
-      row
-    );
-
-  }else{
-
-    lockCustomerRow(
-      row
-    );
-
-  }
+  setRowLocked(
+    row,
+    !locked
+  );
 
   /*
-   * Lock/unlock is a current-session
-   * UI state and is intentionally not
-   * stored inside the ledger data.
+   * Lock state is deliberately NOT
+   * stored in captureLedger().
    *
-   * This means every newly opened
-   * editable ledger starts unlocked.
+   * Therefore saved files always
+   * reopen with every row unlocked.
    */
+
+  saveCurrentDraft();
+
 }
 
 
-/*
- * Lock every customer row.
- *
- * Used only for read-only previews.
- */
+/* =========================
+   LOCK ALL ROWS
+========================= */
+
 function lockAllCustomerRows(){
 
   document
@@ -1888,11 +1849,10 @@ function lockAllCustomerRows(){
 }
 
 
-/*
- * Prepare rows for an editable ledger.
- *
- * Every row ALWAYS starts unlocked.
- */
+/* =========================
+   PREPARE EDITABLE ROWS
+========================= */
+
 function prepareRowsForEditing(){
 
   document
@@ -2127,9 +2087,6 @@ function buildRows(){
     tr.dataset.modifiedAt =
       "";
 
-    /*
-     * Every row starts UNLOCKED.
-     */
     tr.dataset.locked =
       "false";
 
@@ -2149,9 +2106,7 @@ function buildRows(){
             class="row-lock-btn"
             title="Lock row"
             aria-label="Lock row"
-          >
-            🔓
-          </button>
+          >🔓</button>
 
           <span class="row-time"></span>
 
@@ -2255,7 +2210,6 @@ function buildRows(){
               return;
             }
 
-
             if(
               readonlyMode ||
               row.dataset.locked === "true"
@@ -2264,7 +2218,6 @@ function buildRows(){
               return;
 
             }
-
 
             updateCustomerRowTime(
               row
@@ -2277,6 +2230,21 @@ function buildRows(){
             touchEditedSavedFile();
 
           }
+        );
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(
+      ".customer-row"
+    )
+    .forEach(
+      row => {
+
+        setRowInputState(
+          row
         );
 
       }
@@ -2693,13 +2661,6 @@ function applyLedger(data){
           : "";
 
 
-      /*
-       * Lock state is never restored
-       * from saved data.
-       *
-       * Editable ledgers always begin
-       * with every row unlocked.
-       */
       row.dataset.locked =
         "false";
 
@@ -4179,18 +4140,6 @@ function hasLedgerData(data){
    ROW LOCK BUTTON
 ========================= */
 
-/*
- * Simple per-row lock/unlock.
- *
- * There is NO automatic row switching.
- *
- * Row 1 can be unlocked.
- * Row 2 can also be unlocked.
- * Row 3 can be locked.
- *
- * Every row is independent.
- */
-
 customerBody.addEventListener(
   "click",
   e => {
@@ -4230,10 +4179,10 @@ customerBody.addEventListener(
 );
 
 
-/*
- * Allow Enter / Space to operate
- * the row lock button as well.
- */
+/* =========================
+   ROW LOCK KEYBOARD
+========================= */
+
 customerBody.addEventListener(
   "keydown",
   e => {
@@ -4276,34 +4225,6 @@ customerBody.addEventListener(
     toggleCustomerRowLock(
       row
     );
-
-  }
-);
-
-
-/* =========================
-   CUSTOMER ROW INTERACTION
-========================= */
-
-/*
- * Ordinary taps on a row do NOTHING.
- *
- * The row is controlled only by its
- * own lock/unlock button.
- */
-customerBody.addEventListener(
-  "click",
-  e => {
-
-    if(
-      e.target.closest(
-        ".row-lock-btn"
-      )
-    ){
-
-      return;
-
-    }
 
   }
 );
