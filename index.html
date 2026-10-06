@@ -367,8 +367,13 @@ th,td{
   transform:scale(.88);
 }
 
+/* TIME RECORD
+   Slightly wider and centered so AM/PM
+   will not be clipped on the right edge.
+*/
 .row-time{
-  width:44px;
+  width:50px;
+  min-width:50px;
   flex-shrink:0;
   text-align:center;
   color:#64748b;
@@ -376,6 +381,7 @@ th,td{
   font-weight:900;
   line-height:1;
   white-space:nowrap;
+  padding:0 3px;
 }
 
 .name-input,
@@ -834,8 +840,10 @@ th,td{
   }
 
   .row-time{
-    width:44px;
+    width:50px;
+    min-width:50px;
     font-size:7px;
+    padding:0 3px;
   }
 
   .total-row{
@@ -931,8 +939,10 @@ th,td{
   }
 
   .row-time{
-    width:42px;
+    width:50px;
+    min-width:50px;
     font-size:6.5px;
+    padding:0 3px;
   }
 
   .total-row{
@@ -1718,14 +1728,6 @@ function updateCustomerRowTime(row){
    ACTIVE CUSTOMER ROW
 ========================= */
 
-/*
- * Makes one row the active editable row.
- *
- * The previously active row is locked.
- * All other rows are also locked so there
- * can only be one editable customer row.
- */
-
 function activateCustomerRow(row){
 
   if(
@@ -1734,12 +1736,6 @@ function activateCustomerRow(row){
   ){
     return;
   }
-
-
-  /*
-   * If the row is already active,
-   * simply make sure its state is correct.
-   */
 
   if(
     activeCustomerRow === row
@@ -1758,11 +1754,6 @@ function activateCustomerRow(row){
 
   }
 
-
-  /*
-   * Lock the previously active row.
-   */
-
   if(
     activeCustomerRow &&
     activeCustomerRow !== row
@@ -1774,14 +1765,6 @@ function activateCustomerRow(row){
     );
 
   }
-
-
-  /*
-   * Lock every other row.
-   *
-   * This also handles situations where
-   * a row was manually unlocked.
-   */
 
   document
     .querySelectorAll(
@@ -1808,11 +1791,6 @@ function activateCustomerRow(row){
       }
     );
 
-
-  /*
-   * Activate the selected row.
-   */
-
   activeCustomerRow =
     row;
 
@@ -1824,7 +1802,6 @@ function activateCustomerRow(row){
   row.classList.add(
     "row-active"
   );
-
 
   saveCurrentDraft();
 
@@ -1986,13 +1963,6 @@ function toggleCustomerRowLock(row){
   const locked =
     row.dataset.locked === "true";
 
-
-  /*
-   * If a locked row is manually unlocked,
-   * make it the new active row and lock
-   * everything else.
-   */
-
   if(locked){
 
     activateCustomerRow(
@@ -2000,11 +1970,6 @@ function toggleCustomerRowLock(row){
     );
 
   }else{
-
-    /*
-     * Manually locking the active row
-     * leaves no active row.
-     */
 
     setRowLocked(
       row,
@@ -2025,7 +1990,6 @@ function toggleCustomerRowLock(row){
     }
 
   }
-
 
   saveCurrentDraft();
 
@@ -2412,12 +2376,6 @@ function buildRows(){
   }
 
 
-  /*
-   * NEW:
-   * Focusing any customer input makes
-   * that row the active row.
-   */
-
   document
     .querySelectorAll(
       ".qty-input, .name-input, .bayad-input"
@@ -2476,11 +2434,6 @@ function buildRows(){
               return;
 
             }
-
-            /*
-             * Make sure the row remains
-             * the active row while editing.
-             */
 
             if(
               activeCustomerRow !== row
