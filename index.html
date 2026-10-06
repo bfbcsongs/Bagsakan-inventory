@@ -1693,15 +1693,6 @@ function formatSavedTime(timestamp){
    ROW TIME
 ========================= */
 
-/*
- * Update the visible time record
- * and immediately persist it.
- *
- * This is important because the row
- * timestamp must survive refresh,
- * preview, return-to-current and
- * closing/reopening the PWA.
- */
 function updateCustomerRowTime(row){
 
   if(
@@ -1731,10 +1722,6 @@ function updateCustomerRowTime(row){
 
   }
 
-  /*
-   * Save immediately so the exact
-   * row timestamp is not lost.
-   */
   saveCurrentDraft();
 
 }
@@ -1744,10 +1731,6 @@ function updateCustomerRowTime(row){
    ROW LOCKING
 ========================= */
 
-/*
- * Apply the correct disabled state
- * from the row's internal lock state.
- */
 function setRowInputState(row){
 
   if(!row){
@@ -1772,9 +1755,6 @@ function setRowInputState(row){
 }
 
 
-/*
- * Lock one specific row.
- */
 function lockCustomerRow(row){
 
   if(!row){
@@ -1788,6 +1768,10 @@ function lockCustomerRow(row){
     "row-locked"
   );
 
+  row.classList.remove(
+    "active-row"
+  );
+
   setRowInputState(
     row
   );
@@ -1796,10 +1780,10 @@ function lockCustomerRow(row){
 
 
 /*
- * Unlock one specific row.
+ * Unlock the requested row.
  *
- * If another row was previously active,
- * that row is automatically locked.
+ * This function ALWAYS locks the previous
+ * active row first, then unlocks the new row.
  */
 function unlockCustomerRow(row){
 
@@ -1810,8 +1794,10 @@ function unlockCustomerRow(row){
     return;
   }
 
+
   /*
-   * Lock the previously active row.
+   * If another row is active,
+   * lock it completely.
    */
   if(
     activeCustomerRow &&
@@ -1822,14 +1808,13 @@ function unlockCustomerRow(row){
       activeCustomerRow
     );
 
-    activeCustomerRow.classList.remove(
-      "active-row"
-    );
-
   }
 
+
   /*
-   * Unlock the requested row.
+   * Explicitly unlock the requested row.
+   * This works even when the row was
+   * previously locked.
    */
   row.dataset.locked =
     "false";
@@ -1838,12 +1823,18 @@ function unlockCustomerRow(row){
     "row-locked"
   );
 
+  row.classList.remove(
+    "active-row"
+  );
+
   setRowInputState(
     row
   );
 
+
   activeCustomerRow =
     row;
+
 
   row.classList.add(
     "active-row"
@@ -1873,10 +1864,6 @@ function lockAllCustomerRows(){
           row
         );
 
-        row.classList.remove(
-          "active-row"
-        );
-
         row.dataset.timeTapCount =
           "0";
 
@@ -1899,12 +1886,7 @@ function lockAllCustomerRows(){
 /*
  * Prepare rows for an editable ledger.
  *
- * All rows begin available.
- * No row is active.
- *
- * Once a row is selected:
- *   - that row unlocks
- *   - previous active row locks
+ * All rows begin unlocked but inactive.
  */
 function prepareRowsForEditing(){
 
@@ -1949,12 +1931,34 @@ function prepareRowsForEditing(){
 }
 
 
+/* =========================
+   FIVE-TAP ROW UNLOCK
+========================= */
+
 /*
- * Five reliable taps on the row's
- * timestamp unlock that row.
+ * Five taps on ANY row timestamp
+ * unlock that specific row.
  *
- * Uses a 1.5-second window so Android
- * touch timing is much more forgiving.
+ * IMPORTANT:
+ *
+ * This does NOT care whether the row
+ * is currently locked or unlocked.
+ *
+ * Therefore:
+ *
+ * Row 1 active
+ * -> Row 2 selected
+ * -> Row 1 locked
+ * -> five taps Row 1 time
+ * -> Row 1 unlocks
+ *
+ * Then:
+ *
+ * Row 1 active
+ * -> five taps Row 2 time
+ * -> Row 2 unlocks
+ *
+ * This can be repeated indefinitely.
  */
 function handleRowTimeTap(row){
 
@@ -1965,8 +1969,10 @@ function handleRowTimeTap(row){
     return false;
   }
 
+
   const now =
     Date.now();
+
 
   const lastTap =
     Number(
@@ -1975,8 +1981,8 @@ function handleRowTimeTap(row){
 
 
   /*
-   * If the previous tap was too long ago,
-   * start a new five-tap sequence.
+   * Start a fresh sequence if more than
+   * 1.5 seconds passed since the previous tap.
    */
   if(
     !lastTap ||
@@ -1994,7 +2000,9 @@ function handleRowTimeTap(row){
       row.dataset.timeTapCount || 0
     );
 
+
   count++;
+
 
   row.dataset.timeTapCount =
     String(count);
@@ -2024,7 +2032,7 @@ function handleRowTimeTap(row){
 
 
   /*
-   * Five taps completed.
+   * FIVE TAPS COMPLETE.
    */
   if(
     count >= 5
@@ -2036,14 +2044,18 @@ function handleRowTimeTap(row){
     row.dataset.lastTimeTap =
       "0";
 
+
     clearTimeout(
       row._timeTapTimer
     );
 
 
     /*
-     * This also automatically locks
-     * the previously active row.
+     * This explicitly unlocks the
+     * tapped row, even if locked.
+     *
+     * It also locks whichever row
+     * was previously active.
      */
     unlockCustomerRow(
       row
@@ -2051,32 +2063,39 @@ function handleRowTimeTap(row){
 
 
     /*
-     * Put the cursor into the customer's
-     * Name field after unlocking.
+     * Focus the Name field after unlock.
      */
     const nameInput =
       row.querySelector(
         ".name-input"
       );
 
+
     if(nameInput){
 
       requestAnimationFrame(
         () => {
 
-          nameInput.focus();
+          if(
+            !readonlyMode &&
+            row.dataset.locked !== "true"
+          ){
 
-          try{
+            nameInput.focus();
 
-            const length =
-              nameInput.value.length;
+            try{
 
-            nameInput.setSelectionRange(
-              length,
-              length
-            );
+              const length =
+                nameInput.value.length;
 
-          }catch(e){}
+              nameInput.setSelectionRange(
+                length,
+                length
+              );
+
+            }catch(e){}
+
+          }
 
         }
       );
@@ -2440,9 +2459,6 @@ function buildRows(){
             }
 
 
-            /*
-             * Locked rows cannot be edited.
-             */
             if(
               readonlyMode ||
               row.dataset.locked === "true"
@@ -2453,11 +2469,6 @@ function buildRows(){
             }
 
 
-            /*
-             * If input somehow receives focus
-             * on a different row, make that row
-             * the active one first.
-             */
             if(
               activeCustomerRow !== row
             ){
@@ -2776,11 +2787,6 @@ function captureLedger(){
               ".bayad-input"
             ).value,
 
-          /*
-           * Individual row timestamp.
-           * This is intentionally stored
-           * with the ledger data.
-           */
           modifiedAt:
             row.dataset.modifiedAt
               ? String(
@@ -2893,10 +2899,6 @@ function applyLedger(data){
         item.bayad || "";
 
 
-      /*
-       * Restore the customer's
-       * individual timestamp.
-       */
       row.dataset.modifiedAt =
         item.modifiedAt
           ? String(
@@ -2905,9 +2907,6 @@ function applyLedger(data){
           : "";
 
 
-      /*
-       * Reset five-tap state.
-       */
       row.dataset.timeTapCount =
         "0";
 
@@ -2919,10 +2918,6 @@ function applyLedger(data){
       );
 
 
-      /*
-       * Lock state is runtime only.
-       * It is not saved into the ledger.
-       */
       row.dataset.locked =
         "false";
 
@@ -3935,13 +3930,6 @@ function previewSavedFile(id){
   }
 
 
-  /*
-   * Capture the current editable ledger
-   * before entering preview.
-   *
-   * This includes each customer's
-   * individual timestamp.
-   */
   if(
     currentLedgerStarted &&
     !readonlyMode
@@ -3971,9 +3959,6 @@ function previewSavedFile(id){
   );
 
 
-  /*
-   * Preview is read-only.
-   */
   lockAllCustomerRows();
 
 
@@ -3993,12 +3978,6 @@ function previewSavedFile(id){
 
 function returnToCurrent(){
 
-  /*
-   * Restore the exact current ledger
-   * that existed before preview.
-   *
-   * Individual timestamps are restored.
-   */
   if(
     temporaryCurrentState
   ){
@@ -4025,11 +4004,6 @@ function returnToCurrent(){
       null;
 
 
-    /*
-     * Editable again.
-     * Runtime row locking resets.
-     * Timestamp data remains.
-     */
     prepareRowsForEditing();
 
 
@@ -4038,10 +4012,6 @@ function returnToCurrent(){
     );
 
 
-    /*
-     * Persist restored current state
-     * immediately.
-     */
     saveCurrentDraft();
 
 
@@ -4197,10 +4167,6 @@ function editSavedFile(id){
     file.id;
 
 
-  /*
-   * No row is active initially.
-   * The first row touched becomes active.
-   */
   prepareRowsForEditing();
 
 
@@ -4419,10 +4385,6 @@ function hasLedgerData(data){
           .some(
             ([key,value]) => {
 
-              /*
-               * Timestamp alone does not count
-               * as ledger data.
-               */
               if(
                 key === "modifiedAt"
               ){
@@ -4450,18 +4412,21 @@ function hasLedgerData(data){
 ========================= */
 
 /*
- * IMPORTANT:
+ * IMPORTANT FIX:
  *
- * Use pointerdown instead of click.
- * Android touch devices can sometimes
- * miss or delay click events when the
- * target is very small.
+ * The timestamp uses pointerup instead
+ * of pointerdown.
  *
- * The timestamp itself is now a larger
- * 44px touch target.
+ * The browser-generated click is blocked
+ * during the CAPTURE phase so it cannot
+ * accidentally interfere with the normal
+ * row-click handler.
+ *
+ * This makes five-tap unlocking reliable
+ * on Android touch screens.
  */
 customerBody.addEventListener(
-  "pointerdown",
+  "pointerup",
   e => {
 
     const timeEl =
@@ -4487,10 +4452,6 @@ customerBody.addEventListener(
     }
 
 
-    /*
-     * Prevent the browser from converting
-     * the touch into another click event.
-     */
     e.preventDefault();
     e.stopPropagation();
 
@@ -4507,8 +4468,38 @@ customerBody.addEventListener(
 
 
 /*
- * Keyboard accessibility for the
- * timestamp unlock control.
+ * Block the click generated by a touch
+ * on the timestamp BEFORE it reaches the
+ * normal customer-row click handler.
+ *
+ * CAPTURE = true
+ */
+customerBody.addEventListener(
+  "click",
+  e => {
+
+    const timeEl =
+      e.target.closest(
+        ".row-time"
+      );
+
+    if(!timeEl){
+      return;
+    }
+
+
+    e.preventDefault();
+    e.stopPropagation();
+
+  },
+  true
+);
+
+
+/*
+ * Keyboard accessibility.
+ *
+ * Enter or Space counts as one tap.
  */
 customerBody.addEventListener(
   "keydown",
@@ -4536,6 +4527,7 @@ customerBody.addEventListener(
 
 
     e.preventDefault();
+    e.stopPropagation();
 
 
     const row =
@@ -4559,18 +4551,14 @@ customerBody.addEventListener(
    CUSTOMER ROW INTERACTION
 ========================= */
 
-/*
- * Normal row selection.
- *
- * IMPORTANT:
- * .row-time is ignored here because
- * its own pointerdown handler handles
- * the five-tap unlock.
- */
 customerBody.addEventListener(
   "click",
   e => {
 
+    /*
+     * Timestamp clicks are already
+     * handled separately.
+     */
     if(
       e.target.closest(
         ".row-time"
@@ -4593,20 +4581,17 @@ customerBody.addEventListener(
     }
 
 
-    /*
-     * Read-only preview.
-     */
     if(readonlyMode){
       return;
     }
 
 
     /*
-     * Locked row:
-     * normal tap does NOT unlock it.
+     * A locked row cannot be opened
+     * by ordinary tapping.
      *
-     * Five taps on the timestamp are
-     * required.
+     * It requires five taps on its
+     * timestamp.
      */
     if(
       row.dataset.locked === "true"
@@ -4618,9 +4603,9 @@ customerBody.addEventListener(
 
 
     /*
-     * Editable row:
-     * switching to it automatically
-     * locks the previously active row.
+     * Selecting another unlocked row
+     * automatically locks the previous
+     * active row.
      */
     unlockCustomerRow(
       row
@@ -4664,8 +4649,8 @@ customerBody.addEventListener(
 
 
     /*
-     * Do not allow a locked row to
-     * become editable through focus.
+     * Locked rows cannot be reopened
+     * by focus.
      */
     if(
       row.dataset.locked === "true"
@@ -4696,12 +4681,6 @@ customerBody.addEventListener(
    OUTSIDE CUSTOMER ROW
 ========================= */
 
-/*
- * Tapping outside customer rows removes
- * only the visual highlight.
- *
- * It does NOT change the lock state.
- */
 document.addEventListener(
   "click",
   e => {
@@ -4718,9 +4697,11 @@ document.addEventListener(
         )
         .forEach(
           r => {
+
             r.classList.remove(
               "active-row"
             );
+
           }
         );
 
